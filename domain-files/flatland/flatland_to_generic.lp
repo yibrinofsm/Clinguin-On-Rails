@@ -16,12 +16,12 @@
 object(train(ID),train):-train(ID). 
 % each flatland track code becomes a generic track object 
 % cell(_,K) -> object(track(K),track)
-object(track(K),track):-cell(_,K).
+object(track(K),track):-cell(_,K),K!=0.
 
 
 % Positions
 % cell(Node,TrackCode) -> position(Node,cell,track(TrackCode))
-position(N,cell,track(K)):-cell(N,K).
+position(N,cell,track(K)):-cell(N,K),K!=0.
 
 % start positions
 position(N,start,train(ID)):-train(ID),start(ID,N,_,_).

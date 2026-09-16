@@ -1,0 +1,42 @@
+
+% UI rule heads are ONLY elem/3, attr/3 and when/4.
+% UI bodies use the public predicates below, native Clinguin predicates,
+% comparisons, aggregates and external string functions.
+% Domain adapters may derive public facts. They do not expose private helpers.
+
+% 1. ORIGINAL DOMAIN DATA
+% object(Object,Type).
+%   A catalogue declaration. An Object should have one current Type.
+%   The UI does not interpret the Object's spelling or its type name.
+% object(track(1025),track).
+% object(agent(1),agent).
+% object(train(1),train).
+
+% node(Node).
+%   A declared position. This grid renderer uses nonnegative integer (Row,Column)
+%   tuples with zero-based coordinates. The original reference omitted node/1.
+% node((0,0)).
+% node((0,7)).
+% node((0,10)).
+
+% position(Node,Role,Object).
+%   Raw domain placement, not a private UI visibility record.
+% position((0,0),start,agent(1)).
+% position((0,7),start,train(1)).
+% position((0,10),cell,track(1025)).
+
+% property(Object,Key,Value).
+%   An actual object property. Key and Value are ASP terms.
+%   Never use property(Object,(ui,...),Value) to encode UI state or metadata.
+% property(train(1),dep,5).
+% property(train(1),arr,10).
+% property(train(1),direction,east).
+% property(train(1),speed,1).
+
+% image(Object,Role,Path).
+%   A role-specific image path string accessible to the configured renderer.
+%   Empty and exactly-one-space paths are not rendered; existence is not checked.
+%   Supplying an image does not grant permission to place its Role.
+% image(train(1),start,"img/train1.png").
+% image(track(1025),cell,"img/straight_0.png").
+

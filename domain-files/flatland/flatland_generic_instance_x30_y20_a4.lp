@@ -620,6 +620,7 @@ object(train(0),train).
 object(train(1),train).
 object(train(2),train).
 object(train(3),train).
+
 position((0,0),cell,track(0)).
 position((0,10),cell,track(0)).
 position((0,11),cell,track(0)).
