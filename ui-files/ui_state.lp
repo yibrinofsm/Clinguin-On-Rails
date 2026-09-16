@@ -1,6 +1,3 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #defined object/2.
 #defined node/1.
 #defined position/3.
@@ -20,6 +17,8 @@
 #defined _clinguin_context/2.
 #defined _clinguin_atom/1.
 #defined _clinguin_unsat/0.
-
 #const cell_size=28.
 
+ui_cell_size(cell_size) :- node((_,_)),not _clinguin_context(grid_scale,normal),not _clinguin_context(grid_scale,large).
+ui_cell_size(36) :- node((_,_)),_clinguin_context(grid_scale,normal).
+ui_cell_size(48) :- node((_,_)),_clinguin_context(grid_scale,large),not _clinguin_context(grid_scale,normal).
