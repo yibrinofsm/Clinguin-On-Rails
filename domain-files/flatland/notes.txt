@@ -1,0 +1,20 @@
+power_type
+consumed_energy
+Temp speed
+1. Energy Efficiency and Railway Scheduling
+2. Passenger preference optimization in Flatland with ASP
+3. Railway Scheduling coupling and decouplng.
+4. Track Malfunctions in Flatland.
+
+
+object(track1,track).
+property(track1,code,1025).
+
+object(track2,track)
+property(track2,code,1025).
+
+position((0,0),cell,track(1025)).
+position((0,1),cell,track(1025)).
+position((0,2),cell,track(1025)).
+position((0,3),cell,track(1025)).
+position((0,4),cell,track(1025)).

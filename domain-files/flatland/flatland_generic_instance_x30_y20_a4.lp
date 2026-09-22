@@ -598,7 +598,7 @@ node((9,6)).
 node((9,7)).
 node((9,8)).
 node((9,9)).
-object(track(0),track).
+% object(track(0),track).
 object(track(1025),track).
 object(track(1097),track).
 object(track(16386),track).
@@ -1229,6 +1229,7 @@ position((9,6),cell,track(0)).
 position((9,7),cell,track(0)).
 position((9,8),cell,track(32872)).
 position((9,9),cell,track(37408)).
+
 property(train(0),arr,95).
 property(train(0),dep,0).
 property(train(0),direction,s).
