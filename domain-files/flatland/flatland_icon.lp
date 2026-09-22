@@ -18,6 +18,9 @@ def train_img_path(id,dir):
 % image(Object,Role, ImagePath).
 
 image(train(T),start,@train_img_path(T,D)):-object(train(T),train),property(train(T),direction,D).
+% image(train(4),start,?):-object(train(4),train).
+% image(train(4),end,?):-object(train(4),train).
+
 % image(track(0),cell,""):-object(track(0),track).
 image(track(32800),cell,"img/straight_0.png"):-object(track(32800),track).
 image(track(1025),cell,"img/straight_90.png"):-object(track(1025),track).

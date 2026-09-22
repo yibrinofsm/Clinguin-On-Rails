@@ -2,6 +2,17 @@
 elem(w,window,root).
 attr(w,child_layout,flex).
 attr(w,class,("d-flex";"flex-column";"text-dark";"g-light";"min-vh-100")).
+% when(w,load,context,(K,V)) :- _clinguin_context(K,V),K=(placement_role;grid_scale;label_mode;inspector_open;edit_property_object;edit_property_key;edit_property_value;edit_position_object;edit_position_row;edit_position_col;edit_position_role;edit_image_object;edit_image_role;edit_image_path).
+% when(w,load,context,(inspected(O),true)) :- object(O,_),_clinguin_context(inspected(O),true).
+% when(w,load,context,(K,V)) :- elem(input(_,K),textfield,_),_clinguin_context(K,V).
+% when(w,load,context,(undo_operation,Op)) :- _clinguin_context(undo_operation,Op),not elem(commit(_,_,_),container,w),0=#count{Action:_clinguin_context(last_grid_action,Action),Action!=()}.
+
+% when(w,load,context,(dialog,D)) :- _clinguin_context(dialog,D),not elem(commit(_,_,_),container,w),not _clinguin_context(submitted,true).
+% when(w,load,context,(dialog,D)) :- _clinguin_context(dialog,D),not elem(commit(_,_,_),container,w),_clinguin_context(submitted,true),_clinguin_unsat.
+% when(w,load,context,(dialog,none)) :- _clinguin_context(submitted,true),not _clinguin_unsat,not elem(commit(_,_,_),container,w).
+
+% when(w,load,context,(selected_object,O)) :- _clinguin_context(selected_object,O),object(O,_).
+% when(w,load,context,(selected_object,none)) :- _clinguin_context(selected_object,O),not object(O,_).
 
 % Workspace
 attr(workspace,order,2).
@@ -182,9 +193,9 @@ attr(local_feedback,message,"Placement removed.") :- _clinguin_context(last_grid
 attr(local_feedback,type,warning).
 
 % Constraint Error Feedback
-elem(feedback_message(unsat),message,w) :- _clinguin_unsat.
-attr(feedback_message(unsat),title,"No solution") :- _clinguin_unsat.
-attr(feedback_message(unsat),message,"The current facts violate a domain constraint. Use Undo last change or Clear edits to recover.") :- _clinguin_unsat.
+% elem(feedback_message(unsat),message,w) :- _clinguin_unsat.
+% attr(feedback_message(unsat),title,"No solution") :- _clinguin_unsat.
+% attr(feedback_message(unsat),message,"The current facts violate a domain constraint. Use Undo last change or Clear edits to recover.") :- _clinguin_unsat.
 
 % Create Object Feedback
 elem(feedback_message(request(create,O,T,F,Message)),message,w) :- request(create,O,T),rejection(create,O,T,F,Message),_clinguin_context(dialog,form(object_create)),not _clinguin_unsat.

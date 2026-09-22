@@ -20,6 +20,7 @@ object(track(K),track):-cell(_,K),K!=0.
 
 
 % Positions
+
 % cell(Node,TrackCode) -> position(Node,cell,track(TrackCode))
 position(N,cell,track(K)):-cell(N,K),K!=0.
 
