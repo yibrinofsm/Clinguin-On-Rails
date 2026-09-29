@@ -68,7 +68,7 @@ visual(O,end,20,"contain","1","none",false) :- object(O,train).
 role(O,R):-object(O,_),image(O,R,_).
 role(O,R):-object(O,_),position(_,R,O).
 
-rejection(create,O,T,object_term,"This object already exists. Choose another object identifier.") :-object(O,T), request(create,O,_).
+rejection(create,O,T,object_term,"This object already exists. Choose another object identifier.") :-object(O,T),  request(create,O,_).
 
 
 

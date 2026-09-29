@@ -1,21 +1,7 @@
 % Window
 elem(w,window,root).
 attr(w,child_layout,flex).
-attr(w,class,("d-flex";"flex-column";"text-dark";"g-light";"min-vh-100")).
-% when(w,load,context,(K,V)) :- _clinguin_context(K,V),K=(placement_role;grid_scale;label_mode;inspector_open;edit_property_object;edit_property_key;edit_property_value;edit_position_object;edit_position_row;edit_position_col;edit_position_role;edit_image_object;edit_image_role;edit_image_path).
-% when(w,load,context,(inspected(O),true)) :- object(O,_),_clinguin_context(inspected(O),true).
-% when(w,load,context,(K,V)) :- elem(input(_,K),textfield,_),_clinguin_context(K,V).
-% when(w,load,context,(undo_operation,Op)) :- _clinguin_context(undo_operation,Op),not elem(commit(_,_,_),container,w),0=#count{Action:_clinguin_context(last_grid_action,Action),Action!=()}.
-
-% when(w,load,context,(dialog,D)) :- _clinguin_context(dialog,D),not elem(commit(_,_,_),container,w),not _clinguin_context(submitted,true).
-% when(w,load,context,(dialog,D)) :- _clinguin_context(dialog,D),not elem(commit(_,_,_),container,w),_clinguin_context(submitted,true),_clinguin_unsat.
-% when(w,load,context,(dialog,none)) :- _clinguin_context(submitted,true),not _clinguin_unsat,not elem(commit(_,_,_),container,w).
-
-% when(w,load,context,(selected_object,O)) :- _clinguin_context(selected_object,O),object(O,_).
-% when(w,load,context,(selected_object,none)) :- _clinguin_context(selected_object,O),not object(O,_).
-
-% Workspace
-attr(workspace,order,2).
+attr(w,class,("d-flex";"flex-column";"text-dark";"bg-light";"min-vh-100")).
 
 % Menu Bar
 elem(menu_bar,menu_bar,w).
@@ -24,53 +10,53 @@ attr(menu_bar,icon,"fa-table-cells").
 
 % Add new Object
 elem(add_new_object,button,menu_bar).
+attr(add_new_object,order,1).
 attr(add_new_object,label,"New object").
 attr(add_new_object,icon,"fa-plus").
-attr(add_new_object,order,1).
 attr(add_new_object,class,("btn-primary";"px-3")).
-when(add_new_object,click,context,(dialog,form(object_create))).
-when(add_new_object,click,update,(dialog(form(object_create)),visibility,shown)).
+when(add_new_object,click,context,(dialog,form(add_object))).
+when(add_new_object,click,update,(dialog(form(add_object)),visibility,shown)).
 when(add_new_object,click,update,(local_feedback,visibility,hidden)).
 
 % Next Solution
 elem(next_solution_button,button,menu_bar).
+attr(next_solution_button,order,2).
 attr(next_solution_button,label,"Next solution").
 attr(next_solution_button,icon,"fa-forward-step").
-attr(next_solution_button,order,2).
-attr(next_solution_button,class,("btn-outline-secondary";"px-3")).
+attr(next_solution_button,class,("btn-outline-primary";"px-3")).
 when(next_solution_button,click,call,next_solution(optN)).
 
 % Clear Edits Button
 elem(clear_edits_button,button,menu_bar).
-attr(clear_edits_button,icon,"fa-eraser").
 attr(clear_edits_button,order,3).
-attr(clear_edits_button,class,("btn-outline-secondary";"px-3")).
 attr(clear_edits_button,label,@concat("Clear edits · ",N)) :- A=#count{X:_clinguin_atom(X)},B=#count{M,O,T:_clinguin_atom(request(M,O,T))},N=A-B.
+attr(clear_edits_button,icon,"fa-eraser").
+attr(clear_edits_button,class,("btn-outline-primary";"px-3")).
 when(clear_edits_button,click,update,(dialog(clear),visibility,shown)).
 
 % Restart Button
 elem(restart_button,button,menu_bar).
+attr(restart_button,order,4).
 attr(restart_button,label,"Restart").
 attr(restart_button,icon,"fa-arrows-rotate").
-attr(restart_button,order,4).
-attr(restart_button,class,("btn-outline-secondary";"px-3")).
+attr(restart_button,class,("btn-outline-primary";"px-3")).
 when(restart_button,click,update,(dialog(restart),visibility,shown)).
 
 % Help Button
 elem(help_button,button,menu_bar).
+attr(help_button,order,5).
 attr(help_button,label,"Help").
 attr(help_button,icon,"fa-circle-question").
-attr(help_button,order,5).
-attr(help_button,class,("btn-outline-secondary";"px-3")).
+attr(help_button,class,("btn-outline-primary";"px-3")).
 when(help_button,click,update,(dialog(help),visibility,shown)).
 
 % Undo Button
 elem(undo_button,button,menu_bar) :- _clinguin_context(undo_operation,Op),Op!=none.
 attr(undo_button,order,6) :- _clinguin_context(undo_operation,Op),Op!=none.
 attr(undo_button,label,"Undo last change") :- _clinguin_context(undo_operation,Op),Op!=none.
-attr(undo_button,class,"btn-outline-secondary") :- _clinguin_context(undo_operation,Op),Op!=none.
-when(undo_button,click,call,Op) :- _clinguin_context(undo_operation,Op),Op!=none,0=#count{Action:_clinguin_context(last_grid_action,Action),Action!=()}.
+attr(undo_button,class,"btn-outline-primary") :- _clinguin_context(undo_operation,Op),Op!=none.
 when(undo_button,click,context,(undo_operation,none)) :- _clinguin_context(undo_operation,Op),Op!=none.
+when(undo_button,click,call,Op) :- _clinguin_context(undo_operation,Op),Op!=none,0=#count{Action:_clinguin_context(last_grid_action,Action),Action!=()}.
 
 % Shared Modal Attributes
 attr(dialog(D),size,"lg") :- elem(dialog(D),modal,w),D!=inspector.
@@ -78,20 +64,23 @@ attr(dialog(D),visibility,hidden) :- elem(dialog(D),modal,w),elem(commit(_,_,_),
 
 % Dialog Sheet
 elem(dialog_sheet(D),container,dialog(D)) :- elem(dialog(D),modal,w).
-attr(dialog_sheet(D),class,("d-flex";"flex-column";"gap-2";"p-0";"m-0")) :- elem(dialog(D),modal,w).
 attr(dialog_sheet(D),order,1) :- elem(dialog(D),modal,w).
+attr(dialog_sheet(D),class,("d-flex";"flex-column";"gap-2";"p-0";"m-0")) :- elem(dialog(D),modal,w).
 
 % Dialog Close Button
 elem(dialog_close(D),button,dialog_sheet(D)) :- elem(dialog(D),modal,w).
-attr(dialog_close(D),label,"Close ×") :- elem(dialog(D),modal,w).
-attr(dialog_close(D),class,("btn-outline-secondary";"align-self-end")) :- elem(dialog(D),modal,w).
 attr(dialog_close(D),order,1000) :- elem(dialog(D),modal,w).
+attr(dialog_close(D),label,"Close ×") :- elem(dialog(D),modal,w).
+attr(dialog_close(D),class,("btn-outline-primary";"align-self-end")) :- elem(dialog(D),modal,w).
 when(dialog_close(D),click,update,(dialog(D),visibility,hidden)) :- elem(dialog(D),modal,w).
-when(dialog_close(inspector),click,context,(inspector_open,false)) :- elem(dialog(inspector),modal,w).
-when(dialog_close(D),click,context,(dialog,none)) :- elem(dialog(D),modal,w),D!=inspector.
 
 % Shared Dialog Text Attributes
 attr(dialog_text(D),order,1) :- elem(dialog_text(D),label,_).
+
+
+
+
+
 
 % Clear Modal
 elem(dialog(clear),modal,w).
@@ -101,19 +90,19 @@ attr(dialog(clear),title,"Clear session edits?").
 % Clear Modal Text
 elem(dialog_text(clear),label,dialog_sheet(clear)).
 attr(dialog_text(clear),label,"Remove session-added facts? Source files will remain available.").
-attr(dialog_text(clear),class,("p-3";"text-secondary")).
+attr(dialog_text(clear),class,("p-2";"text-secondary")).
 
 % Confirm Clear Button
 elem(confirm_clear,button,dialog_sheet(clear)).
+attr(confirm_clear,order,2).
 attr(confirm_clear,label,"Confirm").
 attr(confirm_clear,class,("btn-danger";"m-3";"align-self-end")).
-attr(confirm_clear,order,2).
-when(confirm_clear,click,call,clear_atoms).
-when(confirm_clear,click,context,(selected_object,none)).
-when(confirm_clear,click,context,(placement_role,none)).
+when(confirm_clear,click,context,(selected_object_for_placement,none)).
+when(confirm_clear,click,context,(selected_role_for_placement,none)).
 when(confirm_clear,click,context,(inspector_open,false)).
 when(confirm_clear,click,context,(undo_operation,none)).
 when(confirm_clear,click,context,(dialog,none)).
+when(confirm_clear,click,call,clear_atoms).
 
 % Restart Modal
 elem(dialog(restart),modal,w).
@@ -127,15 +116,16 @@ attr(dialog_text(restart),class,("p-3";"text-secondary")).
 
 % Confirm Restart Button
 elem(confirm_restart,button,dialog_sheet(restart)).
+attr(confirm_restart,order,2).
 attr(confirm_restart,label,"Confirm").
 attr(confirm_restart,class,("btn-danger";"m-3";"align-self-end")).
-attr(confirm_restart,order,2).
-when(confirm_restart,click,call,restart).
-when(confirm_restart,click,context,(selected_object,none)).
-when(confirm_restart,click,context,(placement_role,none)).
+when(confirm_restart,click,context,(selected_object_for_placement,none)).
+when(confirm_restart,click,context,(selected_role_for_placement,none)).
 when(confirm_restart,click,context,(inspector_open,false)).
 when(confirm_restart,click,context,(undo_operation,none)).
 when(confirm_restart,click,context,(dialog,none)).
+when(confirm_restart,click,call,restart).
+
 
 % Help Modal
 elem(dialog(help),modal,w).
@@ -160,6 +150,7 @@ attr(inspector_content,order,1) :- elem(inspector_content,container,_).
 attr(commit(M,O,T),class,"d-none") :- elem(commit(M,O,T),container,w).
 
 % Create Object Commit
+
 elem(commit(create,O,T),container,w) :- request(create,O,T),_clinguin_atom(request(create,O,T)),not rejection(create,O,T,_,_),not _clinguin_unsat.
 attr(commit(create,O,T),order,1000) :- request(create,O,T),_clinguin_atom(request(create,O,T)),not rejection(create,O,T,_,_),not _clinguin_unsat.
 when(commit(create,O,T),load,context,(undo_operation,remove_atom(object(O,T)))) :- request(create,O,T),_clinguin_atom(request(create,O,T)),not rejection(create,O,T,_,_),not _clinguin_unsat.
@@ -179,6 +170,7 @@ when(commit_apply(create,O,T),load,call,(remove_atom(request(create,O,T)),add_at
 when(commit_apply(edit(Old),O,T),load,call,(remove_atom(request(edit(Old),O,T)),remove_atom(object(O,Old)),add_atom(object(O,T)))) :- request(edit(Old),O,T),_clinguin_atom(request(edit(Old),O,T)),not rejection(edit(Old),O,T,_,_),not _clinguin_unsat.
 
 % Local Feedback
+
 elem(local_feedback,message,w).
 attr(local_feedback,visibility,hidden) :- not _clinguin_context(notice_message,_),not _clinguin_context(last_grid_action,()).
 attr(local_feedback,visibility,hidden) :- _clinguin_unsat.
@@ -192,14 +184,9 @@ attr(local_feedback,message,Message) :- _clinguin_context(notice_message,Message
 attr(local_feedback,message,"Placement removed.") :- _clinguin_context(last_grid_action,remove_atom(_)),not _clinguin_unsat.
 attr(local_feedback,type,warning).
 
-% Constraint Error Feedback
-% elem(feedback_message(unsat),message,w) :- _clinguin_unsat.
-% attr(feedback_message(unsat),title,"No solution") :- _clinguin_unsat.
-% attr(feedback_message(unsat),message,"The current facts violate a domain constraint. Use Undo last change or Clear edits to recover.") :- _clinguin_unsat.
-
 % Create Object Feedback
-elem(feedback_message(request(create,O,T,F,Message)),message,w) :- request(create,O,T),rejection(create,O,T,F,Message),_clinguin_context(dialog,form(object_create)),not _clinguin_unsat.
-attr(feedback_message(request(create,O,T,F,Message)),message,@concat(F," · ",Message)) :- request(create,O,T),rejection(create,O,T,F,Message),_clinguin_context(dialog,form(object_create)),not _clinguin_unsat.
+elem(feedback_message(request(create,O,T,F,Message)),message,w) :- request(create,O,T),rejection(create,O,T,F,Message),_clinguin_context(dialog,form(add_object)),not _clinguin_unsat.
+attr(feedback_message(request(create,O,T,F,Message)),message,@concat(F," · ",Message)) :- request(create,O,T),rejection(create,O,T,F,Message),_clinguin_context(dialog,form(add_object)),not _clinguin_unsat.
 
 % Edit Object Feedback
 elem(feedback_message(request(edit(Old),O,T,F,Message)),message,w) :- request(edit(Old),O,T),rejection(edit(Old),O,T,F,Message),_clinguin_context(dialog,form(object_edit)),not _clinguin_unsat.
@@ -218,11 +205,11 @@ attr(operation_toast,class,("d-flex";"p-2";"rounded";"bg-light";"border")).
 elem(operation_status,label,operation_toast).
 attr(operation_status,order,1).
 attr(operation_status,class,("small";"fw-bold";"text-primary")).
-attr(operation_status,label,"Ready") :- not _clinguin_context(selected_object,O):object(O,_).
-attr(operation_status,label,"Ready to place") :- _clinguin_context(selected_object,O),object(O,_),_clinguin_context(placement_role,R),role(O,R,S,_,Max),not issue(O,error,_,_),not issue(O,warning,property(_),_).
-attr(operation_status,label,"Complete object first") :- _clinguin_context(selected_object,O),object(O,_),issue(O,error,_,_).
-attr(operation_status,label,"Choose a placement role") :- _clinguin_context(selected_object,O),object(O,_),not issue(O,error,_,_),not issue(O,warning,property(_),_),not _clinguin_context(placement_role,R):role(O,R,_,_,_).
-attr(operation_status,label,"Complete object first") :- _clinguin_context(selected_object,O),object(O,_),not issue(O,error,_,_),issue(O,warning,property(_),_).
+attr(operation_status,label,"Ready") :- not _clinguin_context(selected_object_for_placement,O):object(O,_).
+attr(operation_status,label,"Ready to place") :- _clinguin_context(selected_object_for_placement,O),object(O,_),_clinguin_context(selected_role_for_placement,R),role(O,R,S,_,Max),not issue(O,error,_,_),not issue(O,warning,property(_),_).
+attr(operation_status,label,"Complete object first") :- _clinguin_context(selected_object_for_placement,O),object(O,_),issue(O,error,_,_).
+attr(operation_status,label,"Choose a placement role") :- _clinguin_context(selected_object_for_placement,O),object(O,_),not issue(O,error,_,_),not issue(O,warning,property(_),_),not _clinguin_context(selected_role_for_placement,R):role(O,R,_,_,_).
+attr(operation_status,label,"Complete object first") :- _clinguin_context(selected_object_for_placement,O),object(O,_),not issue(O,error,_,_),issue(O,warning,property(_),_).
 
 % Shared Button Attributes
 attr(E,class,("rounded-3";"btn-sm")) :- elem(E,button,_).
@@ -267,8 +254,8 @@ when(E,Ev,update,(local_feedback,title,"Deletion blocked")) :- when(E,Ev,context
 when(E,Ev,update,(local_feedback,message,"This object supports another placement. Remove the dependent placement first.")) :- when(E,Ev,context,(delete_position,position(N,R,O))),_clinguin_atom(position(N,R,O)),role(O,R,S,_,_),0<#count{Dep,Rd:elem(placement(N,Rd,Dep),container,_),support(Dep,Rd,S),Dep!=O},not placeholder(O),not _clinguin_unsat.
 
 % Preserve Selection After Placement Deletion
-when(E,Ev,context,(selected_object,_context_value(selected_object,const,none))) :- when(E,Ev,call,remove_atom(position(N,R,O))),not when(E,Ev,context,(delete_object,_)).
-when(E,Ev,context,(placement_role,_context_value(placement_role,const,none))) :- when(E,Ev,call,remove_atom(position(N,R,O))),not when(E,Ev,context,(delete_object,_)).
+when(E,Ev,context,(selected_object_for_placement,_context_value(selected_object_for_placement,const,none))) :- when(E,Ev,call,remove_atom(position(N,R,O))),not when(E,Ev,context,(delete_object,_)).
+when(E,Ev,context,(selected_role_for_placement,_context_value(selected_role_for_placement,const,none))) :- when(E,Ev,call,remove_atom(position(N,R,O))),not when(E,Ev,context,(delete_object,_)).
 
 % Delete Object Events
 when(E,Ev,call,remove_atom(object(O,T))) :- when(E,Ev,context,(delete_object,O)),object(O,T),_clinguin_atom(object(O,T)),0=#count{N,R,Dep,Rd:position(N,R,O),role(O,R,S,_,_),elem(placement(N,Rd,Dep),container,_),support(Dep,Rd,S),Dep!=O,not placeholder(O)},not _clinguin_unsat.

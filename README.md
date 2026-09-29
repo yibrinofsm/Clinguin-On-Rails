@@ -31,17 +31,17 @@ The repository structure is:
 Clinguin-On-Rails/
 ├── domain-files/
 │   ├── flatland/
-│   │   ├── editor_commands.lp
-│   │   ├── generic_rules.lp
-│   │   ├── flatland_generic_instance_x30_y20_a4.lp
-│   │   ├── flatland_rules.lp
-│   │   └── flatland_icon.lp
+│   │   ├── flatland_generic_instance_x2_y10_a0.lp
+│   │   ├── flatland.lp
+│   │   ├── flatland_domain.lp
+│   │   ├── flatland_sanity_checks.lp
+│   │   └── flatland_visualize.lp
 │   ├── mapf/
-│   │   ├── editor_commands.lp
-│   │   ├── generic_rules.lp
 │   │   ├── mapf_generic_instance_x20_y20_a15.lp
-│   │   ├── mapf_rules.lp
-│   │   └── mapf_icon.lp
+│   │   ├─mapf.lp
+│   │   ├── mapf_domain.lp
+│   │   ├── mapf_sanity_checks.lp
+│   │   └── mapf_visualize.lp
 │   └── img/
 ├── ui-files/
 │   ├── ui_layout.lp
@@ -64,8 +64,8 @@ The instance files must provide the objects and grid data needed by the selected
 Run Flatland
 
 Open a terminal in the project directory and run:
-
-clinguin client-server --domain-files domain-files/flatland/flatland_generic_instance_x30_y20_a4.lp domain-files/flatland/flatland_rules.lp domain-files/flatland/flatland_icon.lp --ui-files ui-files/ui_layout.lp ui-files/ui_state.lp ui-files/ui_sidebar.lp ui-files/ui_shell.lp
+ 
+ clinguin client-server --domain-files domain-files/flatland/flatland_generic_instance_x2_y10_a0.lp domain-files/flatland/flatland_visual.lp domain-files/flatland/flatland.lp   --ui-files ui-files/ui_layout.lp ui-files/ui_state.lp ui-files/ui_sidebar.lp ui-files/ui_shell.lp --server-log-level DEBUG
 
 
 
@@ -73,5 +73,5 @@ Run MAPF
 
 Open a terminal in the project directory and run:
 
- clinguin client-server --domain-files domain-files/mapf/mapf_generic_instance_x20_y20_a15.lp domain-files/mapf/mapf_rules.lp domain-files/mapf/mapf_icon.lp --ui-files ui-files/ui_layout.lp ui-files/ui_state.lp ui-files/ui_sidebar.lp ui-files/ui_shell.lp
+ clinguin client-server --domain-files domain-files/mapf/mapf_generic_instance_x20_y20_a15.lp domain-files/mapf/mapf.lp   --ui-files ui-files/ui_layout.lp ui-files/ui_state.lp ui-files/ui_sidebar.lp ui-files/ui_shell.lp
 

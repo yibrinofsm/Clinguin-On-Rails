@@ -2,6 +2,7 @@
 % WORKSPACE
 % ============================================================
 elem(workspace,container,w).
+attr(workspace,order,2).
 attr(workspace,child_layout,flex).
 attr(workspace,flex_direction,row).
 attr(workspace,class,("d-flex";"flex-row";"flex-wrap";"align-items-start";"p-2";"bg-light")).
@@ -53,7 +54,7 @@ attr(placement_step,class,("small";"text-secondary";"m-0")).
 % EMPTY STATE
 % ============================================================
 
-elem(selection_empty,label,placement_panel) :- object(O,T), not _clinguin_context(selected_object,O).
+elem(selection_empty,label,placement_panel) :- object(O,T), not _clinguin_context(selected_object_for_placement,O).
 attr(selection_empty,order,2).
 attr(selection_empty,label,"Select an object to start.").
 attr(selection_empty,class,("small";"text-secondary";"py-1";"m-0")) :- elem(selection_empty,label,_).
@@ -62,61 +63,61 @@ attr(selection_empty,class,("small";"text-secondary";"py-1";"m-0")) :- elem(sele
 % SELECTION TOOLBAR
 % ============================================================
 
-elem(selection,container,placement_panel) :- object(O,T), _clinguin_context(selected_object,O).
-attr(selection,order,2) :- object(O,T), _clinguin_context(selected_object,O).
-attr(selection,flex_direction,row) :- object(O,T), _clinguin_context(selected_object,O).
-attr(selection,class,("d-flex";"flex-row";"align-items-center";"gap-2";"w-100";"py-1")) :- object(O,T), _clinguin_context(selected_object,O).
+elem(selection,container,placement_panel) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(selection,order,2) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(selection,flex_direction,row) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(selection,class,("d-flex";"flex-row";"align-items-center";"gap-2";"w-100";"py-1")) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
 
 % ============================================================
 % SELECTED OBJECT
 % ============================================================
 
-elem(selection_identity,container,selection) :- object(O,T), _clinguin_context(selected_object,O).
-attr(selection_identity,order,1) :- object(O,T), _clinguin_context(selected_object,O).
+elem(selection_identity,container,selection) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(selection_identity,order,1) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
 attr(selection_identity,class,("d-flex";"align-items-center";"gap-1";"flex-grow-1";"min-w-0")) :- elem(selection_identity,container,_).
 
-elem(selection_name,label,selection_identity) :- object(O,T), _clinguin_context(selected_object,O).
-attr(selection_name,order,1) :- object(O,T), _clinguin_context(selected_object,O).
-attr(selection_name,label,@concat("",O)) :- object(O,T), _clinguin_context(selected_object,O).
-attr(selection_name,class,("fw-semibold";"text-primary";"text-truncate";"small";"m-0")) :- object(O,T), _clinguin_context(selected_object,O).
+elem(selection_name,label,selection_identity) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(selection_name,order,1) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(selection_name,label,@concat("",O)) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(selection_name,class,("fw-semibold";"text-primary";"text-truncate";"small";"m-0")) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
 
 % ============================================================
 % ROLE SELECTOR
 % ============================================================
 
-elem(role_control,container,selection) :- object(O,T), _clinguin_context(selected_object,O).
-attr(role_control,order,2) :- object(O,T), _clinguin_context(selected_object,O).
+elem(role_control,container,selection) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(role_control,order,2) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
 attr(role_control,class,("d-flex";"align-items-center";"gap-1";"flex-shrink-0")) :- elem(role_control,container,_).
 
-elem(role_menu,dropdown_menu,role_control) :- object(O,T), _clinguin_context(selected_object,O).
-attr(role_menu,order,1) :- object(O,T), _clinguin_context(selected_object,O).
-attr(role_menu,class,("btn-outline-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object(O,T), _clinguin_context(selected_object,O).
-attr(role_menu,selected,@concat("",R)) :- object(O,T), _clinguin_context(selected_object,O), _clinguin_context(placement_role,R), role(O,R).
-attr(role_menu,selected,"Role") :- object(O,T), _clinguin_context(selected_object,O), not _clinguin_context(placement_role,R): role(O,R).
+elem(role_menu,dropdown_menu,role_control) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(role_menu,order,1) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(role_menu,class,("btn-outline-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(role_menu,selected,@concat("",R)) :- object(O,T), _clinguin_context(selected_object_for_placement,O), _clinguin_context(selected_role_for_placement,R), role(O,R).
+attr(role_menu,selected,"Role") :- object(O,T), _clinguin_context(selected_object_for_placement,O), not _clinguin_context(selected_role_for_placement,R): role(O,R).
 
 % ============================================================
 % ROLE MENU ITEMS
 % ============================================================
 
-elem(role_item(R),dropdown_menu_item,role_menu) :- object(O,T), _clinguin_context(selected_object,O), role(O,R).
-attr(role_item(R),label,@concat("",R)) :- object(O,T), _clinguin_context(selected_object,O), role(O,R).
+elem(role_item(R),dropdown_menu_item,role_menu) :- object(O,T), _clinguin_context(selected_object_for_placement,O), role(O,R).
+attr(role_item(R),label,@concat("",R)) :- object(O,T), _clinguin_context(selected_object_for_placement,O), role(O,R).
 attr(role_item(R),order,N) :- elem(role_item(R),dropdown_menu_item,_), N=#count{Other:elem(role_item(Other),dropdown_menu_item,_),Other<R}.
-when(role_item(R),click,context,(placement_role,R)) :- object(O,T), _clinguin_context(selected_object,O), role(O,R).
-when(role_item(R),click,call,()) :- object(O,T), _clinguin_context(selected_object,O), role(O,R).
+when(role_item(R),click,context,(selected_role_for_placement,R)) :- object(O,T), _clinguin_context(selected_object_for_placement,O), role(O,R).
+when(role_item(R),click,call,()) :- object(O,T), _clinguin_context(selected_object_for_placement,O), role(O,R).
 
 % ============================================================
 % UNSELECT BUTTON
 % ============================================================
 
-elem(unselect,button,selection) :- object(O,T), _clinguin_context(selected_object,O).
-attr(unselect,order,3) :- object(O,T), _clinguin_context(selected_object,O).
-attr(unselect,label,"×") :- object(O,T), _clinguin_context(selected_object,O).
-attr(unselect,class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object(O,T), _clinguin_context(selected_object,O).
-when(unselect,click,context,(selected_object,none)) :- object(O,T), _clinguin_context(selected_object,O).
-when(unselect,click,context,(placement_role,none)) :- object(O,T), _clinguin_context(selected_object,O).
-when(unselect,click,context,(inspector_open,false)) :- object(O,T), _clinguin_context(selected_object,O).
-when(unselect,click,context,(dialog,none)) :- object(O,T), _clinguin_context(selected_object,O).
-when(unselect,click,call,()) :- object(O,T), _clinguin_context(selected_object,O).
+elem(unselect,button,selection) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(unselect,order,3) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(unselect,label,"×") :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+attr(unselect,class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+when(unselect,click,context,(selected_object_for_placement,none)) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+when(unselect,click,context,(selected_role_for_placement,none)) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+when(unselect,click,context,(inspector_open,false)) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+when(unselect,click,context,(dialog,none)) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
+when(unselect,click,call,()) :- object(O,T), _clinguin_context(selected_object_for_placement,O).
 
 % ============================================================
 % ROLE NOTICE
@@ -126,7 +127,7 @@ elem(role_notice_box,container,placement_panel) :- elem(role_notice,label,_).
 attr(role_notice_box,order,3) :- elem(role_notice,label,_).
 attr(role_notice_box,class,("d-flex";"align-items-center";"border";"border-warning";"rounded-2";"px-2";"py-1";"bg-warning-subtle")) :- elem(role_notice_box,container,_).
 
-elem(role_notice,label,role_notice_box) :- object(O,T), _clinguin_context(selected_object,O), not _clinguin_context(placement_role,R): role(O,R).
+elem(role_notice,label,role_notice_box) :- object(O,T), _clinguin_context(selected_object_for_placement,O), not _clinguin_context(selected_role_for_placement,R): role(O,R).
 attr(role_notice,label,"Choose a role before placing.").
 attr(role_notice,class,("small";"text-warning-emphasis";"m-0")) :- elem(role_notice,label,_).
 
@@ -406,8 +407,8 @@ attr(no_grid,order,2) :- not node((_,_)).
 
 elem(placement_preview(Row,Col),container,node_box(Row,Col)) :-
     object(O,T),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_),
     not issue(O,warning,property(_),_),
@@ -428,8 +429,8 @@ attr(E,grid_column,0) :- elem(E,_,placement_preview(Row,Col)).
 
 elem(placement_preview_image(Row,Col),canvas,placement_preview(Row,Col)) :-
     object(O,T),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_),
     not issue(O,warning,property(_),_),
@@ -439,8 +440,8 @@ elem(placement_preview_image(Row,Col),canvas,placement_preview(Row,Col)) :-
 
 attr(placement_preview_image(Row,Col),image,I) :-
     object(O,T),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_),
     not issue(O,warning,property(_),_),
@@ -460,19 +461,19 @@ attr(placement_preview_image(Row,Col),height,S) :- elem(placement_preview_image(
 
 elem(placement_preview_text(Row,Col),label,placement_preview(Row,Col)) :-
     object(O,T),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_),
     not issue(O,warning,property(_),_),
     node((Row,Col)),
     0=#count{I:image(O,R,I),I!="",I!=" "}.
 
-attr(placement_preview_text(Row,Col),label,@concat("",L)) :- elem(placement_preview_text(Row,Col),label,_), _clinguin_context(selected_object,O), label(O,L,_).
+attr(placement_preview_text(Row,Col),label,@concat("",L)) :- elem(placement_preview_text(Row,Col),label,_), _clinguin_context(selected_object_for_placement,O), label(O,L,_).
 attr(placement_preview_text(Row,Col),label,@concat("",O)) :-
     not label(O,_,_), object(O,T),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_),
     not issue(O,warning,property(_),_),
@@ -488,8 +489,8 @@ attr(placement_preview_text(Row,Col),height,S) :- elem(placement_preview_text(Ro
 
 elem(placement_preview_id_box(Row,Col),container,placement_preview(Row,Col)) :-
     object(O,T),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_),
     not issue(O,warning,property(_),_),
@@ -502,8 +503,8 @@ attr(placement_preview_id_box(Row,Col),order,1) :- elem(placement_preview_id_box
 attr(placement_preview_id_box(Row,Col),width,14) :- elem(placement_preview_id_box(Row,Col),container,_).
 attr(placement_preview_id_box(Row,Col),height,14) :- elem(placement_preview_id_box(Row,Col),container,_).
 attr(placement_preview_id_box(Row,Col),class,("p-0";"m-0";"pe-none";"d-flex";"align-items-center";"justify-content-center")) :- elem(placement_preview_id_box(Row,Col),container,_).
-attr(placement_preview_id_box(Row,Col),class,("align-self-center";"mx-auto")) :- elem(placement_preview_id_box(Row,Col),container,_), _clinguin_context(selected_object,O), label(O,_,center).
-attr(placement_preview_id_box(Row,Col),class,("align-self-start";"ms-auto")) :- elem(placement_preview_id_box(Row,Col),container,_), _clinguin_context(selected_object,O), not label(O,_,center).
+attr(placement_preview_id_box(Row,Col),class,("align-self-center";"mx-auto")) :- elem(placement_preview_id_box(Row,Col),container,_), _clinguin_context(selected_object_for_placement,O), label(O,_,center).
+attr(placement_preview_id_box(Row,Col),class,("align-self-start";"ms-auto")) :- elem(placement_preview_id_box(Row,Col),container,_), _clinguin_context(selected_object_for_placement,O), not label(O,_,center).
 
 % ============================================================
 % PLACEMENT PREVIEW ID
@@ -511,8 +512,8 @@ attr(placement_preview_id_box(Row,Col),class,("align-self-start";"ms-auto")) :- 
 
 elem(placement_preview_id(Row,Col),label,placement_preview_id_box(Row,Col)) :-
     object(O,T),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_),
     not issue(O,warning,property(_),_),
@@ -521,7 +522,7 @@ elem(placement_preview_id(Row,Col),label,placement_preview_id_box(Row,Col)) :-
     0<#count{I:image(O,R,I),I!="",I!=" "},
     not _clinguin_context(label_mode,off).
 
-attr(placement_preview_id(Row,Col),label,@concat("",L)) :- _clinguin_context(selected_object,O), label(O,L,_), elem(placement_preview_id(Row,Col),label,_).
+attr(placement_preview_id(Row,Col),label,@concat("",L)) :- _clinguin_context(selected_object_for_placement,O), label(O,L,_), elem(placement_preview_id(Row,Col),label,_).
 attr(placement_preview_id(Row,Col),order,1) :- elem(placement_preview_id(Row,Col),label,_).
 attr(placement_preview_id(Row,Col),class,("small";"fw-bold";"lh-1";"text-dark";"text-center";"m-0";"pe-none")) :- elem(placement_preview_id(Row,Col),label,_).
 
@@ -543,8 +544,8 @@ attr(node_frame(Row,Col),order,K+2) :- node((Row,Col)), K=#count{R,O:elem(placem
 
 when(node_box(Row,Col),click,call,add_atom(position(N,R,O))) :-
     object(O,T),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_),
     not issue(O,warning,property(_),_),
@@ -562,8 +563,8 @@ when(node_box(Row,Col),click,call,add_atom(position(N,R,O))) :-
 
 when(node_box(Row,Col),click,call,add_atom(position(N,R,O))) :-
     object(O,T),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_),
     not issue(O,warning,property(_),_),
@@ -583,8 +584,8 @@ when(node_box(Row,Col),click,call,add_atom(position(N,R,O))) :-
 % SUCCESSFUL PLACEMENT — CONTEXT UPDATES
 % ============================================================
 
-when(node_box(Row,Col),click,context,(selected_object,O)) :- when(node_box(Row,Col),click,call,add_atom(position(N,R,O))).
-when(node_box(Row,Col),click,context,(placement_role,R)) :- when(node_box(Row,Col),click,call,add_atom(position(N,R,O))).
+when(node_box(Row,Col),click,context,(selected_object_for_placement,O)) :- when(node_box(Row,Col),click,call,add_atom(position(N,R,O))).
+when(node_box(Row,Col),click,context,(selected_role_for_placement,R)) :- when(node_box(Row,Col),click,call,add_atom(position(N,R,O))).
 when(node_box(Row,Col),click,context,(inspector_open,false)) :- when(node_box(Row,Col),click,call,add_atom(position(N,R,O))).
 when(node_box(Row,Col),click,context,(dialog,none)) :- when(node_box(Row,Col),click,call,add_atom(position(N,R,O))).
 when(node_box(Row,Col),click,update,(local_feedback,visibility,hidden)) :- when(node_box(Row,Col),click,call,add_atom(position(N,R,O))).
@@ -607,12 +608,12 @@ when(node_box(Row,Col),click,context,(delete_position,position(N,R,O))) :-
     _clinguin_atom(position(N,R,O)),
     attr(placement(N,R,O),order,K),
     (K,R,O)=#max{(K2,R2,O2):elem(placement(N,R2,O2),container,_),attr(placement(N,R2,O2),order,K2),_clinguin_atom(position(N,R2,O2))},
-    not _clinguin_context(selected_object,Chosen):object(Chosen,_).
+    not _clinguin_context(selected_object_for_placement,Chosen):object(Chosen,_).
 
 when(node_box(Row,Col),click,context,(delete_position,position(N,R,O))) :-
     node((Row,Col)), N=(Row,Col),
-    _clinguin_context(selected_object,O),
-    _clinguin_context(placement_role,R),
+    _clinguin_context(selected_object_for_placement,O),
+    _clinguin_context(selected_role_for_placement,R),
     elem(placement(N,R,O),container,_),
     _clinguin_atom(position(N,R,O)),
     not when(node_box(Row,Col),click,call,add_atom(_)).
@@ -622,7 +623,7 @@ when(node_box(Row,Col),click,context,(delete_position,position(N,R,O))) :-
 % ============================================================
 
 when(node_box(Row,Col),click,update,(local_feedback,visibility,shown)) :-
-    object(O,T), _clinguin_context(selected_object,O), _clinguin_context(placement_role,R),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_), not issue(O,warning,property(_),_), node((Row,Col)), N=(Row,Col),
     not when(node_box(Row,Col),click,context,(delete_position,_)),
@@ -631,7 +632,7 @@ when(node_box(Row,Col),click,update,(local_feedback,visibility,shown)) :-
     not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,title,"Placement blocked")) :-
-    object(O,T), _clinguin_context(selected_object,O), _clinguin_context(placement_role,R),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_), not issue(O,warning,property(_),_), node((Row,Col)), N=(Row,Col),
     not when(node_box(Row,Col),click,context,(delete_position,_)),
@@ -640,7 +641,7 @@ when(node_box(Row,Col),click,update,(local_feedback,title,"Placement blocked")) 
     not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,message,"A required supporting object is missing at this node.")) :-
-    object(O,T), _clinguin_context(selected_object,O), _clinguin_context(placement_role,R),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_), not issue(O,warning,property(_),_), node((Row,Col)), N=(Row,Col),
     not when(node_box(Row,Col),click,context,(delete_position,_)),
@@ -653,7 +654,7 @@ when(node_box(Row,Col),click,update,(local_feedback,message,"A required supporti
 % ============================================================
 
 when(node_box(Row,Col),click,update,(local_feedback,visibility,shown)) :-
-    object(O,T), _clinguin_context(selected_object,O), _clinguin_context(placement_role,R),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_), not issue(O,warning,property(_),_), node((Row,Col)), N=(Row,Col),
     not when(node_box(Row,Col),click,context,(delete_position,_)),
@@ -665,7 +666,7 @@ when(node_box(Row,Col),click,update,(local_feedback,visibility,shown)) :-
     not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,title,"Slot occupied")) :-
-    object(O,T), _clinguin_context(selected_object,O), _clinguin_context(placement_role,R),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_), not issue(O,warning,property(_),_), node((Row,Col)), N=(Row,Col),
     not when(node_box(Row,Col),click,context,(delete_position,_)),
@@ -677,7 +678,7 @@ when(node_box(Row,Col),click,update,(local_feedback,title,"Slot occupied")) :-
     not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,message,"Right-click the existing session placement to remove it, then place your selected object.")) :-
-    object(O,T), _clinguin_context(selected_object,O), _clinguin_context(placement_role,R),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), _clinguin_context(selected_role_for_placement,R),
     role(O,R),
     not issue(O,error,_,_), not issue(O,warning,property(_),_), node((Row,Col)), N=(Row,Col),
     not when(node_box(Row,Col),click,context,(delete_position,_)),
@@ -693,18 +694,18 @@ when(node_box(Row,Col),click,update,(local_feedback,message,"Right-click the exi
 % ============================================================
 
 when(node_box(Row,Col),click,update,(local_feedback,visibility,shown)) :-
-    object(O,T), _clinguin_context(selected_object,O), node((Row,Col)),
-    0=#count{R:_clinguin_context(placement_role,R),role(O,R)},
+    object(O,T), _clinguin_context(selected_object_for_placement,O), node((Row,Col)),
+    0=#count{R:_clinguin_context(selected_role_for_placement,R),role(O,R)},
     not when(node_box(Row,Col),click,context,(delete_position,_)), not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,title,"Choose a role")) :-
-    object(O,T), _clinguin_context(selected_object,O), node((Row,Col)),
-    0=#count{R:_clinguin_context(placement_role,R),role(O,R)},
+    object(O,T), _clinguin_context(selected_object_for_placement,O), node((Row,Col)),
+    0=#count{R:_clinguin_context(selected_role_for_placement,R),role(O,R)},
     not when(node_box(Row,Col),click,context,(delete_position,_)), not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,message,"Select a placement role first.")) :-
-    object(O,T), _clinguin_context(selected_object,O), node((Row,Col)),
-    0=#count{R:_clinguin_context(placement_role,R),role(O,R)},
+    object(O,T), _clinguin_context(selected_object_for_placement,O), node((Row,Col)),
+    0=#count{R:_clinguin_context(selected_role_for_placement,R),role(O,R)},
     not when(node_box(Row,Col),click,context,(delete_position,_)), not _clinguin_unsat.
 
 % ============================================================
@@ -712,32 +713,32 @@ when(node_box(Row,Col),click,update,(local_feedback,message,"Select a placement 
 % ============================================================
 
 when(node_box(Row,Col),click,update,(local_feedback,visibility,shown)) :-
-    object(O,T), _clinguin_context(selected_object,O), node((Row,Col)),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), node((Row,Col)),
     issue(O,error,object_term,_),
     not when(node_box(Row,Col),click,context,(delete_position,_)), not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,title,"Invalid object")) :-
-    object(O,T), _clinguin_context(selected_object,O), node((Row,Col)),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), node((Row,Col)),
     issue(O,error,object_term,_),
     not when(node_box(Row,Col),click,context,(delete_position,_)), not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,message,"Correct the object identifier or type before placing it.")) :-
-    object(O,T), _clinguin_context(selected_object,O), node((Row,Col)),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), node((Row,Col)),
     issue(O,error,object_term,_),
     not when(node_box(Row,Col),click,context,(delete_position,_)), not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,visibility,shown)) :-
-    object(O,T), _clinguin_context(selected_object,O), node((Row,Col)),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), node((Row,Col)),
     issue(O,error,type_term,_),
     not when(node_box(Row,Col),click,context,(delete_position,_)), not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,title,"Invalid object")) :-
-    object(O,T), _clinguin_context(selected_object,O), node((Row,Col)),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), node((Row,Col)),
     issue(O,error,type_term,_),
     not when(node_box(Row,Col),click,context,(delete_position,_)), not _clinguin_unsat.
 
 when(node_box(Row,Col),click,update,(local_feedback,message,"Correct the object identifier or type before placing it.")) :-
-    object(O,T), _clinguin_context(selected_object,O), node((Row,Col)),
+    object(O,T), _clinguin_context(selected_object_for_placement,O), node((Row,Col)),
     issue(O,error,type_term,_),
     not when(node_box(Row,Col),click,context,(delete_position,_)), not _clinguin_unsat.
 
