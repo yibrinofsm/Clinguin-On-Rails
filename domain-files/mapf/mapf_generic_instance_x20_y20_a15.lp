@@ -13,6 +13,7 @@ object(agent(6),agent).
 object(agent(7),agent).
 object(agent(8),agent).
 object(agent(9),agent).
+
 position((10,17),end,agent(15)).
 position((10,5),start,agent(14)).
 position((11,12),start,agent(4)).
@@ -59,6 +60,7 @@ property(agent(6),label,6).
 property(agent(7),label,7).
 property(agent(8),label,8).
 property(agent(9),label,9).
+
 % stat(agents,15).
 % stat(height,20).
 % stat(total_nodes,201).

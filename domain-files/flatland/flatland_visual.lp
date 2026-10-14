@@ -1,29 +1,71 @@
-#script (python)
-import clingo
-def sym_to_str(x):
-  if(x.type)==clingo.SymbolType.Number:
-    return x.number
-  if (x.type)==clingo.SymbolType.Function:
-    return x.name
-  if (x.type)==clingo.SymbolType.String:
-    return x.string
-  return str(x)
+% ============================================================
+% FILE: flatland_visual.lp
+% ============================================================
+%
+% PURPOSE:
+% This file contains Flatland-specific rules for assigning
+% images to trains and railway tracks based on their
+% properties in the generic domain representation.
+%
+% FUNCTIONALITY:
+% 1. Generates train image paths based on train identifiers
+%    and directions using an embedded Python function.
+%
+% 2. Assigns images to railway tracks according to their
+%    Flatland transition codes.
+%
+% 3. Supports different track types and orientations,
+%    including straight tracks, switches, crossings,
+%    turns, and dead ends.
+%
+% 4. Derives image/3 atoms for visualizing Flatland
+%    objects in the Clinguin UI.
+%
+% DEPENDENCIES:
+%   object/2   - Identifies trains and tracks.
+%   property/3 - Provides train directions and track codes.
+%
+% OUTPUT:
+%   image(Object, Role, ImagePath)
+%
+% NOTE:
+% These rules are specific to Flatland but use the generic
+% object and property predicates. They derive image facts
+% without modifying the underlying domain instance.
+%
+% ============================================================
 
-def train_img_path(id,dir):
-  id=sym_to_str(id)
-  dir=sym_to_str(dir)
-  return clingo.String(f"img/train_{dir}_{id}.png")
-#end.
+% #script (python)
+% import clingo
 
- % Images for the objects depending on their properties 
-%  We derive image(...) atoms from object(...) atoms and their properties
+% def sym_to_str(x):
+%     if x.type == clingo.SymbolType.Number:
+%         return x.number
+%     if x.type == clingo.SymbolType.Function:
+%         return x.name
+%     if x.type == clingo.SymbolType.String:
+%         return x.string
+%     return str(x)
 
-% image(Object,Role, ImagePath).
+% def train_img_path(id, direction):
+%     id = sym_to_str(id)
+%     direction = sym_to_str(direction)
+%     return clingo.String(f"img/train_{direction}_{id}.png")
+% #end.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Trains
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-image(train(T),start,@train_img_path(T,D)):-object(train(T),train),property(train(T),direction,D).
+% image(train(T),start,@train_img_path(T,D)):-object(train(T),train),property(train(T),direction,D).
+% image(train(0),start,"img/train_e_0.png"):-object(train(0),train).
+% image(train(1),start,"img/train_e_1.png"):-object(train(1),train).
+% image(train(2),start,"img/train_e_2.png"):-object(train(2),train).
+
+image(T,start,"img/train_e_0.png"):-object(T,train),property(T,direction,e).
+image(T,start,"img/train_n_0.png"):-object(T,train),property(T,direction,n).
+image(T,start,"img/train_s_0.png"):-object(T,train),property(T,direction,s).
+image(T,start,"img/train_w_0.png"):-object(T,train),property(T,direction,w).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -31,7 +73,8 @@ image(train(T),start,@train_img_path(T,D)):-object(train(T),train),property(trai
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Straight Tracks
-image(X,cell,"img/straight_0.png"):-object(X,track),propeerty(X,code,32800).
+image(X,cell,"img/straight_0.png"):-object(X,track),property(X,code,32800).
+
 image(X,cell,"img/straight_90.png"):-object(X,track),property(X,code,1025).
 
 % Simple switches
@@ -75,14 +118,3 @@ image(X,cell,"img/dead_end_90.png"):-object(X,track),property(X,code,4).
 image(X,cell,"img/dead_end_180.png"):-object(X,track),property(X,code,128).
 image(X,cell,"img/dead_end_270.png"):-object(X,track),property(X,code,256).
 
-
-
-label(train(ID),ID,corner) :- object(train(ID),train).
-
-
-
-visual(O,cell,1,"fill","1","none",true) :- object(O,track).
-
-visual(O,start,20,"contain","1","none",true) :- object(O,train).
-
-visual(O,end,20,"contain","1","none",false) :- object(O,train).

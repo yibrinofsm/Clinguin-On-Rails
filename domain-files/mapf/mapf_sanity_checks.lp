@@ -2,17 +2,13 @@
 
 #defined image/3.
 
-rejection(create,O,T,object_term,"This object already exists. Choose another object identifier.") :- request(create,O,T),object(O,_).
+rejection(create,O,T,object_term,"This object already exists. Choose another object identifier.") :-object(O,T), request(create,O,T).
 
 role(O,start,origin,1,1) :- object(O,agent).
 
 role(O,end,destination,1,1) :- object(O,agent).
 
-visual(O,start,20,"contain","1","none",true) :- object(O,agent).
 
-visual(O,end,10,"contain","1","none",false) :- object(O,agent).
-
-label(agent(ID),ID,center) :- object(agent(ID),agent).
 issue(O,warning,property(K),"A required property is missing.") :- object(O,_),property_schema(O,K,_,true),not property(O,K,_).
 issue(O,warning,start,"The agent has no start position.") :- object(O,_),not position(_,start,O).
 issue(O,warning,start,"The agent has no end position.") :- object(O,_),not position(_,end,O).
