@@ -972,6 +972,39 @@ attr(add_object_type_count,label,@concat(N," declared")) :- N=#count{T:domain_ty
 attr(add_object_type_count,class,("text-secondary";"bg-light";"border";"rounded-pill";"px-2";"py-1";"m-0")) :- has_declared_object_type.
 attr(add_object_type_count,"font-size","9px") :- has_declared_object_type.
 
+<<<<<<< HEAD
+=======
+% Mode switch
+elem(object_type_mode_actions,container,add_object_type_field) :- has_declared_object_type.
+attr(object_type_mode_actions,order,2) :- has_declared_object_type.
+attr(object_type_mode_actions,flex_direction,row) :- has_declared_object_type.
+attr(object_type_mode_actions,class,("d-flex";"flex-row";"gap-2";"w-100")) :- has_declared_object_type.
+
+elem(use_declared_type,button,object_type_mode_actions) :- has_declared_object_type.
+attr(use_declared_type,order,1) :- has_declared_object_type.
+attr(use_declared_type,label,"Declared types") :- has_declared_object_type.
+attr(use_declared_type,icon,"fa-list") :- has_declared_object_type.
+attr(use_declared_type,class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- has_declared_object_type.
+attr(use_declared_type,"font-size","10px") :- has_declared_object_type.
+when(use_declared_type,click,update,(declared_type_section,visibility,shown)) :- has_declared_object_type.
+when(use_declared_type,click,update,(manual_type_section,visibility,hidden)) :- has_declared_object_type.
+when(use_declared_type,click,update,(use_declared_type,class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- has_declared_object_type.
+when(use_declared_type,click,update,(use_manual_type,class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- has_declared_object_type.
+when(use_declared_type,click,context,(new_object_type,none)) :- has_declared_object_type.
+
+elem(use_manual_type,button,object_type_mode_actions) :- has_declared_object_type.
+attr(use_manual_type,order,2) :- has_declared_object_type.
+attr(use_manual_type,label,"Enter manually") :- has_declared_object_type.
+attr(use_manual_type,icon,"fa-pen") :- has_declared_object_type.
+attr(use_manual_type,class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1")) :- has_declared_object_type.
+attr(use_manual_type,"font-size","10px") :- has_declared_object_type.
+when(use_manual_type,click,update,(declared_type_section,visibility,hidden)) :- has_declared_object_type.
+when(use_manual_type,click,update,(manual_type_section,visibility,shown)) :- has_declared_object_type.
+when(use_manual_type,click,update,(use_manual_type,class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- has_declared_object_type.
+when(use_manual_type,click,update,(use_declared_type,class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- has_declared_object_type.
+when(use_manual_type,click,context,(new_object_type,none)) :- has_declared_object_type.
+
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 % Declared mode
 
 elem(declared_type_section,container,add_object_type_field) :- has_declared_object_type.

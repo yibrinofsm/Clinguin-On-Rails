@@ -14,9 +14,12 @@ object(agent(7),agent).
 object(agent(8),agent).
 object(agent(9),agent).
 
+<<<<<<< HEAD
 object(wall01,wall).
 position((19,21),cell,wall01).
 
+=======
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 position((10,17),end,agent(15)).
 position((10,5),start,agent(14)).
 position((11,12),start,agent(4)).
@@ -63,7 +66,11 @@ property(agent(6),label,6).
 property(agent(7),label,7).
 property(agent(8),label,8).
 property(agent(9),label,9).
+<<<<<<< HEAD
 property(wall01,label,1).
+=======
+
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 % stat(agents,15).
 % stat(height,20).
 % stat(total_nodes,201).

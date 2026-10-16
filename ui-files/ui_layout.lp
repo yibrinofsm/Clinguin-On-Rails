@@ -83,12 +83,21 @@ attr(node_box(Row,Col),"border-bottom","1px solid #0f8bf7") :- node((Row,Col)), 
 attr(node_box(Row,Col),"box-sizing","border-box") :- node((Row,Col)).
 % % SUCCESS NOTIFICATION
 % % ============================================================
+<<<<<<< HEAD
 % when(node_box(Row,Col),click,context,(notice_level,success)) :-node((Row,Col)),object_selected_for_placement(O,T,R),not position((Row,Col),R,O),not same_type_placement_conflict((Row,Col),R,O,T),not _clinguin_unsat.
 % when(node_box(Row,Col),click,context,(notice_title,"Object Placed")) :-node((Row,Col)),object_selected_for_placement(O,T,R),not position((Row,Col),R,O),not same_type_placement_conflict((Row,Col),R,O,T),not _clinguin_unsat.
 % when(node_box(Row,Col),click,context,(notice_message,@concat("Object ",O," of type ",T," was placed at node (",Row,",",Col,") in the grid."))) :-node((Row,Col)),object_selected_for_placement(O,T,R),not position((Row,Col),R,O),not same_type_placement_conflict((Row,Col),R,O,T),not _clinguin_unsat.
 
  % Place an object when there is no conflict.
 % when(node_box(Row,Col),click,call,add_atom(position((Row,Col),R,O))) :-node((Row,Col)),object_selected_for_placement(O,T,R),not position((Row,Col),R,O),not same_type_placement_conflict((Row,Col),R,O,T),not _clinguin_unsat.
+=======
+% when(node_box(Row,Col),click,context,(notice_level,success)) :-node((Row,Col)),placement_selected(O,T,R),not position((Row,Col),R,O),not same_type_placement_conflict((Row,Col),R,O,T),not _clinguin_unsat.
+% when(node_box(Row,Col),click,context,(notice_title,"Object Placed")) :-node((Row,Col)),placement_selected(O,T,R),not position((Row,Col),R,O),not same_type_placement_conflict((Row,Col),R,O,T),not _clinguin_unsat.
+% when(node_box(Row,Col),click,context,(notice_message,@concat("Object ",O," of type ",T," was placed at node (",Row,",",Col,") in the grid."))) :-node((Row,Col)),placement_selected(O,T,R),not position((Row,Col),R,O),not same_type_placement_conflict((Row,Col),R,O,T),not _clinguin_unsat.
+
+ % Place an object when there is no conflict.
+% when(node_box(Row,Col),click,call,add_atom(position((Row,Col),R,O))) :-node((Row,Col)),placement_selected(O,T,R),not position((Row,Col),R,O),not same_type_placement_conflict((Row,Col),R,O,T),not _clinguin_unsat.
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 % ============================================================
 % GENERIC OBJECT PLACEMENT
 % ============================================================
@@ -98,18 +107,58 @@ attr(node_box(Row,Col),"box-sizing","border-box") :- node((Row,Col)).
 % ============================================================
 % PLACE OBJECT
 % ============================================================
+<<<<<<< HEAD
 when(node_box(Row,Col),click,call,add_atom(position((Row,Col),R,O))) :-valid_object_placement(Row,Col,O,T,R).
+=======
+
+when(node_box(Row,Col),click,call,add_atom(position((Row,Col),R,O))) :-valid_object_placement(Row,Col,O,T,R).
+
+
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 % ============================================================
 % SUCCESS NOTIFICATION
 % ============================================================
 
+<<<<<<< HEAD
 notification_event( node_box(Row,Col),click,success,"Object Placed",@concat("Object ",O," of type ",T," was placed at node (",Row,",",Col,") in the grid.")) :-valid_object_placement(Row,Col,O,T,R).
+=======
+notification_event( node_box(Row,Col),click,
+    success,
+    "Object Placed",
+    @concat(
+        "Object ",O,
+        " of type ",T,
+        " was placed at node (",
+        Row,",",Col,") in the grid."
+    )
+) :-
+    valid_object_placement(Row,Col,O,T,R).
+
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 % ============================================================
 % REJECTED PLACEMENT NOTIFICATION
 % ============================================================
 
+<<<<<<< HEAD
 notification_event(node_box(Row,Col),click,error,"Placement Rejected",@concat("Cannot place object ",O," of type ",T," at node (",Row,",",Col,"). The placement violates a declared constraint.")) :-node((Row,Col)),object_selected_for_placement(O,T,R),placement_rejected((Row,Col),O,T,R).
+=======
+notification_event(
+    node_box(Row,Col),
+    click,
+    error,
+    "Placement Rejected",
+    @concat(
+        "Cannot place object ",O,
+        " of type ",T,
+        " at node (",Row,",",Col,
+        "). The placement violates a declared constraint."
+    )
+) :-
+    node((Row,Col)),
+    placement_selected(O,T,R),
+    placement_rejected((Row,Col),O,T,R).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 % NO GRID
 elem(no_grid,label,main_panel) :- not node((_,_)).

@@ -9,7 +9,11 @@
 %
 % FUNCTIONALITY:
 % 1. Generates train image paths based on train identifiers
+<<<<<<< HEAD
 %    and directions using an embedded Python function. ?
+=======
+%    and directions using an embedded Python function.
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 %
 % 2. Assigns images to railway tracks according to their
 %    Flatland transition codes.

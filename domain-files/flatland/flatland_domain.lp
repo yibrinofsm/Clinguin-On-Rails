@@ -59,6 +59,7 @@ train_direction(s).
 train_direction(w).
 
 
+<<<<<<< HEAD
 position((0,0),start,train0).
 position((0,0),end,train10).
 
@@ -152,3 +153,8 @@ flatland_invalid_placement(N,O,D,Neighbor,Existing) :-
 % If domain files contain #show directives, expose this predicate via
 % a matching #show flatland_invalid_placement/5 directive as needed
 
+=======
+
+
+
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181

@@ -4,12 +4,17 @@
 % ============================================================
 %  This file defines a Flatland instance using our generic ASP representation
 % ##########################################################
+<<<<<<< HEAD
 % Generic Flatland instance using node/1,object/2, property/3,
+=======
+% Generic Flatland instance using object/2, property/3,
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 % and position/3.
 % ##########################################################
 
 % ----------------------------------------------------------
 % Objects
+<<<<<<< HEAD
 % What object exist, and what kind of object is it
 % object(ObjectName,ObjectType)
 % ----------------------------------------------------------
@@ -20,6 +25,14 @@
 object(train(0),train).
 object(train(1),train).
 
+=======
+% ----------------------------------------------------------
+
+% Train
+object(train(0),train).
+object(train(1),train).
+object(train(2),train).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 % Tracks
 % object(track(0),track).
@@ -36,7 +49,10 @@ object(track(2064),track).
 % ----------------------------------------------------------
 % Properties
 % property(Object, PropertyName, Value)
+<<<<<<< HEAD
 % What attribute does an object have, and what is its value?
+=======
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 % ----------------------------------------------------------
 property(track(2064),code,2064).
 % property(track(1025),code,1025).
@@ -301,6 +317,7 @@ node((3,21)).
 
 node((3,22)).
 
+<<<<<<< HEAD
 
 % 1. MAPF
 % 2. FLATLAND
@@ -343,3 +360,5 @@ object(train(end),train).
 object(agent(start),agent).
 object(agent(end),agent).
 
+=======
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181

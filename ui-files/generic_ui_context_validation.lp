@@ -116,7 +116,11 @@ domain_image(O,R,I) :- image(O,R,I),not _clinguin_atom(image(O,R,I)).
 
 % An object O of type T is considered selected and ready for placement with role R if the user has selected the object and 
 % role in the Clinguin interface, the object is complete.
+<<<<<<< HEAD
 object_selected_for_placement(O,T,R) :- _clinguin_context(object_selected_for_placement_for_placement,O),_clinguin_context(selected_role_for_placement,R),complete(O,T).
+=======
+placement_selected(O,T,R) :- _clinguin_context(object_selected_for_placement_for_placement,O),_clinguin_context(selected_role_for_placement,R),complete(O,T).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 % ============================================================
 % SAME-TYPE OBJECT PLACEMENT CONFLICT
@@ -129,7 +133,11 @@ object_selected_for_placement(O,T,R) :- _clinguin_context(object_selected_for_pl
 % ============================================================
 % An object cannot be placed if another object of the same type occupies the selected node.
 % Thsi rule prevents two different objects of the same type from occupying the same node,
+<<<<<<< HEAD
 % same_type_placement_conflict(N,R,O,T) :-object_selected_for_placement(O,T,R),position(N,ExistingRole,ExistingObject),object(ExistingObject,T),ExistingObject != O.
+=======
+same_type_placement_conflict(N,R,O,T) :-placement_selected(O,T,R),position(N,ExistingRole,ExistingObject),object(ExistingObject,T),ExistingObject != O.
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 % A train should not be allowed to be placed on an empty grid cell. It must be placed on a cell that already contains a track.
 
@@ -141,13 +149,18 @@ object_selected_for_placement(O,T,R) :- _clinguin_context(object_selected_for_pl
 
 
 % Identify an unsatisfied placement requirement.
+<<<<<<< HEAD
 missing_placement_requirement(N,O,T,R,RequiredType) :-node(N),object_selected_for_placement(O,T,R),type_placement_requirement(T,RequiredType),not node_contains_type(N,RequiredType).
+=======
+missing_placement_requirement(N,O,T,R,RequiredType) :-node(N),placement_selected(O,T,R),type_placement_requirement(T,RequiredType),not node_contains_type(N,RequiredType).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 % A placement is rejected if a declared requirement is missing.
 placement_rejected(N,O,T,R) :-missing_placement_requirement(N,O,T,R,_).
 
 % A placement is also rejected when another object of
 % the same type occupies the destination node.
+<<<<<<< HEAD
 placement_rejected(N,O,T,R) :- same_type_same_role_placement_conflict(N,R,O,T).
 
 %  Determine whether the selected object can be placed.
@@ -176,3 +189,10 @@ valid_object_placement(Row,Col,O,T,R) :-node((Row,Col)),object_selected_for_plac
 % If an object of type T  is selected for a placement with role R, 
 
 same_type_same_role_placement_conflict(N,O,T,R):-object_selected_for_placement(O,T,R),position(N,_,ExistingObject),object(ExistingObject,T),ExistingObject < O.
+=======
+placement_rejected(N,O,T,R) :- same_type_placement_conflict(N,R,O,T).
+
+%  Determine whether the selected object can be placed.
+valid_object_placement(Row,Col,O,T,R) :-node((Row,Col)),placement_selected(O,T,R),not position((Row,Col),R,O),not placement_rejected((Row,Col),O,T,R),not _clinguin_unsat.
+
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181

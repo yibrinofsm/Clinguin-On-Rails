@@ -184,7 +184,14 @@ single_role_image(O,R) :-
 %
 % ============================================================
 
+<<<<<<< HEAD
 object_missing_required_property(O,T,P,VT) :-object(O,T),type_property(T,P,VT,required),not property(O,P,_).
+=======
+object_missing_required_property(O,T,P,VT) :-
+    object(O,T),
+    type_property(T,P,VT,required),
+    not property(O,P,_).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 
 % ============================================================
@@ -216,10 +223,21 @@ object_missing_required_property(O,T,P,VT) :-object(O,T),type_property(T,P,VT,re
 % ============================================================
 
 % True if object O has all required properties.
+<<<<<<< HEAD
 has_all_properties(O,T) :-object(O,T), not object_missing_required_property(O,T,_,_).
 
 % True if no image role is reported missing for object O.
 has_all_images(O,T) :-object(O,T), not object_missing_image_for_role(O,T,_).
+=======
+has_all_properties(O,T) :-
+    object(O,T),
+    not object_missing_required_property(O,T,_,_).
+
+% True if no image role is reported missing for object O.
+has_all_images(O,T) :-
+    object(O,T),
+    not object_missing_image_for_role(O,T,_).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 
 % ============================================================
@@ -247,6 +265,7 @@ has_all_images(O,T) :-object(O,T), not object_missing_image_for_role(O,T,_).
 % ============================================================
 
 % Object is complete when both completeness checks succeed.
+<<<<<<< HEAD
 complete(O,T) :-object(O,T),has_all_properties(O,T),has_all_images(O,T).
 
 % Object is incomplete when completeness cannot be established.
@@ -255,6 +274,23 @@ incomplete(O,T) :-object(O,T),not complete(O,T).
 
 % Check whether a node contains an object of type T.
 node_contains_type(N,T) :-position(N,_,O),object(O,T).
+=======
+complete(O,T) :-
+    object(O,T),
+    has_all_properties(O,T),
+    has_all_images(O,T).
+
+% Object is incomplete when completeness cannot be established.
+incomplete(O,T) :-
+    object(O,T),
+    not complete(O,T).
+
+
+% Check whether a node contains an object of type T.
+node_contains_type(N,T) :-
+    position(N,_,O),
+    object(O,T).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 % ============================================================
 % 10. EXAMPLE GENERIC DOMAIN FACTS (DISABLED)
@@ -290,5 +326,9 @@ node_contains_type(N,T) :-position(N,_,O),object(O,T).
 % image(train01,start,img/train01_start.png).
 % image(train01,end,img/train01_end.png).
 % position((10,10),start,train01).
+<<<<<<< HEAD
 % position((100,100),end,train01).
 
+=======
+% position((100,100),end,train01).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181

@@ -2,11 +2,24 @@
 
 % #defined image/3.
 
+<<<<<<< HEAD
 % rejection(create,O,T,object_term,"This object already exists. Choose another object identifier.") :-object(O,T), request(create,O,T).
+=======
+rejection(create,O,T,object_term,"This object already exists. Choose another object identifier.") :-object(O,T), request(create,O,T).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 % role(O,start,origin,1,1) :- object(O,agent).
 
+<<<<<<< HEAD
 % role(O,end,destination,1,1) :- object(O,agent).
+=======
+role(O,end,destination,1,1) :- object(O,agent).
+
+
+issue(O,warning,property(K),"A required property is missing.") :- object(O,_),property_schema(O,K,_,true),not property(O,K,_).
+issue(O,warning,start,"The agent has no start position.") :- object(O,_),not position(_,start,O).
+issue(O,warning,start,"The agent has no end position.") :- object(O,_),not position(_,end,O).
+>>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 
 % issue(O,warning,property(K),"A required property is missing.") :- object(O,_),property_schema(O,K,_,true),not property(O,K,_).
