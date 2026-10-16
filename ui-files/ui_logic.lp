@@ -68,14 +68,6 @@ object_selected_for_placement(O,T) :-object(O,T),_clinguin_context(object_select
 object_missing_image_for_role(O,T,R) :- object_selected_for_inspection(O,T),type_role(T,R),not image(O,R,_).
 
 has_object_missing_image_for_role(O,T) :- object_missing_image_for_role(O,T,_).
-<<<<<<< HEAD
-
-object_missing_image(O,T) :- object_missing_image_for_role(O,T,_).
-
-session_image(O,R,I) :- image(O,R,I),_clinguin_atom(image(O,R,I)).
-domain_image(O,R,I) :- image(O,R,I),not _clinguin_atom(image(O,R,I)).
-=======
->>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 % node((R,C)) :-_clinguin_context(new_rows, Rows),_clinguin_context(new_cols, Cols),R = 0..Rows-1,C = 0..Cols-1.
 
 
@@ -115,13 +107,6 @@ has_domain_nodes :- domain_node(_).
 % 3. upload an image associated for that role for the object
 
 
-<<<<<<< HEAD
-% object_missing_image_for_role(O,T,R) :- object_selected_for_inspection(O,T),type_role(T,R),not image(O,R,_).
-
-%
-
-
-=======
 object_missing_image_for_role(O,T,R) :- object_selected_for_inspection(O,T),type_role(T,R),not image(O,R,_).
 
 % has_object_missing_image_for_role
@@ -133,4 +118,3 @@ domain_image(O,R,I) :- image(O,R,I),not _clinguin_atom(image(O,R,I)).
 
 % Selected complete object and valid role.
 placement_selected(O,T,R) :- _clinguin_context(object_selected_for_placement_for_placement,O),_clinguin_context(selected_role_for_placement,R),complete(O,T).
->>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181

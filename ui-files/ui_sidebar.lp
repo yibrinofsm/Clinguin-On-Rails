@@ -972,39 +972,6 @@ attr(add_object_type_count,label,@concat(N," declared")) :- N=#count{T:domain_ty
 attr(add_object_type_count,class,("text-secondary";"bg-light";"border";"rounded-pill";"px-2";"py-1";"m-0")) :- has_declared_object_type.
 attr(add_object_type_count,"font-size","9px") :- has_declared_object_type.
 
-<<<<<<< HEAD
-=======
-% Mode switch
-elem(object_type_mode_actions,container,add_object_type_field) :- has_declared_object_type.
-attr(object_type_mode_actions,order,2) :- has_declared_object_type.
-attr(object_type_mode_actions,flex_direction,row) :- has_declared_object_type.
-attr(object_type_mode_actions,class,("d-flex";"flex-row";"gap-2";"w-100")) :- has_declared_object_type.
-
-elem(use_declared_type,button,object_type_mode_actions) :- has_declared_object_type.
-attr(use_declared_type,order,1) :- has_declared_object_type.
-attr(use_declared_type,label,"Declared types") :- has_declared_object_type.
-attr(use_declared_type,icon,"fa-list") :- has_declared_object_type.
-attr(use_declared_type,class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- has_declared_object_type.
-attr(use_declared_type,"font-size","10px") :- has_declared_object_type.
-when(use_declared_type,click,update,(declared_type_section,visibility,shown)) :- has_declared_object_type.
-when(use_declared_type,click,update,(manual_type_section,visibility,hidden)) :- has_declared_object_type.
-when(use_declared_type,click,update,(use_declared_type,class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- has_declared_object_type.
-when(use_declared_type,click,update,(use_manual_type,class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- has_declared_object_type.
-when(use_declared_type,click,context,(new_object_type,none)) :- has_declared_object_type.
-
-elem(use_manual_type,button,object_type_mode_actions) :- has_declared_object_type.
-attr(use_manual_type,order,2) :- has_declared_object_type.
-attr(use_manual_type,label,"Enter manually") :- has_declared_object_type.
-attr(use_manual_type,icon,"fa-pen") :- has_declared_object_type.
-attr(use_manual_type,class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1")) :- has_declared_object_type.
-attr(use_manual_type,"font-size","10px") :- has_declared_object_type.
-when(use_manual_type,click,update,(declared_type_section,visibility,hidden)) :- has_declared_object_type.
-when(use_manual_type,click,update,(manual_type_section,visibility,shown)) :- has_declared_object_type.
-when(use_manual_type,click,update,(use_manual_type,class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- has_declared_object_type.
-when(use_manual_type,click,update,(use_declared_type,class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- has_declared_object_type.
-when(use_manual_type,click,context,(new_object_type,none)) :- has_declared_object_type.
-
->>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 % Declared mode
 
 elem(declared_type_section,container,add_object_type_field) :- has_declared_object_type.
@@ -1293,52 +1260,12 @@ attr(add_visual_header(O,T),order,1) :- object_selected_for_inspection(O,T).
 attr(add_visual_header(O,T),flex_direction,row) :- object_selected_for_inspection(O,T).
 attr(add_visual_header(O,T),class,("d-flex";"flex-row";"align-items-center";"justify-content-between";"gap-2")) :- object_selected_for_inspection(O,T).
 
-elem(add_visual_title(O,T),label,add_visual_header(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_visual_title(O,T),order,1) :- object_selected_for_inspection(O,T).
-attr(add_visual_title(O,T),label,"Upload image") :- object_selected_for_inspection(O,T).
-attr(add_visual_title(O,T),class,("fw-bold";"text-dark";"m-0")) :- object_selected_for_inspection(O,T).
-attr(add_visual_title(O,T),"font-size","11px") :- object_selected_for_inspection(O,T).
 
 elem(add_visual_remaining(O,T),label,add_visual_header(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
 attr(add_visual_remaining(O,T),order,2) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
 attr(add_visual_remaining(O,T),label,@concat(N," roles available")) :- object_selected_for_inspection(O,T),object_missing_image(O,T),N=#count{R:object_missing_image_for_role(O,T,R)}.
 attr(add_visual_remaining(O,T),class,("text-secondary";"m-0")) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
 attr(add_visual_remaining(O,T),"font-size","9px") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-
-% Role mode buttons
-elem(add_role_mode_actions(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_role_mode_actions(O,T),order,2) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_role_mode_actions(O,T),flex_direction,row) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_role_mode_actions(O,T),class,("d-flex";"flex-row";"gap-2";"w-100")) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-
-elem(use_declared_image_role(O,T),button,add_role_mode_actions(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_declared_image_role(O,T),order,1) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_declared_image_role(O,T),label,"Available roles") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_declared_image_role(O,T),icon,"fa-list") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_declared_image_role(O,T),class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_declared_image_role(O,T),"font-size","9px") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-
-when(use_declared_image_role(O,T),click,update,(declared_image_role_section(O,T),visibility,shown)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_declared_image_role(O,T),click,update,(manual_image_role_section(O,T),visibility,hidden)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_declared_image_role(O,T),click,update,(use_declared_image_role(O,T),class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_declared_image_role(O,T),click,update,(use_manual_image_role(O,T),class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_declared_image_role(O,T),click,context,(new_image_role,none)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_declared_image_role(O,T),click,update,(add_visual_file(O,T),disabled,true)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_declared_image_role(O,T),click,update,(upload_visual(O,T),disabled,true)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-
-elem(use_manual_image_role(O,T),button,add_role_mode_actions(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_manual_image_role(O,T),order,2) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_manual_image_role(O,T),label,"Enter manually") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_manual_image_role(O,T),icon,"fa-pen") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_manual_image_role(O,T),class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(use_manual_image_role(O,T),"font-size","9px") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_manual_image_role(O,T),click,update,(declared_image_role_section(O,T),visibility,hidden)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_manual_image_role(O,T),click,update,(manual_image_role_section(O,T),visibility,shown)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_manual_image_role(O,T),click,update,(use_manual_image_role(O,T),class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_manual_image_role(O,T),click,update,(use_declared_image_role(O,T),class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1"))) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_manual_image_role(O,T),click,context,(new_image_role,none)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_manual_image_role(O,T),click,update,(add_visual_file(O,T),disabled,true)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-when(use_manual_image_role(O,T),click,update,(upload_visual(O,T),disabled,true)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
 
 % Declared role mode
 elem(declared_image_role_section(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
@@ -1360,63 +1287,7 @@ attr(add_visual_role_option(O,T,R),class,("dropdown-item";"py-1")) :- object_mis
 attr(add_visual_role_option(O,T,R),"font-size","10px") :- object_missing_image_for_role(O,T,R).
 when(add_visual_role_option(O,T,R),click,context,(new_image_role,R)) :- object_missing_image_for_role(O,T,R).
 when(add_visual_role_option(O,T,R),click,update,(add_visual_role(O,T),selected,@concat("",R))) :- object_missing_image_for_role(O,T,R).
-when(add_visual_role_option(O,T,R),click,update,(add_visual_file(O,T),disabled,false)) :- object_missing_image_for_role(O,T,R).
-
-% Manual role mode
-elem(manual_image_role_section(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).
-attr(manual_image_role_section(O,T),order,3) :- object_selected_for_inspection(O,T).
-attr(manual_image_role_section(O,T),flex_direction,column) :- object_selected_for_inspection(O,T).
-attr(manual_image_role_section(O,T),class,("d-flex";"flex-column";"gap-1";"w-100")) :- object_selected_for_inspection(O,T).
-attr(manual_image_role_section(O,T),visibility,hidden) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(manual_image_role_section(O,T),visibility,shown) :- object_selected_for_inspection(O,T),not object_missing_image(O,T).
-
-elem(add_visual_manual_role(O,T),textfield,manual_image_role_section(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_visual_manual_role(O,T),order,1) :- object_selected_for_inspection(O,T).
-attr(add_visual_manual_role(O,T),placeholder,"Enter role, e.g. start") :- object_selected_for_inspection(O,T).
-attr(add_visual_manual_role(O,T),class,("form-control";"form-control-sm";"rounded-2";"w-100")) :- object_selected_for_inspection(O,T).
-attr(add_visual_manual_role(O,T),"font-size","10px") :- object_selected_for_inspection(O,T).
-when(add_visual_manual_role(O,T),input,context,(new_image_role,_value)) :- object_selected_for_inspection(O,T).
-when(add_visual_manual_role(O,T),input,update,(add_visual_file(O,T),disabled,false)) :- object_selected_for_inspection(O,T).
-
-elem(add_visual_manual_hint(O,T),label,manual_image_role_section(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_visual_manual_hint(O,T),order,2) :- object_selected_for_inspection(O,T).
-attr(add_visual_manual_hint(O,T),label,"Enter the role manually when the domain does not provide one or when a custom role is needed.") :- object_selected_for_inspection(O,T).
-attr(add_visual_manual_hint(O,T),class,("text-secondary";"text-wrap";"m-0")) :- object_selected_for_inspection(O,T).
-attr(add_visual_manual_hint(O,T),"font-size","8px") :- object_selected_for_inspection(O,T).
-
-% File
-
-elem(add_visual_file(O,T),file_input,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_visual_file(O,T),order,4) :- object_selected_for_inspection(O,T).
-attr(add_visual_file(O,T),accept,".png,.jpg,.jpeg,.webp") :- object_selected_for_inspection(O,T).
-attr(add_visual_file(O,T),multiple,false) :- object_selected_for_inspection(O,T).
-attr(add_visual_file(O,T),disabled,true) :- object_selected_for_inspection(O,T).
-attr(add_visual_file(O,T),class,("form-control";"form-control-sm";"rounded-2")) :- object_selected_for_inspection(O,T).
-
-when(add_visual_file(O,T),change,update,(upload_visual(O,T),disabled,false)) :- object_selected_for_inspection(O,T).
-
-% Upload
-elem(add_visual_actions(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_visual_actions(O,T),order,5) :- object_selected_for_inspection(O,T).
-attr(add_visual_actions(O,T),flex_direction,row) :- object_selected_for_inspection(O,T).
-attr(add_visual_actions(O,T),class,("d-flex";"flex-row";"justify-content-end")) :- object_selected_for_inspection(O,T).
-
-elem(upload_visual(O,T),button,add_visual_actions(O,T)) :- object_selected_for_inspection(O,T).
-attr(upload_visual(O,T),order,1) :- object_selected_for_inspection(O,T).
-attr(upload_visual(O,T),label,"Upload image") :- object_selected_for_inspection(O,T).
-attr(upload_visual(O,T),icon,"fa-upload") :- object_selected_for_inspection(O,T).
-attr(upload_visual(O,T),disabled,true) :- object_selected_for_inspection(O,T).
-attr(upload_visual(O,T),class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object_selected_for_inspection(O,T).
-attr(upload_visual(O,T),"font-size","9px") :- object_selected_for_inspection(O,T).
-when(add_visual_file(O,T),click,update,add_atom()) :- object_selected_for_inspection(O,T).
-when(upload_visual(O,T),click,call,add_atom(type_role(T,_context_value(new_image_role)))):-object_selected_for_inspection(O,T).
-
-
-when(upload_visual(O,T),click,call,upload_object_image(O,_context_value(new_image_role))) :- object_selected_for_inspection(O,T).
-
-
-
-% ============================================================
+when(add_visual_role_option(O,T,R),click,update,(add_visual_file(O,T),disabled,false)) :- object_missing_image_for_role(O,T,R).% Manual role modeelem(manual_image_role_section(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).attr(manual_image_role_section(O,T),order,3) :- object_selected_for_inspection(O,T).attr(manual_image_role_section(O,T),flex_direction,column) :- object_selected_for_inspection(O,T).attr(manual_image_role_section(O,T),class,("d-flex";"flex-column";"gap-1";"w-100")) :- object_selected_for_inspection(O,T).attr(manual_image_role_section(O,T),visibility,hidden) :- object_selected_for_inspection(O,T),object_missing_image(O,T).attr(manual_image_role_section(O,T),visibility,shown) :- object_selected_for_inspection(O,T),not object_missing_image(O,T).elem(add_visual_manual_role(O,T),textfield,manual_image_role_section(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_manual_role(O,T),order,1) :- object_selected_for_inspection(O,T).attr(add_visual_manual_role(O,T),placeholder,"Enter role, e.g. start") :- object_selected_for_inspection(O,T).attr(add_visual_manual_role(O,T),class,("form-control";"form-control-sm";"rounded-2";"w-100")) :- object_selected_for_inspection(O,T).attr(add_visual_manual_role(O,T),"font-size","10px") :- object_selected_for_inspection(O,T).when(add_visual_manual_role(O,T),input,context,(new_image_role,_value)) :- object_selected_for_inspection(O,T).when(add_visual_manual_role(O,T),input,update,(add_visual_file(O,T),disabled,false)) :- object_selected_for_inspection(O,T).elem(add_visual_manual_hint(O,T),label,manual_image_role_section(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_manual_hint(O,T),order,2) :- object_selected_for_inspection(O,T).attr(add_visual_manual_hint(O,T),label,"Enter the role manually when the domain does not provide one or when a custom role is needed.") :- object_selected_for_inspection(O,T).attr(add_visual_manual_hint(O,T),class,("text-secondary";"text-wrap";"m-0")) :- object_selected_for_inspection(O,T).attr(add_visual_manual_hint(O,T),"font-size","8px") :- object_selected_for_inspection(O,T).% Fileelem(add_visual_file(O,T),file_input,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),order,4) :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),accept,".png,.jpg,.jpeg,.webp") :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),multiple,false) :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),disabled,true) :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),class,("form-control";"form-control-sm";"rounded-2")) :- object_selected_for_inspection(O,T).when(add_visual_file(O,T),change,update,(upload_visual(O,T),disabled,false)) :- object_selected_for_inspection(O,T).% Uploadelem(add_visual_actions(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_actions(O,T),order,5) :- object_selected_for_inspection(O,T).attr(add_visual_actions(O,T),flex_direction,row) :- object_selected_for_inspection(O,T).attr(add_visual_actions(O,T),class,("d-flex";"flex-row";"justify-content-end")) :- object_selected_for_inspection(O,T).elem(upload_visual(O,T),button,add_visual_actions(O,T)) :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),order,1) :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),label,"Upload image") :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),icon,"fa-upload") :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),disabled,true) :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),"font-size","9px") :- object_selected_for_inspection(O,T).when(add_visual_file(O,T),click,update,add_atom()) :- object_selected_for_inspection(O,T).when(upload_visual(O,T),click,call,add_atom(type_role(T,_context_value(new_image_role)))):-object_selected_for_inspection(O,T).when(upload_visual(O,T),click,call,upload_object_image(O,_context_value(new_image_role))) :- object_selected_for_inspection(O,T).% ============================================================
 % COMPACT PLACEMENTS
 % ============================================================
 elem(inspector_positions(O,T),container,inspector_body) :- object_selected_for_inspection(O,T), position(_,_,O).

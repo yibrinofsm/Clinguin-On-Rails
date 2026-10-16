@@ -349,10 +349,6 @@ elem(confirm_restart,button,dialog_sheet(restart)).
 attr(confirm_restart,order,2).
 attr(confirm_restart,label,"Confirm").
 attr(confirm_restart,class,("btn-danger";"m-3";"align-self-end")).
-<<<<<<< HEAD
-when(confirm_restart,click,restart).
-=======
->>>>>>> 099658fafc97134e4963e8c7a3152f905d85e181
 
 
 % Help modal
