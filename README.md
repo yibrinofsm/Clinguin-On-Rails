@@ -1,77 +1,96 @@
-Clinguin 
+# Generic ASP-Driven User Interface with Clinguin
 
-This project provides one reusable Clinguin interface for any domains:
+This project provides a generic, ASP-driven interface for creating, inspecting, and visualizing domain instances with [Clinguin](https://clinguin.readthedocs.io/). The same UI can be launched **without a domain-specific instance** or **with an existing domain instance**, such as Flatland.
 
-Flatland: tracks and trains
+The interface works with generic ASP predicates for objects, properties, nodes, images, and positions. Domain-specific facts may be loaded from files; additional instance facts can be supplied through UI interactions.
 
-MAPF: agents with start and end positions
+## 1. Running without a domain-specific file
 
+Start the Clinguin client–server application using only the generic validation file:
 
-Requirements
+```bash
+clinguin client-server \
+  --domain-files domain-files/generic/generic_validation.lp \
+  --ui-files ui-files/ui_presentation.lp \
+  --custom-classes domain-files/generic_ui_backend.py \
+  --backend GenericUIBackend
+```
 
-Python 3.10 is recommended.
+In this mode, **no Flatland or other domain-specific instance is loaded**. The UI can be used to create objects interactively, rather than relying on predefined `object/2` facts.
 
-Clinguin must be installed and available from the terminal.
+### Example: create two robots
 
-Create and activate a virtual environment:
+Use the object-creation interface to add:
 
-conda create python=3.10 --name venv-clinguin
-conda activate venv-clinguin
-pip install clinguin
+```prolog
+object(robot1,robot).
+object(robot2,robot).
+```
 
+Then:
 
-Check the installation:
+1. Find `robot1` in the object list and open its **Inspect** view.
+2. Open the `img/robot/` folder and choose an image for `robot1`. In the image-upload area, enter the **role** associated with the image (for example, 'body'), select that image file, and upload it.
+3. Inspect `robot2`, choose another image from `img/robot/`, enter its role, and upload it. The second robot can use the same role name but a different image.
 
-clinguin -h
- 
- project files
+Conceptually, the resulting image associations have the form:
 
-The repository structure is:
+```prolog
+image(robot1,start,"path/to/robot1-image.png").
+image(robot2,start,"path/to/robot2-image.png").
+```
 
-Clinguin-On-Rails/
-├── domain-files/
-│   ├── flatland/
-│   │   ├── flatland_generic_instance_x2_y10_a0.lp
-│   │   ├── flatland.lp
-│   │   ├── flatland_domain.lp
-│   │   ├── flatland_sanity_checks.lp
-│   │   └── flatland_visualize.lp
-│   ├── mapf/
-│   │   ├── mapf_generic_instance_x20_y20_a15.lp
-│   │   ├─mapf.lp
-│   │   ├── mapf_domain.lp
-│   │   ├── mapf_sanity_checks.lp
-│   │   └── mapf_visualize.lp
-│   └── img/
-├── ui-files/
-│   ├── ui_layout.lp
-│   ├── ui_shell.lp
-│   ├── ui_sidebar.lp
-│   └── ui_state.lp
-└── README.md
+The robot image files used in this example can be found in **`img/robot/`**.  The image role is supplied manually because no domain-specific `type_role/2` declarations are loaded.
 
 
+## 2. Running with a Flatland domain instance
 
-flatland_rules.lp and mapf_rules.lp contain these includes:
+Start the same UI while loading the Flatland program as an additional domain file:
 
-#include "generic_rules.lp".
-#include "editor_commands.lp".
+```bash
+clinguin client-server \
+  --domain-files domain-files/generic/generic_validation.lp domain-files/flatland/flatland.lp \
+  --ui-files ui-files/ui_presentation.lp \
+  --custom-classes domain-files/generic_ui_backend.py \
+  --backend GenericUIBackend
+```
 
-Therefore, keep generic_rules.lp and editor_commands.lp beside the domain rule files, or update the include paths.
-
-The instance files must provide the objects and grid data needed by the selected domain. In particular, the UI expects generic facts such as object/2, property/3, position/3, and grid nodes derived from the project representation.
-
-Run Flatland
-
-Open a terminal in the project directory and run:
- 
- clinguin client-server --domain-files domain-files/flatland/flatland_generic_instance_x2_y10_a0.lp domain-files/flatland/flatland_visual.lp domain-files/flatland/flatland.lp   --ui-files ui-files/ui_layout.lp ui-files/ui_state.lp ui-files/ui_sidebar.lp ui-files/ui_shell.lp --server-log-level DEBUG
+Here, `domain-files/flatland/flatland.lp` supplies the Flatland-specific information to the UI. The generic interface can inspect and visualize relevant facts from the loaded instance, while the generic validation rules continue to operate on the shared representation.
 
 
 
-Run MAPF
+## 3. Generic representation
 
-Open a terminal in the project directory and run:
+The key instance predicates are:
 
- clinguin client-server --domain-files domain-files/mapf/mapf_generic_instance_x20_y20_a15.lp domain-files/mapf/mapf.lp   --ui-files ui-files/ui_layout.lp ui-files/ui_state.lp ui-files/ui_sidebar.lp ui-files/ui_shell.lp
+| Predicate | Purpose | Example |
+|---|---|---|
+| `object(O,T)` | Declares object `O` of type `T` | `object(robot1,robot).` |
+| `property(O,P,V)` | Associates property `P` and value `V` with `O` | `property(robot1,speed,1).` |
+| `node(N)` | Declares a node (often a grid coordinate) | `node((0,0)).` |
+| `image(O,R,Path)` | Associates an image with object `O` in role `R` | `image(robot1,body,"robot.png").` |
+| `position(N,R,O)` | Places object `O` at node `N` under role `R` | `position((0,0),body,robot1).` |
 
+
+
+
+### `domain-files/generic/generic_validation.lp`
+
+This file contains generic validation, counting, and completeness rules based on instance and schema facts, rather than on the currently selected UI object. Its  include:
+
+- Checking the existence of objects and nodes.
+- Counting objects, types, images, and positions.
+- Identifying missing required properties declared through `type_property/4`.
+- Identifying missing images for roles declared through `type_role/2` **when the corresponding missing-image rule is included**.
+- Deriving object completion status, such as `complete(O,T)` and `incomplete(O,T)`.
+
+
+### `generic_ui_context_validation.lp`
+
+This file contain rules that depend on the **current Clinguin UI context**, such as the object or role selected for an operation. It should be distinguished from the general instance validation in `generic_validation.lp`.
+
+
+## References
+
+- [ASP-driven User-interaction with Clinguin (paper)](https://arxiv.org/abs/2502.09222)
+- [Clinguin documentation](https://clinguin.readthedocs.io/)

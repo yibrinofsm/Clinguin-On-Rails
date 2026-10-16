@@ -13,11 +13,15 @@ object(agent(6),agent).
 object(agent(7),agent).
 object(agent(8),agent).
 object(agent(9),agent).
+
+object(wall01,wall).
+position((19,21),cell,wall01).
+
 position((10,17),end,agent(15)).
 position((10,5),start,agent(14)).
 position((11,12),start,agent(4)).
 position((11,19),end,agent(12)).
-position((11,19),start,agent(5)).
+% position((11,19),start,agent(5)).
 position((11,6),end,agent(14)).
 position((1,18),start,agent(9)).
 position((1,2),start,agent(6)).
@@ -31,7 +35,7 @@ position((16,9),end,agent(1)).
 position((18,3),end,agent(8)).
 position((1,8),end,agent(5)).
 position((19,20),end,agent(2)).
-position((19,21),start,agent(2)).
+% position((19,21),start,agent(2)).
 position((2,19),start,agent(11)).
 position((3,13),end,agent(13)).
 position((3,14),end,agent(4)).
@@ -59,6 +63,7 @@ property(agent(6),label,6).
 property(agent(7),label,7).
 property(agent(8),label,8).
 property(agent(9),label,9).
+property(wall01,label,1).
 % stat(agents,15).
 % stat(height,20).
 % stat(total_nodes,201).
