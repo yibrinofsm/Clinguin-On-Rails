@@ -337,12 +337,12 @@ node((3,22)).
 % property(train(1),speed,1).
 
 
-object(train(start),train).
-object(train(end),train).
+% object(train(start),train).
+% object(train(end),train).
 
 
-object(agent(start),agent).
-object(agent(end),agent).
+% object(agent(start),agent).
+% object(agent(end),agent).
 
 
 

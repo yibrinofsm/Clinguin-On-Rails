@@ -77,85 +77,6 @@ attr(active_domain_container,class,("d-flex";"flex-row";"align-items-center";"px
 attr(active_domain_container,"box-sizing","border-box") :- active_domain(_).
 
 
-
-
-% ============================================================
-% NO ACTIVE DOMAIN
-% ============================================================
-
-elem(no_active_domain_bar,container,w) :- no_active_domain.
-attr(no_active_domain_bar,order,1) :- no_active_domain.
-attr(no_active_domain_bar,flex_direction,row) :- no_active_domain.
-attr(no_active_domain_bar,class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"justify-content-between";"gap-2";"mx-2";"mt-2";"px-3";"py-2";"rounded-3")) :- no_active_domain.
-attr(no_active_domain_bar,background_color,"#F8FAFC") :- no_active_domain.
-attr(no_active_domain_bar,"border","1px solid #DDE6F0") :- no_active_domain.
-attr(no_active_domain_bar,"border-left","4px solid #F59E0B") :- no_active_domain.
-attr(no_active_domain_bar,"box-shadow","0 2px 8px rgba(15,23,42,0.05)") :- no_active_domain.
-attr(no_active_domain_bar,"min-height","48px") :- no_active_domain.
-attr(no_active_domain_bar,"box-sizing","border-box") :- no_active_domain.
-
-
-% ============================================================
-% NO DOMAIN INFORMATION
-% ============================================================
-
-elem(no_active_domain_info,container,no_active_domain_bar) :- no_active_domain.
-attr(no_active_domain_info,order,1) :- no_active_domain.
-attr(no_active_domain_info,flex_direction,row) :- no_active_domain.
-attr(no_active_domain_info,class,("d-flex";"flex-row";"align-items-center";"gap-2";"flex-shrink-0")) :- no_active_domain.
-
-
-
-elem(no_active_domain_text,container,no_active_domain_info) :- no_active_domain.
-attr(no_active_domain_text,order,2) :- no_active_domain.
-attr(no_active_domain_text,flex_direction,column) :- no_active_domain.
-attr(no_active_domain_text,class,("d-flex";"flex-column";"gap-0")) :- no_active_domain.
-
-elem(no_active_domain_title,label,no_active_domain_text) :- no_active_domain.
-attr(no_active_domain_title,order,1) :- no_active_domain.
-attr(no_active_domain_title,label,"No domain configured") :- no_active_domain.
-attr(no_active_domain_title,class,("fw-bold";"text-dark";"m-0";"text-nowrap")) :- no_active_domain.
-attr(no_active_domain_title,"font-size","11px") :- no_active_domain.
-
-elem(no_active_domain_hint,label,no_active_domain_text) :- no_active_domain.
-attr(no_active_domain_hint,order,2) :- no_active_domain.
-attr(no_active_domain_hint,label,"Enter a domain identifier to start.") :- no_active_domain.
-attr(no_active_domain_hint,class,("text-secondary";"m-0";"text-nowrap")) :- no_active_domain.
-attr(no_active_domain_hint,"font-size","9px") :- no_active_domain.
-
-
-% ============================================================
-% CREATE DOMAIN FORM
-% ============================================================
-
-elem(create_domain_form,container,no_active_domain_bar) :- no_active_domain.
-attr(create_domain_form,order,2) :- no_active_domain.
-attr(create_domain_form,flex_direction,row) :- no_active_domain.
-attr(create_domain_form,class,("d-flex";"flex-row";"align-items-center";"gap-2";"flex-grow-1";"justify-content-end")) :- no_active_domain.
-attr(create_domain_form,"min-width","240px") :- no_active_domain.
-
-elem(input(domain,new_domain_name),textfield,create_domain_form) :- no_active_domain.
-attr(input(domain,new_domain_name),order,1) :- no_active_domain.
-attr(input(domain,new_domain_name),placeholder,"e.g. flatland") :- no_active_domain.
-attr(input(domain,new_domain_name),class,("form-control";"bg-white";"text-dark";"rounded-3";"px-3";"py-1";"flex-grow-1")) :- no_active_domain.
-attr(input(domain,new_domain_name),"border","1px solid #CBD5E1") :- no_active_domain.
-attr(input(domain,new_domain_name),"box-shadow","0 1px 2px rgba(15,23,42,0.04)") :- no_active_domain.
-attr(input(domain,new_domain_name),"font-size","12px") :- no_active_domain.
-attr(input(domain,new_domain_name),"min-height","34px") :- no_active_domain.
-attr(input(domain,new_domain_name),"min-width","180px") :- no_active_domain.
-attr(input(domain,new_domain_name),"max-width","300px") :- no_active_domain.
-when(input(domain,new_domain_name),input,context,(new_domain_name,_value)) :- no_active_domain.
-
-elem(create_domain,button,create_domain_form) :- no_active_domain.
-attr(create_domain,order,2) :- no_active_domain.
-attr(create_domain,label,"Create domain") :- no_active_domain.
-attr(create_domain,icon,"fa-plus") :- no_active_domain.
-attr(create_domain,class,("btn-primary";"text-white";"fw-bold";"rounded-3";"px-3";"py-1";"shadow-sm";"text-nowrap")) :- no_active_domain.
-attr(create_domain,"font-size","11px") :- no_active_domain.
-attr(create_domain,"min-height","34px") :- no_active_domain.
-when(create_domain,click,call,add_atom(active_domain(_context_value(new_domain_name)))) :- no_active_domain.
-
-
 % ============================================================
 % ACTIVE DOMAIN CARD
 % ============================================================
@@ -258,50 +179,6 @@ attr(active_domain_status_label(D),class,("fw-bold";"text-success";"text-nowrap"
 attr(active_domain_status_label(D),"font-size","8px") :- active_domain(D).
 
 
-% ============================================================
-% USER-ADDED / READ-ONLY BADGES
-% ============================================================
-
-elem(active_domain_user_badge(D),label,active_domain_right(D)) :- editable_domain(D).
-attr(active_domain_user_badge(D),order,2) :- editable_domain(D).
-attr(active_domain_user_badge(D),label,"User added") :- editable_domain(D).
-attr(active_domain_user_badge(D),class,("rounded-pill";"px-2";"py-1";"fw-bold";"text-primary";"bg-white";"border";"m-0";"text-nowrap")) :- editable_domain(D).
-attr(active_domain_user_badge(D),"font-size","8px") :- editable_domain(D).
-
-elem(active_domain_readonly_badge(D),label,active_domain_right(D)) :- readonly_domain(D).
-attr(active_domain_readonly_badge(D),order,2) :- readonly_domain(D).
-attr(active_domain_readonly_badge(D),label,"Declared in a domain file") :- readonly_domain(D).
-attr(active_domain_readonly_badge(D),class,("rounded-pill";"px-2";"py-1";"fw-bold";"text-secondary";"bg-white";"border";"m-0";"text-nowrap")) :- readonly_domain(D).
-attr(active_domain_readonly_badge(D),"font-size","8px") :- readonly_domain(D).
-
-% ============================================================
-% EDIT BUTTON
-% ============================================================
-
-
-elem(domain_edit(D),button,active_domain_right(D)) :- editable_domain(D).
-attr(domain_edit(D),order,3) :- editable_domain(D).
-attr(domain_edit(D),label,"Edit") :- editable_domain(D).
-attr(domain_edit(D),icon,"fa-pen") :- editable_domain(D).
-attr(domain_edit(D),class,("btn-outline-primary";"btn-sm";"fw-bold";"rounded-2";"px-2";"py-1";"text-nowrap")) :- editable_domain(D).
-attr(domain_edit(D),"font-size","8px") :- editable_domain(D).
-when(domain_edit(D),click,context,(edit_domain_name(D),D)) :- editable_domain(D).
-when(domain_edit(D),click,update,(dialog(form(edit_domain(D))),visibility,shown)) :- editable_domain(D).
-
-
-% ============================================================
-% REMOVE BUTTON
-% ============================================================
-
-elem(domain_remove(D),button,active_domain_right(D)) :- editable_domain(D).
-attr(domain_remove(D),order,4) :- editable_domain(D).
-attr(domain_remove(D),label,"Remove") :- editable_domain(D).
-attr(domain_remove(D),icon,"fa-trash") :- editable_domain(D).
-attr(domain_remove(D),class,("btn-outline-danger";"btn-sm";"fw-bold";"rounded-2";"px-2";"py-1";"text-nowrap")) :- editable_domain(D).
-attr(domain_remove(D),"font-size","8px") :- editable_domain(D).
-when(domain_remove(D),click,update,(dialog(form(remove_domain(D))),visibility,shown)) :- editable_domain(D).
-
-
 
 % Shared modal appearance 
 attr(dialog(D),size,"lg") :- elem(dialog(D),modal,w).
@@ -349,8 +226,6 @@ elem(confirm_restart,button,dialog_sheet(restart)).
 attr(confirm_restart,order,2).
 attr(confirm_restart,label,"Confirm").
 attr(confirm_restart,class,("btn-danger";"m-3";"align-self-end")).
-
-
 % Help modal
 elem(dialog(help),modal,w).
 attr(dialog(help),visibility,hidden).
