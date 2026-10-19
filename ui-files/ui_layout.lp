@@ -86,25 +86,16 @@ attr(node_box(Row,Col),"gridTemplateRows","minmax(0,1fr)") :-node((Row,Col)).
 % ============================================================
 % PLACE OBJECT
 % ============================================================
-
 when(node_box(Row,Col),click,call,add_atom(position((Row,Col),R,O))) :-valid_object_placement(Row,Col,O,T,R).
-
 % ============================================================
 % SUCCESS NOTIFICATION
 % ============================================================
-
 notification_event( node_box(Row,Col),click,success,"Object Placed",@concat("Object ",O," of type ",T," was placed at node (",Row,",",Col,") in the grid." )) :-valid_object_placement(Row,Col,O,T,R).
-
 % ============================================================
 % REJECTED PLACEMENT NOTIFICATION
 % ============================================================
-
-notification_event(node_box(Row,Col),click,error,"Placement Rejected",@concat("Cannot place object ",O," of type ",T," at node (",Row,",",Col,"). The placement violates a declared constraint.")) :-
-    node((Row,Col)),
-    object_selected_for_placement(O,T,R),
-    object_placement_rejected((Row,Col),O,T,R).
+notification_event(node_box(Row,Col),click,error,"Placement Rejected",@concat("Cannot place object ",O," of type ",T," at node (",Row,",",Col,"). The placement violates a declared constraint.")) :-node((Row,Col)),object_selected_for_placement(O,T,R),object_placement_rejected((Row,Col),O,T,R).
     
-
 % NO GRID
 elem(no_grid,label,main_panel) :- not node((_,_)).
 attr(no_grid,order,2) :- elem(no_grid,label,main_panel).
@@ -124,30 +115,14 @@ attr(grid_placement(Row,Col,R,O),grid_row,0) :- elem(grid_placement(Row,Col,R,O)
 attr(grid_placement(Row,Col,R,O),grid_column,0) :- elem(grid_placement(Row,Col,R,O),container,_).
 attr(grid_placement(Row,Col,R,O),class,("w-100";"h-100";"p-0";"m-0";"pe-none")) :- elem(grid_placement(Row,Col,R,O),container,_).
 % Let each placement fit within its cell.
-attr(grid_placement(Row,Col,R,O),"min-width","0") :-
-    elem(grid_placement(Row,Col,R,O),container,_).
-
-attr(grid_placement(Row,Col,R,O),"min-height","0") :-
-    elem(grid_placement(Row,Col,R,O),container,_).
-
-attr(grid_placement(Row,Col,R,O),class,"overflow-hidden") :-
-    elem(grid_placement(Row,Col,R,O),container,_).
+attr(grid_placement(Row,Col,R,O),"min-width","0") :-elem(grid_placement(Row,Col,R,O),container,_).
+attr(grid_placement(Row,Col,R,O),"min-height","0") :-elem(grid_placement(Row,Col,R,O),container,_).
+attr(grid_placement(Row,Col,R,O),class,"overflow-hidden") :-elem(grid_placement(Row,Col,R,O),container,_).
 
 % Generic background styling for any object.
-attr(grid_placement(Row,Col,R,O),background_color,Color) :-
-    elem(grid_placement(Row,Col,R,O),container,_),
-    property(O,background_color,Color).
+attr(grid_placement(Row,Col,R,O),background_color,Color) :-elem(grid_placement(Row,Col,R,O),container,_),property(O,background_color,Color).
+elem(grid_placement_image(Row,Col,R,O),canvas,grid_placement(Row,Col,R,O)) :-elem(grid_placement(Row,Col,R,O),container,_),not property(O,render_mode,fill),image(O,R,I),I = #min { Path : image(O,R,Path) }.
 
-
-elem(
-    grid_placement_image(Row,Col,R,O),
-    canvas,
-    grid_placement(Row,Col,R,O)
-) :-
-    elem(grid_placement(Row,Col,R,O),container,_),
-    not property(O,render_mode,fill),
-    image(O,R,I),
-    I = #min { Path : image(O,R,Path) }.
 % Role-specific image.
 elem(grid_placement_image(Row,Col,R,O),canvas,grid_placement(Row,Col,R,O)) :- elem(grid_placement(Row,Col,R,O),container,_),image(O,R,I),I=#min{Path:image(O,R,Path)}.
 attr(grid_placement_image(Row,Col,R,O),image,I) :- elem(grid_placement_image(Row,Col,R,O),canvas,_),image(O,R,I),I=#min{Path:image(O,R,Path)}.
@@ -160,63 +135,24 @@ attr(grid_placement_image(Row,Col,R,O),class,("w-100";"h-100";"pe-none")) :- ele
 
 
 % Shared label layer above the images in each occupied cell.
-elem(grid_labels(Row,Col),container,node_box(Row,Col)) :-
-    elem(grid_placement(Row,Col,_,_),container,_).
-
-attr(grid_labels(Row,Col),grid_row,0) :-
-    elem(grid_labels(Row,Col),container,_).
-
-attr(grid_labels(Row,Col),grid_column,0) :-
-    elem(grid_labels(Row,Col),container,_).
-
-attr(grid_labels(Row,Col),child_layout,flex) :-
-    elem(grid_labels(Row,Col),container,_).
-
-attr(grid_labels(Row,Col),flex_direction,column) :-
-    elem(grid_labels(Row,Col),container,_).
-
-attr(grid_labels(Row,Col),class,
-    ("d-flex";"flex-column";"justify-content-end";
-     "w-100";"h-100";"p-0";"m-0";"pe-none";"overflow-hidden")) :-
-    elem(grid_labels(Row,Col),container,_).
-
-attr(grid_labels(Row,Col),"z-index","2") :-
-    elem(grid_labels(Row,Col),container,_).
-
-attr(grid_labels(Row,Col),"min-width","0") :-
-    elem(grid_labels(Row,Col),container,_).
-
-attr(grid_labels(Row,Col),"min-height","0") :-
-    elem(grid_labels(Row,Col),container,_).
+elem(grid_labels(Row,Col),container,node_box(Row,Col)) :-elem(grid_placement(Row,Col,_,_),container,_).
+attr(grid_labels(Row,Col),grid_row,0) :-elem(grid_labels(Row,Col),container,_).
+attr(grid_labels(Row,Col),grid_column,0) :-elem(grid_labels(Row,Col),container,_).
+attr(grid_labels(Row,Col),child_layout,flex) :-elem(grid_labels(Row,Col),container,_).
+attr(grid_labels(Row,Col),flex_direction,column) :-elem(grid_labels(Row,Col),container,_).
+attr(grid_labels(Row,Col),class,("d-flex";"flex-column";"justify-content-end";"w-100";"h-100";"p-0";"m-0";"pe-none";"overflow-hidden")) :-elem(grid_labels(Row,Col),container,_).
+attr(grid_labels(Row,Col),"z-index","2") :-elem(grid_labels(Row,Col),container,_).
+attr(grid_labels(Row,Col),"min-width","0") :-elem(grid_labels(Row,Col),container,_).
+attr(grid_labels(Row,Col),"min-height","0") :-elem(grid_labels(Row,Col),container,_).
 
 % One label per object per cell, even if it has multiple roles there.
-elem(grid_object_label(Row,Col,O),label,grid_labels(Row,Col)) :-
-    elem(grid_placement(Row,Col,_,O),container,_).
-
-attr(grid_object_label(Row,Col,O),label,@concat("",Text)) :-
-    elem(grid_object_label(Row,Col,O),label,_),
-    object_display_ID(O,Text).
+elem(grid_object_label(Row,Col,O),label,grid_labels(Row,Col)) :-elem(grid_placement(Row,Col,_,O),container,_).
+attr(grid_object_label(Row,Col,O),label,@concat("",ID)) :-elem(grid_object_label(Row,Col,O),label,_),object_display_ID(O,ID).
 
 % Stable ordering when multiple objects share a cell.
-attr(grid_object_label(Row,Col,O),order,N) :-
-    elem(grid_object_label(Row,Col,O),label,_),
-    N = #count {
-        Other :
-        elem(grid_object_label(Row,Col,Other),label,_),
-        Other < O
-    }.
+attr(grid_object_label(Row,Col,O),order,N) :-elem(grid_object_label(Row,Col,O),label,_),N = #count {Other :elem(grid_object_label(Row,Col,Other),label,_),Other < O}.
 
-attr(grid_object_label(Row,Col,O),class,
-    ("d-block";"w-100";"text-center";"fw-bold";"text-dark";
-     "text-truncate";"flex-shrink-0";"pe-none";"p-0";"m-0")) :-
-    elem(grid_object_label(Row,Col,O),label,_).
-
-attr(grid_object_label(Row,Col,O),"font-size","8px") :-
-    elem(grid_object_label(Row,Col,O),label,_).
-
-attr(grid_object_label(Row,Col,O),"line-height","9px") :-
-    elem(grid_object_label(Row,Col,O),label,_).
-
-attr(grid_object_label(Row,Col,O),background_color,
-    "rgba(255,255,255,0.85)") :-
-    elem(grid_object_label(Row,Col,O),label,_).
+attr(grid_object_label(Row,Col,O),class,("d-block";"w-100";"text-center";"fw-bold";"text-dark";"text-truncate";"flex-shrink-0";"pe-none";"p-0";"m-0")) :-elem(grid_object_label(Row,Col,O),label,_).
+attr(grid_object_label(Row,Col,O),"font-size","8px") :-elem(grid_object_label(Row,Col,O),label,_).
+attr(grid_object_label(Row,Col,O),"line-height","9px") :-elem(grid_object_label(Row,Col,O),label,_).
+attr(grid_object_label(Row,Col,O),background_color,"rgba(255,255,255,0.85)") :-elem(grid_object_label(Row,Col,O),label,_).

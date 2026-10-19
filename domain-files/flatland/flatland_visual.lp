@@ -66,7 +66,7 @@ image(T,start,"img/train_e_0.png"):-object(T,train),property(T,direction,e).
 image(T,start,"img/train_n_0.png"):-object(T,train),property(T,direction,n).
 image(T,start,"img/train_s_0.png"):-object(T,train),property(T,direction,s).
 image(T,start,"img/train_w_0.png"):-object(T,train),property(T,direction,w).
-
+image(T,start,"img/train_e_0.png"):-object(T,train),not property(T,direction,_).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

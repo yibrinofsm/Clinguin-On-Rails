@@ -20,7 +20,7 @@ attr(sidebar_subtitle,label,"Objects available in the current instance.").
 attr(sidebar_subtitle,class,("small";"text-light")).
 
 
-% Catalogue shell
+% Object Catalogue
 % ------------------------------------------------------------
 elem(object_catalogue,container,sidebar_panel).
 attr(object_catalogue,order,3).
@@ -302,7 +302,6 @@ attr(object_actions(O,T),"min-width","0") :- object(O,T).
 elem(object_select(O,T),button,object_actions(O,T)) :- object(O,T).
 attr(object_select(O,T),order,1) :- object(O,T).
 attr(object_select(O,T),icon,"fa-arrow-pointer") :- object(O,T).
-% attr(object_select(O,T),disabled,true) :- object(O,T),incomplete(O,T).
 attr(object_select(O,T),disabled,true) :- object(O,T),not complete(O,T).
 attr(object_select(O,T),label,"Selected") :- object(O,T), _clinguin_context(object_selected,O).
 attr(object_select(O,T),label,"Select") :- object(O,T), not _clinguin_context(object_selected,O).
@@ -346,6 +345,65 @@ when(object_delete(O,T),click,context,(notice_level,warning)):-object(O,T), _cli
 when(object_delete(O,T),click,context,(notice_title,"Object deleted")):-object(O,T), _clinguin_atom(object(O,T)).
 when(object_delete(O,T),click,context,(notice_message,@concat("Object ",O," (type: ",T,") was deleted."))):-object(O,T), _clinguin_atom(object(O,T)).
 when(object_delete(O,T),click,call, remove_atom(object(O,T))) :- elem(object_delete(O,T),button,_).
+
+% ============================================================
+% placement role section
+% ============================================================
+
+% Section: one toolbar row.
+elem(placement_role_section(O,T),container,object_card(O,T)) :-complete(O,T), _clinguin_context(object_selected,O).
+attr(placement_role_section(O,T),order,5) :-elem(placement_role_section(O,T),container,_).
+attr(placement_role_section(O,T),child_layout,flex) :-elem(placement_role_section(O,T),container,_).
+attr(placement_role_section(O,T),flex_direction,row) :-elem(placement_role_section(O,T),container,_).
+attr(placement_role_section(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-1";"px-2";"py-1";"w-100";"border-top";"bg-white")) :-elem(placement_role_section(O,T),container,_).
+
+%  heading.
+elem(placement_role_label(O,T),label,placement_role_section(O,T)) :-elem(placement_role_section(O,T),container,_).
+attr(placement_role_label(O,T),order,1) :-elem(placement_role_label(O,T),label,_).
+attr(placement_role_label(O,T),label,"Role") :-elem(placement_role_label(O,T),label,_).
+attr(placement_role_label(O,T),class,("fw-bold";"text-secondary";"text-nowrap";"m-0";"me-1")) :-elem(placement_role_label(O,T),label,_).
+attr(placement_role_label(O,T),"font-size","0.75rem") :-elem(placement_role_label(O,T),label,_).
+
+%  role buttons.
+elem(placement_role_buttons(O,T),container,placement_role_section(O,T)) :-elem(placement_role_section(O,T),container,_).
+attr(placement_role_buttons(O,T),order,2) :-elem(placement_role_buttons(O,T),container,_).
+attr(placement_role_buttons(O,T),child_layout,flex) :-elem(placement_role_buttons(O,T),container,_).
+attr(placement_role_buttons(O,T),flex_direction,row) :-elem(placement_role_buttons(O,T),container,_).
+attr(placement_role_buttons(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-1";"flex-grow-1")) :-elem(placement_role_buttons(O,T),container,_).
+
+elem(placement_role_button(O,R),button,placement_role_buttons(O,T)) :- elem(placement_role_buttons(O,T),container,_),type_role(T,R), image(O,R,_).
+attr(placement_role_button(O,R),label,@concat("",R)) :- elem(placement_role_button(O,R),button,_).
+attr(placement_role_button(O,R),height,26) :-elem(placement_role_button(O,R),button,_).
+attr(placement_role_button(O,R),"font-size","0.8125rem") :-elem(placement_role_button(O,R),button,_).
+attr(placement_role_button(O,R),class,("btn-sm";"rounded-pill";"px-2";"py-0";"m-0";"text-nowrap")) :-elem(placement_role_button(O,R),button,_).
+attr(placement_role_button(O,R),class,"btn-primary") :-elem(placement_role_button(O,R),button,_), _clinguin_context(selected_role_for_placement,R).
+attr(placement_role_button(O,R),icon,"fa-check") :-elem(placement_role_button(O,R),button,_), _clinguin_context(selected_role_for_placement,R).
+attr(placement_role_button(O,R),class,"btn-outline-secondary") :- elem(placement_role_button(O,R),button,_), not _clinguin_context(selected_role_for_placement,R).
+when(placement_role_button(O,R),click,context,(selected_role_for_placement,R)) :- elem(placement_role_button(O,R),button,_).
+when(placement_role_button(O,R),click,call,()) :- elem(placement_role_button(O,R),button,_).
+
+elem(unselect_placement(O,T),button,placement_role_section(O,T)) :- elem(placement_role_section(O,T),container,_).
+attr(unselect_placement(O,T),order,3) :- elem(unselect_placement(O,T),button,_).
+attr(unselect_placement(O,T),label,"Unselect") :- elem(unselect_placement(O,T),button,_).
+attr(unselect_placement(O,T),height,26) :- elem(unselect_placement(O,T),button,_).
+attr(unselect_placement(O,T),"font-size","0.75rem") :- elem(unselect_placement(O,T),button,_).
+attr(unselect_placement(O,T),class,("btn-sm";"btn-outline-secondary";"border-0";"rounded";"px-2";"py-0";"ms-auto";"text-nowrap")) :- elem(unselect_placement(O,T),button,_).
+when(unselect_placement(O,T),click,context,(object_selected,none)) :- elem(unselect_placement(O,T),button,_).
+when(unselect_placement(O,T),click,context,(selected_role_for_placement,none)) :- elem(unselect_placement(O,T),button,_).
+when(unselect_placement(O,T),click,call,()) :- elem(unselect_placement(O,T),button,_).
+% ============================================================
+% PLACEMENT HINT
+% ============================================================
+elem(placement_role_hint(O,T),label,placement_role_section(O,T)) :- elem(placement_role_section(O,T),container,_).
+attr(placement_role_hint(O,T),order,4) :- elem(placement_role_hint(O,T),label,_).
+attr(placement_role_hint(O,T),class,("w-100";"m-0";"lh-sm")) :- elem(placement_role_hint(O,T),label,_).
+attr(placement_role_hint(O,T),"flex-basis","100%") :- elem(placement_role_hint(O,T),label,_).
+attr(placement_role_hint(O,T),"font-size","0.75rem") :- elem(placement_role_hint(O,T),label,_).
+attr(placement_role_hint(O,T),label,"Choose a role, then click a cell.") :- elem(placement_role_hint(O,T),label,_), 0 < #count { R : elem(placement_role_button(O,R),button,placement_role_buttons(O,T)) }, 0 = #count { R : elem(placement_role_button(O,R),button,placement_role_buttons(O,T)), _clinguin_context(selected_role_for_placement,R) }.
+attr(placement_role_hint(O,T),label,@concat("Click a cell to place as ",R,".")) :- elem(placement_role_hint(O,T),label,_), elem(placement_role_button(O,R),button,placement_role_buttons(O,T)), _clinguin_context(selected_role_for_placement,R).
+attr(placement_role_hint(O,T),label,"No roles with images available.") :- elem(placement_role_hint(O,T),label,_), 0 = #count { R : elem(placement_role_button(O,R),button,placement_role_buttons(O,T)) }.
+attr(placement_role_hint(O,T),class,"text-primary") :- elem(placement_role_hint(O,T),label,_), elem(placement_role_button(O,R),button,placement_role_buttons(O,T)), _clinguin_context(selected_role_for_placement,R).
+attr(placement_role_hint(O,T),class,"text-secondary") :- elem(placement_role_hint(O,T),label,_), 0 = #count { R : elem(placement_role_button(O,R),button,placement_role_buttons(O,T)), _clinguin_context(selected_role_for_placement,R) }.
 
 % Shared form styles 
 attr(form_actions(F),flex_direction,row) :- elem(form_actions(F),container,_).
@@ -422,7 +480,7 @@ attr(add_object_name_label,"font-size","13px").
 
 elem(input(add_object,new_object_name),textfield,add_object_name_field).
 attr(input(add_object,new_object_name),order,2).
-attr(input(add_object,new_object_name),placeholder,"e.g. train01").
+attr(input(add_object,new_object_name),placeholder,"e.g. train(01)").
 attr(input(add_object,new_object_name),class,("form-control";"rounded-3";"bg-white";"text-dark";"px-3";"py-2";"w-100")).
 attr(input(add_object,new_object_name),"border","1px solid #CBD5E1").
 attr(input(add_object,new_object_name),"min-height","42px").
@@ -616,115 +674,7 @@ elem(inspector_visual_path(O,T,R,I),label,inspector_visual_info(O,T,R,I)) :- obj
 attr(inspector_visual_path(O,T,R,I),order,2) :- object_selected_for_inspection(O,T),image(O,R,I).
 attr(inspector_visual_path(O,T,R,I),label,@concat("",I)) :- object_selected_for_inspection(O,T),image(O,R,I).
 attr(inspector_visual_path(O,T,R,I),class,("font-monospace";"text-secondary";"text-break";"m-0")) :- object_selected_for_inspection(O,T),image(O,R,I).
-attr(inspector_visual_path(O,T,R,I),"font-size","8px") :- object_selected_for_inspection(O,T),image(O,R,I).
-
-
-elem(domain_image_badge(O,T,R,I),label,inspector_visual_info(O,T,R,I)) :- object_selected_for_inspection(O,T),domain_image(O,R,I).
-attr(domain_image_badge(O,T,R,I),order,3) :- object_selected_for_inspection(O,T),domain_image(O,R,I).
-attr(domain_image_badge(O,T,R,I),label,"Declared Image") :- object_selected_for_inspection(O,T),domain_image(O,R,I).
-attr(domain_image_badge(O,T,R,I),class,("badge";"bg-secondary";"text-white")) :- object_selected_for_inspection(O,T),domain_image(O,R,I).
-attr(domain_image_badge(O,T,R,I),"font-size","8px") :- object_selected_for_inspection(O,T),domain_image(O,R,I).
-
-% ============================================================
-% ADD IMAGE
-% ============================================================
-
-elem(inspector_add_role(O,T),container,inspector_body) :- object_selected_for_inspection(O,T).
-attr(inspector_add_role(O,T),order,11) :- object_selected_for_inspection(O,T).
-attr(inspector_add_role(O,T),flex_direction,column) :- object_selected_for_inspection(O,T).
-attr(inspector_add_role(O,T),class,("d-flex";"flex-column";"gap-2";"p-2";"bg-white";"border";"rounded-3";"w-100")) :- object_selected_for_inspection(O,T).
-
-% Header
-elem(add_visual_header(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_visual_header(O,T),order,1) :- object_selected_for_inspection(O,T).
-attr(add_visual_header(O,T),flex_direction,row) :- object_selected_for_inspection(O,T).
-attr(add_visual_header(O,T),class,("d-flex";"flex-row";"align-items-center";"justify-content-between";"gap-2")) :- object_selected_for_inspection(O,T).
-
-
-elem(add_visual_remaining(O,T),label,add_visual_header(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_visual_remaining(O,T),order,2) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_visual_remaining(O,T),label,@concat(N," roles available")) :- object_selected_for_inspection(O,T),object_missing_image(O,T),N=#count{R:object_missing_image_for_role(O,T,R)}.
-attr(add_visual_remaining(O,T),class,("text-secondary";"m-0")) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_visual_remaining(O,T),"font-size","9px") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-
-% Declared role mode
-elem(declared_image_role_section(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(declared_image_role_section(O,T),order,3) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(declared_image_role_section(O,T),flex_direction,column) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(declared_image_role_section(O,T),class,("d-flex";"flex-column";"gap-1";"w-100")) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(declared_image_role_section(O,T),visibility,shown) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-
-elem(add_visual_role(O,T),dropdown_menu,declared_image_role_section(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_visual_role(O,T),order,1) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_visual_role(O,T),selected,"Select role") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_visual_role(O,T),class,("btn-light";"bg-white";"border";"text-dark";"text-start";"w-100";"rounded-2";"px-2";"py-1")) :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-attr(add_visual_role(O,T),"font-size","10px") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
-
-elem(add_visual_role_option(O,T,R),dropdown_menu_item,add_visual_role(O,T)) :- object_missing_image_for_role(O,T,R).
-attr(add_visual_role_option(O,T,R),order,N) :- object_missing_image_for_role(O,T,R),N=#count{R2:object_missing_image_for_role(O,T,R2),R2<R}.
-attr(add_visual_role_option(O,T,R),label,@concat("",R)) :- object_missing_image_for_role(O,T,R).
-attr(add_visual_role_option(O,T,R),class,("dropdown-item";"py-1")) :- object_missing_image_for_role(O,T,R).
-attr(add_visual_role_option(O,T,R),"font-size","10px") :- object_missing_image_for_role(O,T,R).
-when(add_visual_role_option(O,T,R),click,context,(new_image_role,R)) :- object_missing_image_for_role(O,T,R).
-when(add_visual_role_option(O,T,R),click,update,(add_visual_role(O,T),selected,@concat("",R))) :- object_missing_image_for_role(O,T,R).
-when(add_visual_role_option(O,T,R),click,update,(add_visual_file(O,T),disabled,false)) :- object_missing_image_for_role(O,T,R).% Manual role modeelem(manual_image_role_section(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).attr(manual_image_role_section(O,T),order,3) :- object_selected_for_inspection(O,T).attr(manual_image_role_section(O,T),flex_direction,column) :- object_selected_for_inspection(O,T).attr(manual_image_role_section(O,T),class,("d-flex";"flex-column";"gap-1";"w-100")) :- object_selected_for_inspection(O,T).attr(manual_image_role_section(O,T),visibility,hidden) :- object_selected_for_inspection(O,T),object_missing_image(O,T).attr(manual_image_role_section(O,T),visibility,shown) :- object_selected_for_inspection(O,T),not object_missing_image(O,T).elem(add_visual_manual_role(O,T),textfield,manual_image_role_section(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_manual_role(O,T),order,1) :- object_selected_for_inspection(O,T).attr(add_visual_manual_role(O,T),placeholder,"Enter role, e.g. start") :- object_selected_for_inspection(O,T).attr(add_visual_manual_role(O,T),class,("form-control";"form-control-sm";"rounded-2";"w-100")) :- object_selected_for_inspection(O,T).attr(add_visual_manual_role(O,T),"font-size","10px") :- object_selected_for_inspection(O,T).when(add_visual_manual_role(O,T),input,context,(new_image_role,_value)) :- object_selected_for_inspection(O,T).when(add_visual_manual_role(O,T),input,update,(add_visual_file(O,T),disabled,false)) :- object_selected_for_inspection(O,T).elem(add_visual_manual_hint(O,T),label,manual_image_role_section(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_manual_hint(O,T),order,2) :- object_selected_for_inspection(O,T).attr(add_visual_manual_hint(O,T),label,"Enter the role manually when the domain does not provide one or when a custom role is needed.") :- object_selected_for_inspection(O,T).attr(add_visual_manual_hint(O,T),class,("text-secondary";"text-wrap";"m-0")) :- object_selected_for_inspection(O,T).attr(add_visual_manual_hint(O,T),"font-size","8px") :- object_selected_for_inspection(O,T).% Fileelem(add_visual_file(O,T),file_input,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),order,4) :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),accept,".png,.jpg,.jpeg,.webp") :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),multiple,false) :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),disabled,true) :- object_selected_for_inspection(O,T).attr(add_visual_file(O,T),class,("form-control";"form-control-sm";"rounded-2")) :- object_selected_for_inspection(O,T).when(add_visual_file(O,T),change,update,(upload_visual(O,T),disabled,false)) :- object_selected_for_inspection(O,T).% Uploadelem(add_visual_actions(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_actions(O,T),order,5) :- object_selected_for_inspection(O,T).attr(add_visual_actions(O,T),flex_direction,row) :- object_selected_for_inspection(O,T).attr(add_visual_actions(O,T),class,("d-flex";"flex-row";"justify-content-end")) :- object_selected_for_inspection(O,T).elem(upload_visual(O,T),button,add_visual_actions(O,T)) :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),order,1) :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),label,"Upload image") :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),icon,"fa-upload") :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),disabled,true) :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object_selected_for_inspection(O,T).attr(upload_visual(O,T),"font-size","9px") :- object_selected_for_inspection(O,T).when(add_visual_file(O,T),click,update,add_atom()) :- object_selected_for_inspection(O,T).when(upload_visual(O,T),click,call,add_atom(type_role(T,_context_value(new_image_role)))):-object_selected_for_inspection(O,T).when(upload_visual(O,T),click,call,upload_object_image(O,_context_value(new_image_role))) :- object_selected_for_inspection(O,T).% ============================================================
-% COMPACT PLACEMENTS
-% ============================================================
-elem(inspector_positions(O,T),container,inspector_body) :- object_selected_for_inspection(O,T), position(_,_,O).
-attr(inspector_positions(O,T),order,20) :- elem(inspector_positions(O,T),container,_).
-attr(inspector_positions(O,T),flex_direction,column) :- elem(inspector_positions(O,T),container,_).
-attr(inspector_positions(O,T),class,("d-flex";"flex-column";"gap-1";"p-2";"bg-white";"border";"rounded-3";"w-100")) :- elem(inspector_positions(O,T),container,_).
-
-% ============================================================
-% PLACEMENTS HEADER
-% ============================================================
-elem(inspector_positions_header(O,T),container,inspector_positions(O,T)) :- object_selected_for_inspection(O,T), elem(inspector_positions(O,T),container,_).
-attr(inspector_positions_header(O,T),order,1) :- elem(inspector_positions_header(O,T),container,_).
-attr(inspector_positions_header(O,T),flex_direction,row) :- elem(inspector_positions_header(O,T),container,_).
-attr(inspector_positions_header(O,T),class,("d-flex";"flex-row";"align-items-center";"justify-content-between")) :- elem(inspector_positions_header(O,T),container,_).
-
-elem(inspector_positions_title(O,T),label,inspector_positions_header(O,T)) :- object_selected_for_inspection(O,T), elem(inspector_positions_header(O,T),container,_).
-attr(inspector_positions_title(O,T),order,1) :- elem(inspector_positions_title(O,T),label,_).
-attr(inspector_positions_title(O,T),label,"Placements") :- elem(inspector_positions_title(O,T),label,_).
-attr(inspector_positions_title(O,T),class,("fw-bold";"text-dark";"m-0")) :- elem(inspector_positions_title(O,T),label,_).
-attr(inspector_positions_title(O,T),"font-size","11px") :- elem(inspector_positions_title(O,T),label,_).
-
-elem(inspector_positions_count(O,T),label,inspector_positions_header(O,T)) :- object_selected_for_inspection(O,T), elem(inspector_positions_header(O,T),container,_).
-attr(inspector_positions_count(O,T),order,2) :- elem(inspector_positions_count(O,T),label,_).
-attr(inspector_positions_count(O,T),label,@concat(N," total")) :- object_selected_for_inspection(O,T), N = #count { N1,R : position(N1,R,O) }.
-attr(inspector_positions_count(O,T),class,("text-secondary";"m-0")) :- elem(inspector_positions_count(O,T),label,_).
-attr(inspector_positions_count(O,T),"font-size","9px") :- elem(inspector_positions_count(O,T),label,_).
-
-% ============================================================
-% PLACEMENT LIST
-% ============================================================
-elem(inspector_position_list(O,T),container,inspector_positions(O,T)) :- object_selected_for_inspection(O,T), position(_,_,O).
-attr(inspector_position_list(O,T),order,2) :- elem(inspector_position_list(O,T),container,_).
-attr(inspector_position_list(O,T),flex_direction,column) :- elem(inspector_position_list(O,T),container,_).
-attr(inspector_position_list(O,T),class,("d-flex";"flex-column";"gap-1")) :- elem(inspector_position_list(O,T),container,_).
-
-% ============================================================
-% INDIVIDUAL PLACEMENT
-% ============================================================
-elem(inspector_position(O,T,N,R),container,inspector_position_list(O,T)) :- object_selected_for_inspection(O,T), position(N,R,O).
-attr(inspector_position(O,T,N,R),order,K) :- object_selected_for_inspection(O,T), position(N,R,O), K = #count { N2,R2 : position(N2,R2,O), (N2,R2) < (N,R) }.
-attr(inspector_position(O,T,N,R),flex_direction,row) :- elem(inspector_position(O,T,N,R),container,_).
-attr(inspector_position(O,T,N,R),class,("d-flex";"flex-row";"align-items-center";"justify-content-between";"gap-2";"px-2";"py-1";"bg-light";"rounded-2")) :- elem(inspector_position(O,T,N,R),container,_).
-
-elem(inspector_position_node(O,T,N,R),label,inspector_position(O,T,N,R)) :- object_selected_for_inspection(O,T), position(N,R,O).
-attr(inspector_position_node(O,T,N,R),order,1) :- elem(inspector_position_node(O,T,N,R),label,_).
-attr(inspector_position_node(O,T,N,R),label,@concat("Node ",N)) :- object_selected_for_inspection(O,T), position(N,R,O).
-attr(inspector_position_node(O,T,N,R),class,("font-monospace";"fw-semibold";"text-dark";"m-0")) :- elem(inspector_position_node(O,T,N,R),label,_).
-attr(inspector_position_node(O,T,N,R),"font-size","9px") :- elem(inspector_position_node(O,T,N,R),label,_).
-
-elem(inspector_position_role(O,T,N,R),label,inspector_position(O,T,N,R)) :- object_selected_for_inspection(O,T), position(N,R,O).
-attr(inspector_position_role(O,T,N,R),order,2) :- elem(inspector_position_role(O,T,N,R),label,_).
-attr(inspector_position_role(O,T,N,R),label,R) :- object_selected_for_inspection(O,T), position(N,R,O).
-attr(inspector_position_role(O,T,N,R),class,("rounded-pill";"px-2";"fw-semibold";"text-secondary";"m-0")) :- elem(inspector_position_role(O,T,N,R),label,_).
-attr(inspector_position_role(O,T,N,R),"font-size","8px") :- elem(inspector_position_role(O,T,N,R),label,_).
-
-
-
+attr(inspector_visual_path(O,T,R,I),"font-size","8px") :- object_selected_for_inspection(O,T),image(O,R,I).% ============================================================% ADD IMAGE% ============================================================elem(inspector_add_role(O,T),container,inspector_body) :- object_selected_for_inspection(O,T).attr(inspector_add_role(O,T),order,11) :- object_selected_for_inspection(O,T).attr(inspector_add_role(O,T),flex_direction,column) :- object_selected_for_inspection(O,T).attr(inspector_add_role(O,T),class,("d-flex";"flex-column";"gap-2";"p-2";"bg-white";"border";"rounded-3";"w-100")) :- object_selected_for_inspection(O,T).% Headerelem(add_visual_header(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_header(O,T),order,1) :- object_selected_for_inspection(O,T).attr(add_visual_header(O,T),flex_direction,row) :- object_selected_for_inspection(O,T).attr(add_visual_header(O,T),class,("d-flex";"flex-row";"align-items-center";"justify-content-between";"gap-2")) :- object_selected_for_inspection(O,T).elem(add_visual_remaining(O,T),label,add_visual_header(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).attr(add_visual_remaining(O,T),order,2) :- object_selected_for_inspection(O,T),object_missing_image(O,T).attr(add_visual_remaining(O,T),label,@concat(N," roles available")) :- object_selected_for_inspection(O,T),object_missing_image(O,T),N=#count{R:object_missing_image_for_role(O,T,R)}.attr(add_visual_remaining(O,T),class,("text-secondary";"m-0")) :- object_selected_for_inspection(O,T),object_missing_image(O,T).attr(add_visual_remaining(O,T),"font-size","9px") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
 
 
 
@@ -1018,6 +968,67 @@ when(add_new_property_button(O,T),click,call,add_atom(property(O,_context_value(
 
 
 
+
+
+% PLACEMENTS
+% ============================================================
+elem(inspector_positions(O,T),container,inspector_body) :- object_selected_for_inspection(O,T), position(_,_,O).
+attr(inspector_positions(O,T),order,20) :- elem(inspector_positions(O,T),container,_).
+attr(inspector_positions(O,T),flex_direction,column) :- elem(inspector_positions(O,T),container,_).
+attr(inspector_positions(O,T),class,("d-flex";"flex-column";"gap-1";"p-2";"bg-white";"border";"rounded-3";"w-100")) :- elem(inspector_positions(O,T),container,_).
+
+% ============================================================
+% PLACEMENTS HEADER
+% ============================================================
+elem(inspector_positions_header(O,T),container,inspector_positions(O,T)) :- object_selected_for_inspection(O,T), elem(inspector_positions(O,T),container,_).
+attr(inspector_positions_header(O,T),order,1) :- elem(inspector_positions_header(O,T),container,_).
+attr(inspector_positions_header(O,T),flex_direction,row) :- elem(inspector_positions_header(O,T),container,_).
+attr(inspector_positions_header(O,T),class,("d-flex";"flex-row";"align-items-center";"justify-content-between")) :- elem(inspector_positions_header(O,T),container,_).
+
+elem(inspector_positions_title(O,T),label,inspector_positions_header(O,T)) :- object_selected_for_inspection(O,T), elem(inspector_positions_header(O,T),container,_).
+attr(inspector_positions_title(O,T),order,1) :- elem(inspector_positions_title(O,T),label,_).
+attr(inspector_positions_title(O,T),label,"Placements") :- elem(inspector_positions_title(O,T),label,_).
+attr(inspector_positions_title(O,T),class,("fw-bold";"text-dark";"m-0")) :- elem(inspector_positions_title(O,T),label,_).
+attr(inspector_positions_title(O,T),"font-size","11px") :- elem(inspector_positions_title(O,T),label,_).
+
+elem(inspector_positions_count(O,T),label,inspector_positions_header(O,T)) :- object_selected_for_inspection(O,T), elem(inspector_positions_header(O,T),container,_).
+attr(inspector_positions_count(O,T),order,2) :- elem(inspector_positions_count(O,T),label,_).
+attr(inspector_positions_count(O,T),label,@concat(N," total")) :- object_selected_for_inspection(O,T), N = #count { N1,R : position(N1,R,O) }.
+attr(inspector_positions_count(O,T),class,("text-secondary";"m-0")) :- elem(inspector_positions_count(O,T),label,_).
+attr(inspector_positions_count(O,T),"font-size","9px") :- elem(inspector_positions_count(O,T),label,_).
+
+% ============================================================
+% PLACEMENT LIST
+% ============================================================
+elem(inspector_position_list(O,T),container,inspector_positions(O,T)) :- object_selected_for_inspection(O,T), position(_,_,O).
+attr(inspector_position_list(O,T),order,2) :- elem(inspector_position_list(O,T),container,_).
+attr(inspector_position_list(O,T),flex_direction,column) :- elem(inspector_position_list(O,T),container,_).
+attr(inspector_position_list(O,T),class,("d-flex";"flex-column";"gap-1")) :- elem(inspector_position_list(O,T),container,_).
+
+% ============================================================
+% INDIVIDUAL PLACEMENT
+% ============================================================
+elem(inspector_position(O,T,N,R),container,inspector_position_list(O,T)) :- object_selected_for_inspection(O,T), position(N,R,O).
+attr(inspector_position(O,T,N,R),order,K) :- object_selected_for_inspection(O,T), position(N,R,O), K = #count { N2,R2 : position(N2,R2,O), (N2,R2) < (N,R) }.
+attr(inspector_position(O,T,N,R),flex_direction,row) :- elem(inspector_position(O,T,N,R),container,_).
+attr(inspector_position(O,T,N,R),class,("d-flex";"flex-row";"align-items-center";"justify-content-between";"gap-2";"px-2";"py-1";"bg-light";"rounded-2")) :- elem(inspector_position(O,T,N,R),container,_).
+
+elem(inspector_position_node(O,T,N,R),label,inspector_position(O,T,N,R)) :- object_selected_for_inspection(O,T), position(N,R,O).
+attr(inspector_position_node(O,T,N,R),order,1) :- elem(inspector_position_node(O,T,N,R),label,_).
+attr(inspector_position_node(O,T,N,R),label,@concat("Node ",N)) :- object_selected_for_inspection(O,T), position(N,R,O).
+attr(inspector_position_node(O,T,N,R),class,("font-monospace";"fw-semibold";"text-dark";"m-0")) :- elem(inspector_position_node(O,T,N,R),label,_).
+attr(inspector_position_node(O,T,N,R),"font-size","9px") :- elem(inspector_position_node(O,T,N,R),label,_).
+
+elem(inspector_position_role(O,T,N,R),label,inspector_position(O,T,N,R)) :- object_selected_for_inspection(O,T), position(N,R,O).
+attr(inspector_position_role(O,T,N,R),order,2) :- elem(inspector_position_role(O,T,N,R),label,_).
+attr(inspector_position_role(O,T,N,R),label,R) :- object_selected_for_inspection(O,T), position(N,R,O).
+attr(inspector_position_role(O,T,N,R),class,("rounded-pill";"px-2";"fw-semibold";"text-secondary";"m-0")) :- elem(inspector_position_role(O,T,N,R),label,_).
+attr(inspector_position_role(O,T,N,R),"font-size","8px") :- elem(inspector_position_role(O,T,N,R),label,_).
+
+
+
+
+
 % ============================================================
 % OBJECT PLACEMENT: ROLE SELECTION
 % ============================================================
@@ -1025,43 +1036,3 @@ when(add_new_property_button(O,T),click,call,add_atom(property(O,_context_value(
 % Preserve placement selection.
 when(w,load,context,(object_selected,O)) :- _clinguin_context(object_selected,O),complete(O,_).
 when(w,load,context,(selected_role_for_placement,R)) :- _clinguin_context(object_selected,O),_clinguin_context(selected_role_for_placement,R),complete(O,T),type_role(T,R),image(O,R,_).
-
-% Role selection section inside the selected object card.
-elem(placement_role_section(O,T),container,object_card(O,T)) :- complete(O,T),_clinguin_context(object_selected,O).
-attr(placement_role_section(O,T),order,5) :- elem(placement_role_section(O,T),container,_).
-attr(placement_role_section(O,T),flex_direction,column) :- elem(placement_role_section(O,T),container,_).
-attr(placement_role_section(O,T),class,("d-flex";"flex-column";"gap-2";"p-2";"w-100";"border-top";"bg-light")) :- elem(placement_role_section(O,T),container,_).
-
-% Heading.
-elem(placement_role_label(O,T),label,placement_role_section(O,T)) :- elem(placement_role_section(O,T),container,_).
-attr(placement_role_label(O,T),label,"Choose placement role") :- elem(placement_role_label(O,T),label,_).
-attr(placement_role_label(O,T),class,("fw-semibold";"small";"text-secondary")) :- elem(placement_role_label(O,T),label,_).
-
-% Role buttons container.
-elem(placement_role_buttons(O,T),container,placement_role_section(O,T)) :- elem(placement_role_section(O,T),container,_).
-attr(placement_role_buttons(O,T),flex_direction,row) :- elem(placement_role_buttons(O,T),container,_).
-attr(placement_role_buttons(O,T),class,("d-flex";"flex-row";"flex-wrap";"gap-1")) :- elem(placement_role_buttons(O,T),container,_).
-
-% One button per declared role.
-elem(placement_role_button(O,R),button,placement_role_buttons(O,T)) :- elem(placement_role_buttons(O,T),container,_),type_role(T,R),image(O,R,_).
-attr(placement_role_button(O,R),label,@concat("",R)) :- elem(placement_role_button(O,R),button,_).
-attr(placement_role_button(O,R),class,("btn-sm";"btn-primary")) :- elem(placement_role_button(O,R),button,_),_clinguin_context(selected_role_for_placement,R).
-attr(placement_role_button(O,R),class,("btn-sm";"btn-outline-primary")) :- elem(placement_role_button(O,R),button,_),not _clinguin_context(selected_role_for_placement,R).
-
-% Select role.
-when(placement_role_button(O,R),click,context,(selected_role_for_placement,R)) :- elem(placement_role_button(O,R),button,_).
-when(placement_role_button(O,R),click,call,()) :- elem(placement_role_button(O,R),button,_).
-
-% Placement instruction.
-elem(placement_role_hint(O,T),label,placement_role_section(O,T)) :- elem(placement_role_section(O,T),container,_).
-attr(placement_role_hint(O,T),label,"Select a role to enable grid placement") :- elem(placement_role_hint(O,T),label,_),not _clinguin_context(selected_role_for_placement,R):type_role(T,R).
-attr(placement_role_hint(O,T),label,@concat("Click a grid cell to place ",O," as ",R)) :- elem(placement_role_hint(O,T),label,_),_clinguin_context(selected_role_for_placement,R),type_role(T,R).
-attr(placement_role_hint(O,T),class,("small";"text-secondary")) :- elem(placement_role_hint(O,T),label,_).
-
-% Unselect.
-elem(unselect_placement(O,T),button,placement_role_section(O,T)) :- elem(placement_role_section(O,T),container,_).
-attr(unselect_placement(O,T),label,"Unselect object") :- elem(unselect_placement(O,T),button,_).
-attr(unselect_placement(O,T),class,("btn-sm";"btn-outline-secondary")) :- elem(unselect_placement(O,T),button,_).
-when(unselect_placement(O,T),click,context,(object_selected,none)) :- elem(unselect_placement(O,T),button,_).
-when(unselect_placement(O,T),click,context,(selected_role_for_placement,none)) :- elem(unselect_placement(O,T),button,_).
-when(unselect_placement(O,T),click,call,()) :- elem(unselect_placement(O,T),button,_).
