@@ -96,8 +96,6 @@ clinguin client-server \
 
 ```
 
-The same UI and backend are reused for both domains. Keep the terminal running while using the browser interface.
-
 ## References
 
 [Clinguin paper](https://arxiv.org/abs/2502.09222) · [Clinguin documentation](https://clinguin.readthedocs.io/en/latest/)
