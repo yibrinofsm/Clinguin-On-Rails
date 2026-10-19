@@ -239,4 +239,4 @@ incomplete(O,T) :-object(O,T),not complete(O,T).
 node_contains_type(N,T) :-position(N,_,O),object(O,T).
 
 
-
+:-position(N,R,O1),position(N,R,O2),O1<O2.

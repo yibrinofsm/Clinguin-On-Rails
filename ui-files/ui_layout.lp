@@ -81,7 +81,8 @@ attr(node_box(Row,Col),"border-left","1px solid #0f8bf7") :- node((Row,Col)).
 attr(node_box(Row,Col),"border-right","1px solid #0f8bf7") :- node((Row,Col)), not node((Row,Col+1)).
 attr(node_box(Row,Col),"border-bottom","1px solid #0f8bf7") :- node((Row,Col)), not node((Row+1,Col)).
 attr(node_box(Row,Col),"box-sizing","border-box") :- node((Row,Col)).
-
+attr(node_box(Row,Col),"gridTemplateColumns","minmax(0,1fr)") :-node((Row,Col)).
+attr(node_box(Row,Col),"gridTemplateRows","minmax(0,1fr)") :-node((Row,Col)).
 % ============================================================
 % PLACE OBJECT
 % ============================================================
@@ -122,7 +123,31 @@ elem(grid_placement(Row,Col,R,O),container,node_box(Row,Col)) :- node((Row,Col))
 attr(grid_placement(Row,Col,R,O),grid_row,0) :- elem(grid_placement(Row,Col,R,O),container,_).
 attr(grid_placement(Row,Col,R,O),grid_column,0) :- elem(grid_placement(Row,Col,R,O),container,_).
 attr(grid_placement(Row,Col,R,O),class,("w-100";"h-100";"p-0";"m-0";"pe-none")) :- elem(grid_placement(Row,Col,R,O),container,_).
+% Let each placement fit within its cell.
+attr(grid_placement(Row,Col,R,O),"min-width","0") :-
+    elem(grid_placement(Row,Col,R,O),container,_).
 
+attr(grid_placement(Row,Col,R,O),"min-height","0") :-
+    elem(grid_placement(Row,Col,R,O),container,_).
+
+attr(grid_placement(Row,Col,R,O),class,"overflow-hidden") :-
+    elem(grid_placement(Row,Col,R,O),container,_).
+
+% Generic background styling for any object.
+attr(grid_placement(Row,Col,R,O),background_color,Color) :-
+    elem(grid_placement(Row,Col,R,O),container,_),
+    property(O,background_color,Color).
+
+
+elem(
+    grid_placement_image(Row,Col,R,O),
+    canvas,
+    grid_placement(Row,Col,R,O)
+) :-
+    elem(grid_placement(Row,Col,R,O),container,_),
+    not property(O,render_mode,fill),
+    image(O,R,I),
+    I = #min { Path : image(O,R,Path) }.
 % Role-specific image.
 elem(grid_placement_image(Row,Col,R,O),canvas,grid_placement(Row,Col,R,O)) :- elem(grid_placement(Row,Col,R,O),container,_),image(O,R,I),I=#min{Path:image(O,R,Path)}.
 attr(grid_placement_image(Row,Col,R,O),image,I) :- elem(grid_placement_image(Row,Col,R,O),canvas,_),image(O,R,I),I=#min{Path:image(O,R,Path)}.

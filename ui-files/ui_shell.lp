@@ -34,13 +34,13 @@ when(next_solution_button,click,call,next_solution(optN)).
 
 % Clear Edit
 
-elem(clear_edits_button,button,menu_bar).
-attr(clear_edits_button,order,3).
-attr(clear_edits_button,label,@concat("Clear edits ")).
-attr(clear_edits_button,icon,"fa-eraser").
-attr(clear_edits_button,class,("btn-outline-primary";"px-3")).
-when(clear_edits_button,click,update,(dialog(clear),visibility,shown)).
-% when(clear_edits_button,click,call,)).
+% elem(clear_edits_button,button,menu_bar).
+% attr(clear_edits_button,order,3).
+% attr(clear_edits_button,label,@concat("Clear edits ")).
+% attr(clear_edits_button,icon,"fa-eraser").
+% attr(clear_edits_button,class,("btn-outline-primary";"px-3")).
+% when(clear_edits_button,click,update,(dialog(clear),visibility,shown)).
+% % when(clear_edits_button,click,call,)).
 
 % Restart
 elem(restart_button,button,menu_bar).
@@ -203,6 +203,10 @@ elem(confirm_clear,button,dialog_sheet(clear)).
 attr(confirm_clear,order,2).
 attr(confirm_clear,label,"Confirm").
 attr(confirm_clear,class,("btn-danger";"m-3";"align-self-end")).
+when(confirm_clear,click,cell,clear_atoms).
+when(confirm_clear,click,update,(dialog(clear),visibility,hidden)).
+
+
 
 
 %Restart modal.
@@ -218,6 +222,7 @@ elem(confirm_restart,button,dialog_sheet(restart)).
 attr(confirm_restart,order,2).
 attr(confirm_restart,label,"Confirm").
 attr(confirm_restart,class,("btn-danger";"m-3";"align-self-end")).
+when(confirm_restart,click,call,restart).
 % Help modal
 elem(dialog(help),modal,w).
 attr(dialog(help),visibility,hidden).
