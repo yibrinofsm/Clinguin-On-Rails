@@ -2,7 +2,7 @@
 
 The project adopts a generic and extensible instance representation to support the generation, diagnosis, and visualization of **Multi-Agent Path Finding (MAPF)**, **Flatland**, and other grid-based domain instances using Clinguin.
 
-Instances are represented through common ASP predicates: `object/2`, `node/1`, `property/3`, `position/3`, and `image/3`. Each predicate describes a particular aspect of an instance. Together, they separate domain-specific information from the generic user interface, improving flexibility, reusability, and extensibility. New objects and properties can be introduced without redesigning the core representation or creating a separate UI for each compatible domain. 
+Instances are represented through common ASP predicates: `object/2`, `node/1`, `property/3`, `position/3`, `image/3`,etc. Each predicate describes a particular aspect of an instance. Together, they separate domain-specific information from the generic user interface, improving flexibility, reusability, and extensibility. New objects and properties can be introduced without redesigning the core representation or creating a separate UI for each compatible domain. 
 
 ## Generic Predicates
 
