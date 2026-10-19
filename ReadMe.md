@@ -11,20 +11,20 @@ Instances are represented through common ASP predicates: `object/2`, `node/1`, `
 `object(ObjectName,ObjectType)` declares an object and its type. The first argument identifies the object, and the second identifies its type.
 
 ```asp
-object(train0,train).
+object(train(0),train).
 ```
 
-This fact declares `train0` as an object of type `train`. Additional objects can be introduced using the same predicate.
+This fact declares `train(0)` as an object of type `train`. Additional objects can be introduced using the same predicate.
 
 ### 2. Properties — `property/3`
 
 `property(ObjectName,PropertyName,Value)` assigns an attribute and its value to an object. Its arguments identify the object, the property name (key), and the value.
 
 ```asp
-property(train0,direction,n).
+property(train(0),direction,n).
 ```
 
-This fact assigns the direction `n` to `train0`. Other attributes can be added through the same predicate.
+This fact assigns the direction `n` to `train(0)`. Other attributes can be added through the same predicate.
 
 ### 3. Grid Environment — `node/1`
 
@@ -41,8 +41,8 @@ This example creates a 20-by-20 grid. Domain rules determine whether a location 
 `position(Node,Role,ObjectName)` specifies where an object is placed and under which role. Its arguments identify the node, placement role, and object.
 
 ```asp
-position((10,10),start,train0).
-position((15,15),end,train0).
+position((10,10),start,train(0)).
+position((15,15),end,train(0)).
 ```
 
 A train or agent can have both a start and an end location. Other objects, such as tracks or walls, can use a single role such as `cell`.
@@ -52,8 +52,8 @@ A train or agent can have both a start and an end location. Other objects, such 
 `image(ObjectName,Role,ImagePath)` separates an object's identity and properties from its appearance. Its arguments identify the object, visualization role, and image resource.
 
 ```asp
-image(train0,start,"img/train0.png").
-image(train0,end,"img/train0_end.png").
+image(train(0),start,"img/train0.png").
+image(train(0),end,"img/train0_end.png").
 ```
 
 The same object can use different images for different roles. Image paths must be quoted and refer to available resources. The UI matches each placement to its image using the object and role.
