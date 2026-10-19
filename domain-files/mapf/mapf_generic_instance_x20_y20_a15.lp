@@ -11,11 +11,11 @@ object(agent(7),agent).  object(agent(8),agent).  object(agent(9),agent).
 object(agent(10),agent). object(agent(11),agent). object(agent(12),agent).
 object(agent(13),agent). object(agent(14),agent). object(agent(15),agent).
 
-property(agent(1),label,1).   property(agent(2),label,2).   property(agent(3),label,3).
-property(agent(4),label,4).   property(agent(5),label,5).   property(agent(6),label,6).
-property(agent(7),label,7).   property(agent(8),label,8).   property(agent(9),label,9).
-property(agent(10),label,10). property(agent(11),label,11). property(agent(12),label,12).
-property(agent(13),label,13). property(agent(14),label,14). property(agent(15),label,15).
+property(agent(1),id,1).   property(agent(2),id,2).   property(agent(3),id,3).
+property(agent(4),id,4).   property(agent(5),id,5).   property(agent(6),id,6).
+property(agent(7),id,7).   property(agent(8),id,8).   property(agent(9),id,9).
+property(agent(10),id,10). property(agent(11),id,11). property(agent(12),id,12).
+property(agent(13),id,13). property(agent(14),id,14). property(agent(15),id,15).
 
 % ---------- WALL OBJECT ----------
 object(wall(1),wall).

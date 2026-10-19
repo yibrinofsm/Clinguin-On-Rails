@@ -155,7 +155,68 @@ attr(grid_placement_image(Row,Col,R,O),width,30) :- elem(grid_placement_image(Ro
 attr(grid_placement_image(Row,Col,R,O),height,30) :- elem(grid_placement_image(Row,Col,R,O),canvas,_).
 attr(grid_placement_image(Row,Col,R,O),class,("w-100";"h-100";"pe-none")) :- elem(grid_placement_image(Row,Col,R,O),canvas,_).
 
-% Fallback if the image is missing.
-elem(grid_placement_fallback(Row,Col,R,O),label,grid_placement(Row,Col,R,O)) :- elem(grid_placement(Row,Col,R,O),container,_),not image(O,R,_).
-attr(grid_placement_fallback(Row,Col,R,O),label,@concat("",O)) :- elem(grid_placement_fallback(Row,Col,R,O),label,_).
-attr(grid_placement_fallback(Row,Col,R,O),class,("small";"text-danger";"text-center";"pe-none")) :- elem(grid_placement_fallback(Row,Col,R,O),label,_).
+
+
+
+
+% Shared label layer above the images in each occupied cell.
+elem(grid_labels(Row,Col),container,node_box(Row,Col)) :-
+    elem(grid_placement(Row,Col,_,_),container,_).
+
+attr(grid_labels(Row,Col),grid_row,0) :-
+    elem(grid_labels(Row,Col),container,_).
+
+attr(grid_labels(Row,Col),grid_column,0) :-
+    elem(grid_labels(Row,Col),container,_).
+
+attr(grid_labels(Row,Col),child_layout,flex) :-
+    elem(grid_labels(Row,Col),container,_).
+
+attr(grid_labels(Row,Col),flex_direction,column) :-
+    elem(grid_labels(Row,Col),container,_).
+
+attr(grid_labels(Row,Col),class,
+    ("d-flex";"flex-column";"justify-content-end";
+     "w-100";"h-100";"p-0";"m-0";"pe-none";"overflow-hidden")) :-
+    elem(grid_labels(Row,Col),container,_).
+
+attr(grid_labels(Row,Col),"z-index","2") :-
+    elem(grid_labels(Row,Col),container,_).
+
+attr(grid_labels(Row,Col),"min-width","0") :-
+    elem(grid_labels(Row,Col),container,_).
+
+attr(grid_labels(Row,Col),"min-height","0") :-
+    elem(grid_labels(Row,Col),container,_).
+
+% One label per object per cell, even if it has multiple roles there.
+elem(grid_object_label(Row,Col,O),label,grid_labels(Row,Col)) :-
+    elem(grid_placement(Row,Col,_,O),container,_).
+
+attr(grid_object_label(Row,Col,O),label,@concat("",Text)) :-
+    elem(grid_object_label(Row,Col,O),label,_),
+    object_display_ID(O,Text).
+
+% Stable ordering when multiple objects share a cell.
+attr(grid_object_label(Row,Col,O),order,N) :-
+    elem(grid_object_label(Row,Col,O),label,_),
+    N = #count {
+        Other :
+        elem(grid_object_label(Row,Col,Other),label,_),
+        Other < O
+    }.
+
+attr(grid_object_label(Row,Col,O),class,
+    ("d-block";"w-100";"text-center";"fw-bold";"text-dark";
+     "text-truncate";"flex-shrink-0";"pe-none";"p-0";"m-0")) :-
+    elem(grid_object_label(Row,Col,O),label,_).
+
+attr(grid_object_label(Row,Col,O),"font-size","8px") :-
+    elem(grid_object_label(Row,Col,O),label,_).
+
+attr(grid_object_label(Row,Col,O),"line-height","9px") :-
+    elem(grid_object_label(Row,Col,O),label,_).
+
+attr(grid_object_label(Row,Col,O),background_color,
+    "rgba(255,255,255,0.85)") :-
+    elem(grid_object_label(Row,Col,O),label,_).

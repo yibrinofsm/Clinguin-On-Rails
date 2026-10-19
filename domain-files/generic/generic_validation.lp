@@ -239,4 +239,10 @@ incomplete(O,T) :-object(O,T),not complete(O,T).
 node_contains_type(N,T) :-position(N,_,O),object(O,T).
 
 
-:-position(N,R,O1),position(N,R,O2),O1<O2.
+% :-position(N,R,O1),position(N,R,O2),O1<O2.
+% ============================================================
+% DISPLAY OBJECT LABELS
+% ============================================================
+
+% Use the label property, or fall back to the object name.
+object_display_ID(O,ID) :-object(O,_),property(O,id,ID).
