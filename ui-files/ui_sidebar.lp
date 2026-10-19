@@ -20,26 +20,12 @@ attr(sidebar_subtitle,label,"Objects available in the current instance.").
 attr(sidebar_subtitle,class,("small";"text-light")).
 
 
-
-
-
 % Catalogue shell
 % ------------------------------------------------------------
 elem(object_catalogue,container,sidebar_panel).
 attr(object_catalogue,order,3).
 attr(object_catalogue,flex_direction,column).
 attr(object_catalogue,class,("d-flex";"flex-column";"w-100";"mw-100";"border-top";"overflow-hidden")).
-
-
-% ============================================================
-% NO GRID STATUS
-% ============================================================
-
-elem(grid_catalogue_no_nodes,label,grid_catalogue_info) :- not node((_,_)).
-attr(grid_catalogue_no_nodes,order,2) :- not node((_,_)).
-attr(grid_catalogue_no_nodes,label,"No grid configured") :- not node((_,_)).
-attr(grid_catalogue_no_nodes,class,("text-secondary";"m-0")) :- not node((_,_)).
-attr(grid_catalogue_no_nodes,"font-size","9px") :- not node((_,_)).
 
 
 % Catalogue heading, Add object Button
@@ -192,13 +178,13 @@ elem(object_card(O,T),container,type_items(T)) :- object(O,T).
 attr(object_card(O,T),order,N+10) :- object(O,T),N=#count{Other:object(Other,T),Other<O}.
 attr(object_card(O,T),flex_direction,row) :- object(O,T).
 attr(object_card(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-1";"p-0";"border";"rounded-3";"mw-100")) :- object(O,T).
-attr(object_card(O,T),background_color,"white") :- object(O,T),not _clinguin_context(object_selected_for_placement_for_placement,O).
-attr(object_card(O,T),background_color,"#e9ecef") :- object(O,T),_clinguin_context(object_selected_for_placement_for_placement,O).
+attr(object_card(O,T),background_color,"white") :- object(O,T),not _clinguin_context(object_selected,O).
+attr(object_card(O,T),background_color,"#e9ecef") :- object(O,T),_clinguin_context(object_selected,O).
 attr(object_card(O,T),background_color,"#fff3cd") :- object_selected_for_inspection(O,T).
 attr(object_card(O,T),class,("border-warning";"border-2";"shadow-sm")) :- object_selected_for_inspection(O,T).
-attr(object_card(O,T),class,("border-primary";"border-2";"shadow-sm")) :- object(O,T),_clinguin_context(object_selected_for_placement_for_placement,O).
-attr(object_card(O,T),on_hover,true) :- object(O,T),not _clinguin_context(object_selected_for_placement_for_placement,O).
-attr(object_card(O,T),on_hover_background_color,"#e9ecef") :- object(O,T),not _clinguin_context(object_selected_for_placement_for_placement,O).
+attr(object_card(O,T),class,("border-primary";"border-2";"shadow-sm")) :- object(O,T),_clinguin_context(object_selected,O).
+attr(object_card(O,T),on_hover,true) :- object(O,T),not _clinguin_context(object_selected,O).
+attr(object_card(O,T),on_hover_background_color,"#e9ecef") :- object(O,T),not _clinguin_context(object_selected,O).
 
 
 % ============================================================
@@ -318,15 +304,15 @@ attr(object_select(O,T),order,1) :- object(O,T).
 attr(object_select(O,T),icon,"fa-arrow-pointer") :- object(O,T).
 % attr(object_select(O,T),disabled,true) :- object(O,T),incomplete(O,T).
 attr(object_select(O,T),disabled,true) :- object(O,T),not complete(O,T).
-attr(object_select(O,T),label,"Selected") :- object(O,T), _clinguin_context(object_selected_for_placement_for_placement,O).
-attr(object_select(O,T),label,"Select") :- object(O,T), not _clinguin_context(object_selected_for_placement_for_placement,O).
-attr(object_select(O,T),class, ("btn-outline-primary"; "btn-sm"; "rounded-2"; "px-1"; "py-1")) :- object(O,T), not _clinguin_context(object_selected_for_placement_for_placement,O).
-attr(object_select(O,T),class, ("btn-primary"; "btn-sm"; "rounded-2"; "px-1"; "py-1")) :- object(O,T), _clinguin_context(object_selected_for_placement_for_placement,O).
+attr(object_select(O,T),label,"Selected") :- object(O,T), _clinguin_context(object_selected,O).
+attr(object_select(O,T),label,"Select") :- object(O,T), not _clinguin_context(object_selected,O).
+attr(object_select(O,T),class, ("btn-outline-primary"; "btn-sm"; "rounded-2"; "px-1"; "py-1")) :- object(O,T), not _clinguin_context(object_selected,O).
+attr(object_select(O,T),class, ("btn-primary"; "btn-sm"; "rounded-2"; "px-1"; "py-1")) :- object(O,T), _clinguin_context(object_selected,O).
 attr(object_select(O,T), "font-size", "10px") :- object(O,T).
 
-when(object_select(O,T),click,context,(object_selected_for_placement_for_placement,O)) :- complete(O,T).
-when(object_select(O,T),click,context,(selected_role_for_placement,none)) :- complete(O,T),not single_role_image(O,_).
-when(object_select(O,T),click,context,(selected_role_for_placement,R)) :- complete(O,T),single_role_image(O,R).
+when(object_select(O,T),click,context,(object_selected,O)) :- complete(O,T).
+when(object_select(O,T),click,context,(selected_role_for_placement,none)) :- complete(O,T),not object_single_role_image(O,_).
+when(object_select(O,T),click,context,(selected_role_for_placement,R)) :- complete(O,T),object_single_role_image(O,R).
 when(object_select(O,T),click,call,()) :- complete(O,T).
 
 % ============================================================
@@ -443,11 +429,6 @@ attr(input(add_object,new_object_name),"min-height","42px").
 attr(input(add_object,new_object_name),"font-size","13px").
 when(input(add_object,new_object_name),input,context,(new_object_name,_value)).
 
-elem(add_object_name_hint,label,add_object_name_field).
-attr(add_object_name_hint,order,3).
-attr(add_object_name_hint,label,"The identifier is interpreted as an ASP constant.").
-attr(add_object_name_hint,class,("text-secondary";"m-0")).
-attr(add_object_name_hint,"font-size","10px").
 
 % Type section
 elem(add_object_type_field,container,form_body(add_object)).
@@ -468,7 +449,7 @@ attr(add_object_type_label,"font-size","13px").
 
 elem(add_object_type_count,label,add_object_type_header) :- has_declared_object_type.
 attr(add_object_type_count,order,2) :- has_declared_object_type.
-attr(add_object_type_count,label,@concat(N," declared")) :- N=#count{T:domain_type(T)},N>0.
+attr(add_object_type_count,label,@concat(N," declared")) :- N=#count{T:object_type(T)},N>0.
 attr(add_object_type_count,class,("text-secondary";"bg-light";"border";"rounded-pill";"px-2";"py-1";"m-0")) :- has_declared_object_type.
 attr(add_object_type_count,"font-size","9px") :- has_declared_object_type.
 
@@ -486,42 +467,14 @@ attr(input(add_object,declared_object_type),selected,"Select object type") :- ha
 attr(input(add_object,declared_object_type),class,("btn-light";"bg-white";"border";"text-dark";"text-start";"w-100";"rounded-3";"px-3";"py-2")) :- has_declared_object_type.
 attr(input(add_object,declared_object_type),"font-size","13px") :- has_declared_object_type.
 
-elem(object_type_option(T),dropdown_menu_item,input(add_object,declared_object_type)) :- domain_type(T).
-attr(object_type_option(T),order,N) :-domain_type(T),N=#count{T2:domain_type(D,T2),T2<T}.
-attr(object_type_option(T),label,@concat("",T)) :-domain_type(T).
-attr(object_type_option(T),class,("dropdown-item";"px-3";"py-2")) :-domain_type(T).
-when(object_type_option(T),click,context,(new_object_type,T)) :-domain_type(T).
-when(object_type_option(T),click,update,(input(add_object,declared_object_type),selected,@concat("",T))) :-domain_type(T).
+elem(object_type_option(T),dropdown_menu_item,input(add_object,declared_object_type)) :- object_type(T).
+attr(object_type_option(T),order,N) :-object_type(T),N=#count{T2:object_type(D,T2),T2<T}.
+attr(object_type_option(T),label,@concat("",T)) :-object_type(T).
+attr(object_type_option(T),class,("dropdown-item";"px-3";"py-2")) :-object_type(T).
+when(object_type_option(T),click,context,(new_object_type,T)) :-object_type(T).
+when(object_type_option(T),click,update,(input(add_object,declared_object_type),selected,@concat("",T))) :-object_type(T).
 
-% Manual mode
 
-elem(manual_type_section,container,add_object_type_field).
-attr(manual_type_section,order,3).
-attr(manual_type_section,flex_direction,column).
-attr(manual_type_section,class,("d-flex";"flex-column";"gap-1";"w-100")).
-attr(manual_type_section,visibility,hidden) :- has_declared_object_type.
-attr(manual_type_section,visibility,shown) :- not has_declared_object_type.
-
-elem(manual_type_label,label,manual_type_section).
-attr(manual_type_label,order,1).
-attr(manual_type_label,label,"Enter object type").
-attr(manual_type_label,class,("text-secondary";"m-0")).
-attr(manual_type_label,"font-size","10px").
-
-elem(input(add_object,manual_object_type),textfield,manual_type_section).
-attr(input(add_object,manual_object_type),order,2).
-attr(input(add_object,manual_object_type),placeholder,"e.g. station").
-attr(input(add_object,manual_object_type),class,("form-control";"rounded-3";"bg-white";"text-dark";"px-3";"py-2";"w-100")).
-attr(input(add_object,manual_object_type),"border","1px solid #CBD5E1").
-attr(input(add_object,manual_object_type),"min-height","42px").
-attr(input(add_object,manual_object_type),"font-size","13px").
-when(input(add_object,manual_object_type),input,context,(new_object_type,_value)).
-
-elem(manual_type_hint,label,manual_type_section).
-attr(manual_type_hint,order,3).
-attr(manual_type_hint,label,"Use any type identifier required by the instance.").
-attr(manual_type_hint,class,("text-secondary";"m-0")).
-attr(manual_type_hint,"font-size","9px").
 
 % Actions
 
@@ -548,7 +501,7 @@ when(save(add_object),click,update,(dialog(form(add_object)),visibility,hidden))
 when(save(add_object),click,context,(notice_level,success)).
 when(save(add_object),click,context,(notice_title,"Object created")).
 when(save(add_object),click,context,(notice_message,@concat("Object ",_context_value(new_object_name),", of type ",_context_value(new_object_type),", was created successfully."))).
-when(save(add_object),click,call,add_atom(domain_type(_context_value(new_object_type)))).
+when(save(add_object),click,call,add_atom(object_type(_context_value(new_object_type)))).
 
 when(save(add_object),click,call,add_atom(object(_context_value(new_object_name),_context_value(new_object_type)))).
 
@@ -665,85 +618,12 @@ attr(inspector_visual_path(O,T,R,I),label,@concat("",I)) :- object_selected_for_
 attr(inspector_visual_path(O,T,R,I),class,("font-monospace";"text-secondary";"text-break";"m-0")) :- object_selected_for_inspection(O,T),image(O,R,I).
 attr(inspector_visual_path(O,T,R,I),"font-size","8px") :- object_selected_for_inspection(O,T),image(O,R,I).
 
-% Source badge
-elem(session_image_badge(O,T,R,I),label,inspector_visual_info(O,T,R,I)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(session_image_badge(O,T,R,I),order,3) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(session_image_badge(O,T,R,I),label,"Session image") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(session_image_badge(O,T,R,I),class,("badge";"bg-primary";"text-white")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(session_image_badge(O,T,R,I),"font-size","8px") :- object_selected_for_inspection(O,T),session_image(O,R,I).
 
 elem(domain_image_badge(O,T,R,I),label,inspector_visual_info(O,T,R,I)) :- object_selected_for_inspection(O,T),domain_image(O,R,I).
 attr(domain_image_badge(O,T,R,I),order,3) :- object_selected_for_inspection(O,T),domain_image(O,R,I).
 attr(domain_image_badge(O,T,R,I),label,"Declared Image") :- object_selected_for_inspection(O,T),domain_image(O,R,I).
 attr(domain_image_badge(O,T,R,I),class,("badge";"bg-secondary";"text-white")) :- object_selected_for_inspection(O,T),domain_image(O,R,I).
 attr(domain_image_badge(O,T,R,I),"font-size","8px") :- object_selected_for_inspection(O,T),domain_image(O,R,I).
-
-% Session actions
-elem(image_actions(O,T,R,I),container,inspector_visual(O,T,R,I)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(image_actions(O,T,R,I),order,3) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(image_actions(O,T,R,I),flex_direction,row) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(image_actions(O,T,R,I),class,("d-flex";"flex-row";"gap-1";"ms-auto";"flex-shrink-0")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-
-% elem(image_edit(O,T,R,I),button,image_actions(O,T,R,I)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit(O,T,R,I),order,1) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit(O,T,R,I),label,"Edit") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit(O,T,R,I),icon,"fa-pen") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit(O,T,R,I),class,("btn-outline-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit(O,T,R,I),"font-size","8px") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% when(image_edit(O,T,R,I),click,context,(editing_image_role(O,R,I),R)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% when(image_edit(O,T,R,I),click,update,(image_editor(O,T,R,I),visibility,shown)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-
-elem(image_delete(O,T,R,I),button,image_actions(O,T,R,I)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(image_delete(O,T,R,I),order,2) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(image_delete(O,T,R,I),label,"Delete") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(image_delete(O,T,R,I),icon,"fa-trash") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(image_delete(O,T,R,I),class,("btn-outline-danger";"btn-sm";"rounded-2";"px-2";"py-1")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-attr(image_delete(O,T,R,I),"font-size","8px") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-when(image_delete(O,T,R,I),click,call,remove_atom(image(O,R,I))) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-
-% ============================================================
-% SESSION IMAGE EDITOR
-% ============================================================
-
-% elem(image_editor(O,T,R,I),container,inspector_visual_list(O,T)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor(O,T,R,I),order,N+100) :- object_selected_for_inspection(O,T),session_image(O,R,I),N=#count{R2,I2:image(O,R2,I2),(R2,I2)<(R,I)}.
-% attr(image_editor(O,T,R,I),flex_direction,column) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor(O,T,R,I),class,("d-flex";"flex-column";"gap-2";"p-2";"rounded-2";"w-100")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor(O,T,R,I),background_color,"#EFF6FF") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor(O,T,R,I),"border","1px solid #BFDBFE") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor(O,T,R,I),visibility,hidden) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-
-% elem(image_editor_title(O,T,R,I),label,image_editor(O,T,R,I)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor_title(O,T,R,I),order,1) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor_title(O,T,R,I),label,@concat("Edit image role: ",R)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor_title(O,T,R,I),class,("fw-bold";"text-primary";"m-0")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor_title(O,T,R,I),"font-size","10px") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-
-% elem(image_edit_role_input(O,T,R,I),textfield,image_editor(O,T,R,I)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_role_input(O,T,R,I),order,2) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_role_input(O,T,R,I),placeholder,@concat("Current role: ",R)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_role_input(O,T,R,I),class,("form-control";"form-control-sm";"rounded-2";"w-100")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_role_input(O,T,R,I),"font-size","10px") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% when(image_edit_role_input(O,T,R,I),input,context,(editing_image_role(O,R,I),_value)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-
-% elem(image_editor_actions(O,T,R,I),container,image_editor(O,T,R,I)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor_actions(O,T,R,I),order,3) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor_actions(O,T,R,I),flex_direction,row) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_editor_actions(O,T,R,I),class,("d-flex";"flex-row";"justify-content-end";"gap-2")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-
-% elem(image_edit_cancel(O,T,R,I),button,image_editor_actions(O,T,R,I)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_cancel(O,T,R,I),order,1) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_cancel(O,T,R,I),label,"Cancel") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_cancel(O,T,R,I),class,("btn-light";"border";"btn-sm";"rounded-2")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% when(image_edit_cancel(O,T,R,I),click,update,(image_editor(O,T,R,I),visibility,hidden)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-
-% elem(image_edit_save(O,T,R,I),button,image_editor_actions(O,T,R,I)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_save(O,T,R,I),order,2) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_save(O,T,R,I),label,"Save") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_save(O,T,R,I),icon,"fa-check") :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% attr(image_edit_save(O,T,R,I),class,("btn-primary";"btn-sm";"rounded-2")) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% when(image_edit_save(O,T,R,I),click,update,(image_editor(O,T,R,I),visibility,hidden)) :- object_selected_for_inspection(O,T),session_image(O,R,I).
-% when(image_edit_save(O,T,R,I),click,call,(remove_atom(image(O,R,I)),add_atom(image(O,_context_value(editing_image_role(O,R,I),const),I)))) :- object_selected_for_inspection(O,T),session_image(O,R,I).
 
 % ============================================================
 % ADD IMAGE
@@ -1143,11 +1023,11 @@ when(add_new_property_button(O,T),click,call,add_atom(property(O,_context_value(
 % ============================================================
 
 % Preserve placement selection.
-when(w,load,context,(object_selected_for_placement_for_placement,O)) :- _clinguin_context(object_selected_for_placement_for_placement,O),complete(O,_).
-when(w,load,context,(selected_role_for_placement,R)) :- _clinguin_context(object_selected_for_placement_for_placement,O),_clinguin_context(selected_role_for_placement,R),complete(O,T),type_role(T,R),image(O,R,_).
+when(w,load,context,(object_selected,O)) :- _clinguin_context(object_selected,O),complete(O,_).
+when(w,load,context,(selected_role_for_placement,R)) :- _clinguin_context(object_selected,O),_clinguin_context(selected_role_for_placement,R),complete(O,T),type_role(T,R),image(O,R,_).
 
 % Role selection section inside the selected object card.
-elem(placement_role_section(O,T),container,object_card(O,T)) :- complete(O,T),_clinguin_context(object_selected_for_placement_for_placement,O).
+elem(placement_role_section(O,T),container,object_card(O,T)) :- complete(O,T),_clinguin_context(object_selected,O).
 attr(placement_role_section(O,T),order,5) :- elem(placement_role_section(O,T),container,_).
 attr(placement_role_section(O,T),flex_direction,column) :- elem(placement_role_section(O,T),container,_).
 attr(placement_role_section(O,T),class,("d-flex";"flex-column";"gap-2";"p-2";"w-100";"border-top";"bg-light")) :- elem(placement_role_section(O,T),container,_).
@@ -1182,6 +1062,6 @@ attr(placement_role_hint(O,T),class,("small";"text-secondary")) :- elem(placemen
 elem(unselect_placement(O,T),button,placement_role_section(O,T)) :- elem(placement_role_section(O,T),container,_).
 attr(unselect_placement(O,T),label,"Unselect object") :- elem(unselect_placement(O,T),button,_).
 attr(unselect_placement(O,T),class,("btn-sm";"btn-outline-secondary")) :- elem(unselect_placement(O,T),button,_).
-when(unselect_placement(O,T),click,context,(object_selected_for_placement_for_placement,none)) :- elem(unselect_placement(O,T),button,_).
+when(unselect_placement(O,T),click,context,(object_selected,none)) :- elem(unselect_placement(O,T),button,_).
 when(unselect_placement(O,T),click,context,(selected_role_for_placement,none)) :- elem(unselect_placement(O,T),button,_).
 when(unselect_placement(O,T),click,call,()) :- elem(unselect_placement(O,T),button,_).

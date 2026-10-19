@@ -13,8 +13,8 @@
 active_domain(flatland).
 
 % Type Declaration
-domain_type(track).
-domain_type(train).
+object_type(track).
+object_type(train).
 
 % Role Declaration
 % domain_role(flatland,cell).
@@ -22,7 +22,6 @@ domain_type(train).
 % domain_role(flatland,end).
 
 % Type Role
-
 type_role(track,cell).
 type_role(train,start).
 type_role(train,end).
@@ -57,8 +56,3 @@ train_direction(n).
 train_direction(e).
 train_direction(s).
 train_direction(w).
-
-
-
-
-

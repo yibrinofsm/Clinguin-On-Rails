@@ -58,14 +58,6 @@ attr(help_button,icon,"fa-circle-question").
 attr(help_button,class,("btn-outline-primary";"px-3")).
 when(help_button,click,update,(dialog(help),visibility,shown)).
 
-% %Undo Button
-
-% elem(undo_button,button,menu_bar) .
-% attr(undo_button,order,6) :- elem(undo_button,button,menu_bar).
-% attr(undo_button,label,"Undo last change") :- elem(undo_button,button,menu_bar).
-% attr(undo_button,class,"btn-outline-primary") :- elem(undo_button,button,menu_bar).
-
-
 % ============================================================
 % ACTIVE DOMAIN 
 % ============================================================

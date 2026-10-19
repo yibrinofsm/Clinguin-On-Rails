@@ -1,11 +1,14 @@
-% mapf_domain.lp
+
+% ============================================================
+% FILE: mapf_domain.lp
+% ============================================================
 
 % Domain configuration
 active_domain(mapf).
 
 % Type Declaration
-domain_type(agent).
-domain_type(wall).
+object_type(agent).
+object_type(wall).
 
 % Role Declaration
 type_role(agent,start).

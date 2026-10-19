@@ -10,7 +10,7 @@
 %
 % It works with generic predicates such as:
 %
-%   domain_type/2 ?
+%   object_type/2 
 %   node/1
 %   object/2
 %   property/3
@@ -29,29 +29,29 @@
 %
 % The generic facts may originate from:
 %   - Domain files (e.g., MAPF, Flatland).
-%   - Atoms dynamically added through the Clinguin UI.
+%   - Objects and  their properties can  dynamically be added through the Clinguin UI.
 
 % ============================================================
 
 
 % ============================================================
-% 1. DOMAIN TYPE EXISTENCE ?
+% 1. Object TYPE EXISTENCE 
 % ============================================================
 %
 % PURPOSE:
-% Check whether at least one domain type is declared.
+% Check whether at least one object type is declared.
+% Check whether at least one object role is declared.
+
 %
 % CHECKS:
-% - Whether any domain_type/2 fact exists.
-% - The fact may come from a loaded domain file or
-%   from an atom added through the Clinguin UI.
-%
+% - Whether any object_type/2 fact exists.
+% - Whether any object_role/2 fact exists.
+
 % ============================================================
+% Declared Object Type
+has_declared_object_type :-object_type(_).
 
-has_declared_object_type :-
-    domain_type(_).
-
-
+% Declared Role
 has_declared_type_role(R) :- type_role(_,R).
 
 % ============================================================
@@ -68,25 +68,20 @@ has_declared_type_role(R) :- type_role(_,R).
 % - Whether an object has at least one position.
 %
 % These predicates can be used to control UI visibility,
-% display empty-state messages, or enable certain actions.
 %
 % ============================================================
 
 % True if at least one coordinate-based grid node exists.
-has_grid_nodes :-
-    node((_ , _)).
+has_grid_nodes :-node((_ , _)).
 
 % True if at least one object exists.
-has_objects :-
-    object(_,_).
+has_objects :-object(_,_).
 
 % True if object O has at least one image.
-has_images(O) :-
-    image(O,_,_).
+has_images(O) :-image(O,_,_).
 
 % True if object O has at least one position.
-has_positions(O) :-
-    position(_,_,O).
+has_positions(O) :-position(_,_,O).
 
 
 % ============================================================
@@ -120,9 +115,9 @@ object_count(N) :-
 type_count(N) :-
     N = #count { T : object(_,T) }.
 
-% Count distinct types declared through domain_type/2.
+% Count distinct types declared through object_type/2.
 type_count(N) :-
-    N = #count { T : domain_type(T) }.
+    N = #count { T : object_type(T) }.
 
 % Count all images associated with object O.
 object_image_count(O,N) :-
@@ -150,14 +145,10 @@ object_position_count(O,N) :-
 % ============================================================
 
 % True if type T declares at least one property.
-has_properties(T) :-
-    type_property(T,_,_,_).
+has_properties(T) :-type_property(T,_,_,_).
 
 % True if object O has exactly one distinct image role R.
-single_role_image(O,R) :-
-    object(O,_),
-    image(O,R,_),
-    1 = #count { R2 : image(O,R2,_) }.
+object_single_role_image(O,R) :-object(O,_),image(O,R,_),1 = #count { R2 : image(O,R2,_) }.
 
 
 % ============================================================
@@ -187,7 +178,7 @@ single_role_image(O,R) :-
 
 
 % ============================================================
-% 8. PROPERTY AND IMAGE COMPLETENESS CHECKS
+% 6. PROPERTY AND IMAGE COMPLETENESS CHECKS
 % ============================================================
 %
 % PURPOSE:
@@ -203,19 +194,10 @@ single_role_image(O,R) :-
 % has_all_images/2:
 % - The object exists.
 % - No declared image role is missing an image.
-%
-% IMPORTANT:
-% If an object type has no required properties,
-% has_all_properties/2 is true.
-%
-% If an object type has no declared image roles,
-% has_all_images/2 is true, provided no missing-image
-% atom is derived.
-%
+
 % ============================================================
 
 % True if object O has all required properties.
-% <<<<<<< HEAD
 has_all_properties(O,T) :-object(O,T), not object_missing_required_property(O,T,_,_).
 
 % True if no image role is reported missing for object O.
@@ -223,7 +205,7 @@ has_all_images(O,T) :-object(O,T), not object_missing_image_for_role(O,T,_).
 
 
 % ============================================================
-% 9. OBJECT COMPLETENESS
+% 7. OBJECT COMPLETENESS
 % ============================================================
 %
 % PURPOSE:
@@ -256,39 +238,5 @@ incomplete(O,T) :-object(O,T),not complete(O,T).
 % Check whether a node contains an object of type T.
 node_contains_type(N,T) :-position(N,_,O),object(O,T).
 
-% ============================================================
-% 10. EXAMPLE GENERIC DOMAIN FACTS (DISABLED)
-% ============================================================
-%
-% PURPOSE:
-% Examples of generic object, image, and position facts.
-%
-% These facts demonstrate how the generic representation
-% can describe tracks and trains.
-%
-% They are commented out and have no effect on solving.
-%
-% ============================================================
 
-% % Tracks
-%
-% object(track1025,track).
-% image(track1025,cell,img/track1025.png).
-% position((10,10),cell,track1025).
-% position((10,11),cell,track1025).
-% position((10,12),cell,track1025).
-%
-% object(track32800,track).
-% image(track32800,cell,img/track32800.png).
-% position((11,10),cell,track32800).
-% position((11,11),cell,track32800).
-% position((11,12),cell,track32800).
-%
-% % Trains
-%
-% object(train01,train).
-% image(train01,start,img/train01_start.png).
-% image(train01,end,img/train01_end.png).
-% position((10,10),start,train01).
-% position((100,100),end,train01).
 

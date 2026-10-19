@@ -68,6 +68,7 @@ image(T,start,"img/train_s_0.png"):-object(T,train),property(T,direction,s).
 image(T,start,"img/train_w_0.png"):-object(T,train),property(T,direction,w).
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Tracks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
