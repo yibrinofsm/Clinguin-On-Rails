@@ -24,6 +24,7 @@ object_type(train).
 % Type Role
 type_role(track,cell).
 type_role(train,start).
+
 type_role(train,end).
 
 
@@ -52,7 +53,8 @@ type_property(track,code,int,required).
 type_placement_requirement(train,track).
 
 % Valid train directions
-train_direction(n).
-train_direction(e).
-train_direction(s).
-train_direction(w).
+train_direction(0).
+train_direction(1).
+train_direction(2).
+train_direction(3).
+

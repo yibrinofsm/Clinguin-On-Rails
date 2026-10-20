@@ -62,12 +62,12 @@
 % image(train(1),start,"img/train_e_1.png"):-object(train(1),train).
 % image(train(2),start,"img/train_e_2.png"):-object(train(2),train).
 
-image(T,start,"img/train_e_0.png"):-object(T,train),property(T,direction,e).
-image(T,start,"img/train_n_0.png"):-object(T,train),property(T,direction,n).
-image(T,start,"img/train_s_0.png"):-object(T,train),property(T,direction,s).
-image(T,start,"img/train_w_0.png"):-object(T,train),property(T,direction,w).
+image(T,start,"img/train_e_0.png"):-object(T,train),property(T,direction,1).
+image(T,start,"img/train_n_0.png"):-object(T,train),property(T,direction,0).
+image(T,start,"img/train_s_0.png"):-object(T,train),property(T,direction,2).
+image(T,start,"img/train_w_0.png"):-object(T,train),property(T,direction,3).
 image(T,start,"img/train_e_0.png"):-object(T,train),not property(T,direction,_).
-
+image(T,end,"img/train_target2.png"):-object(T,train).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Tracks
@@ -155,3 +155,12 @@ image(X,cell,"img/dead_end_90.png"):-object(X,track),property(X,code,4).
 image(X,cell,"img/dead_end_180.png"):-object(X,track),property(X,code,128).
 image(X,cell,"img/dead_end_270.png"):-object(X,track),property(X,code,256).
 
+
+% ============================================================
+% Drawing layers by object type.
+% layer(ObjectType, Level).
+% Higher levels are drawn above lower levels.
+% ============================================================
+
+drawing_layer(track,1).
+drawing_layer(train,10).

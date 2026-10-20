@@ -83,6 +83,7 @@ attr(node_box(Row,Col),"border-bottom","1px solid #0f8bf7") :- node((Row,Col)), 
 attr(node_box(Row,Col),"box-sizing","border-box") :- node((Row,Col)).
 attr(node_box(Row,Col),"gridTemplateColumns","minmax(0,1fr)") :-node((Row,Col)).
 attr(node_box(Row,Col),"gridTemplateRows","minmax(0,1fr)") :-node((Row,Col)).
+attr(node_box(Row,Col),"isolation","isolate") :-node((Row,Col)).
 % ============================================================
 % PLACE OBJECT
 % ============================================================
@@ -114,6 +115,27 @@ elem(grid_placement(Row,Col,R,O),container,node_box(Row,Col)) :- node((Row,Col))
 attr(grid_placement(Row,Col,R,O),grid_row,0) :- elem(grid_placement(Row,Col,R,O),container,_).
 attr(grid_placement(Row,Col,R,O),grid_column,0) :- elem(grid_placement(Row,Col,R,O),container,_).
 attr(grid_placement(Row,Col,R,O),class,("w-100";"h-100";"p-0";"m-0";"pe-none")) :- elem(grid_placement(Row,Col,R,O),container,_).
+
+% Each grid cell has its own stacking context.
+attr(node_box(Row,Col),"isolation","isolate") :-node((Row,Col)).
+
+% Create one container for each placed object.
+elem(grid_placement(Row,Col,R,O),container,node_box(Row,Col)) :-node((Row,Col)),position((Row,Col),R,O),object(O,_).
+
+
+% Objects in the same cell overlap.
+attr(grid_placement(Row,Col,R,O),grid_row,0) :-elem(grid_placement(Row,Col,R,O),container,_).
+attr(grid_placement(Row,Col,R,O),grid_column,0) :-elem(grid_placement(Row,Col,R,O),container,_).
+
+
+% Read the object's type and use its declared drawing drawing_layer.
+% An undeclared type uses level 0.
+attr(grid_placement(Row,Col,R,O),"z-index",Level) :-elem(grid_placement(Row,Col,R,O),container,_),Level = #max {0;L,T : object(O,T), drawing_layer(T,L)}.
+
+
+% Keep object labels above every object image in the cell.
+attr(grid_labels(Row,Col),"z-index",Highest+1) :-elem(grid_labels(Row,Col),container,_),Highest = #max {0;Level,R,O :attr(grid_placement(Row,Col,R,O),"z-index",Level)}.
+
 % Let each placement fit within its cell.
 attr(grid_placement(Row,Col,R,O),"min-width","0") :-elem(grid_placement(Row,Col,R,O),container,_).
 attr(grid_placement(Row,Col,R,O),"min-height","0") :-elem(grid_placement(Row,Col,R,O),container,_).
@@ -121,20 +143,18 @@ attr(grid_placement(Row,Col,R,O),class,"overflow-hidden") :-elem(grid_placement(
 
 % Generic background styling for any object.
 attr(grid_placement(Row,Col,R,O),background_color,Color) :-elem(grid_placement(Row,Col,R,O),container,_),property(O,background_color,Color).
-elem(grid_placement_image(Row,Col,R,O),canvas,grid_placement(Row,Col,R,O)) :-elem(grid_placement(Row,Col,R,O),container,_),not property(O,render_mode,fill),image(O,R,I),I = #min { Path : image(O,R,Path) }.
+elem(grid_placement_image(Row,Col,R,O),canvas,grid_placement(Row,Col,R,O)) :-elem(grid_placement(Row,Col,R,O),container,_),not property(O,render_mode,fill),image(O,R,I).
 
 % Role-specific image.
-elem(grid_placement_image(Row,Col,R,O),canvas,grid_placement(Row,Col,R,O)) :- elem(grid_placement(Row,Col,R,O),container,_),image(O,R,I),I=#min{Path:image(O,R,Path)}.
-attr(grid_placement_image(Row,Col,R,O),image,I) :- elem(grid_placement_image(Row,Col,R,O),canvas,_),image(O,R,I),I=#min{Path:image(O,R,Path)}.
+
+elem(grid_placement_image(Row,Col,R,O),canvas,grid_placement(Row,Col,R,O)) :- elem(grid_placement(Row,Col,R,O),container,_),image(O,R,I).
+attr(grid_placement_image(Row,Col,R,O),image,I) :- elem(grid_placement_image(Row,Col,R,O),canvas,_),image(O,R,I).
 attr(grid_placement_image(Row,Col,R,O),width,30) :- elem(grid_placement_image(Row,Col,R,O),canvas,_).
 attr(grid_placement_image(Row,Col,R,O),height,30) :- elem(grid_placement_image(Row,Col,R,O),canvas,_).
 attr(grid_placement_image(Row,Col,R,O),class,("w-100";"h-100";"pe-none")) :- elem(grid_placement_image(Row,Col,R,O),canvas,_).
 
 
-
-
-
-% Shared label layer above the images in each occupied cell.
+% Shared label drawing_layer above the images in each occupied cell.
 elem(grid_labels(Row,Col),container,node_box(Row,Col)) :-elem(grid_placement(Row,Col,_,_),container,_).
 attr(grid_labels(Row,Col),grid_row,0) :-elem(grid_labels(Row,Col),container,_).
 attr(grid_labels(Row,Col),grid_column,0) :-elem(grid_labels(Row,Col),container,_).

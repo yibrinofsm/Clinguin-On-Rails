@@ -32,12 +32,13 @@ object(track(1025),track).
 % % % property(Object, PropertyName, Value)
 % % % ----------------------------------------------------------
 property(track(1025),code,1025).
-property(train(0),direction,n).
+% property(train(0),direction,n).
 
-% property(train(0),dep,0).
-% property(train(0),direction,w).
-% property(train(0),arr,12).
-% property(train(0),speed,1).
+property(train(0),dep,0).
+property(train(0),direction,e).
+property(train(0),arr,12).
+property(train(0),speed,1).
+property(train(0),id,0).
 
 
 % % % ----------------------------------------------------------

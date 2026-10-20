@@ -50,6 +50,8 @@ position((12,2),end,agent(9)).
 position((11,20),end,agent(10)).
 position((10,14),end,agent(11)).
 position((9,4),end,agent(12)).
+position((9,4),start,agent(1)).
+
 position((8,17),end,agent(13)).
 position((7,11),end,agent(14)).
 position((6,1),end,agent(15)).

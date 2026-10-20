@@ -78,6 +78,7 @@ attr(catalogue_type_count,background_color,"#F1F5F9").
 attr(catalogue_type_count,foreground_color,"#475569").
 attr(catalogue_type_count,"font-size","11px").
 
+
 % Add Object
 
 elem(add_object,button,object_toolbar_catalogue).
@@ -134,8 +135,8 @@ attr(catalogue_list,"overflow-x","hidden") :- has_objects.
 attr(catalogue_list,"scrollbar-width","thin") :- has_objects.
 
 % Type groups
-% ------------------------------------------------------------
-elem(type_group(T),container,catalogue_list) :- object(_,T).
+% ------------------------------------------------------------ 
+elem(type_group(T),container,catalogue_list) :-object(_,T).
 attr(type_group(T),order,N) :- object(_,T), N = #count { T2 : object(_,T2), T2 < T }.
 attr(type_group(T),flex_direction,column) :- object(_,T).
 attr(type_group(T),class,("d-flex";"flex-column";"gap-2";"mw-100";"flex-shrink-0")) :- object(_,T).
@@ -173,7 +174,6 @@ attr(type_items(T),"min-width","0") :- object(_,T).
 % OBJECT CARD 
 % ============================================================
 
-% Object Card
 elem(object_card(O,T),container,type_items(T)) :- object(O,T).
 attr(object_card(O,T),order,N+10) :- object(O,T),N=#count{Other:object(Other,T),Other<O}.
 attr(object_card(O,T),flex_direction,row) :- object(O,T).
@@ -206,6 +206,13 @@ attr(object_visuals(O,T),order,1) :- object(O,T), image(O,_,_).
 attr(object_visuals(O,T),flex_direction,row) :- object(O,T), image(O,_,_).
 attr(object_visuals(O,T),class, ("d-flex"; "flex-row"; "flex-wrap"; "gap-2"; "align-items-start"; "flex-shrink-0")) :- object(O,T), image(O,_,_).
 
+% elem(object_missing_image_role(O,R),container,object_visuals(O,T)) :- object(O,T),type_role(T,R), not image(O,R,_).
+% attr(object_missing_image_role(O,R),label,"{}") :-object(O,T),type_role(T,R), not image(O,R,_).
+% attr(object_missing_image_role(O,R),width,30) :-object(O,T),type_role(T,R), not image(O,R,_).
+% attr(object_missing_image_role(O,R),height,30) :-object(O,T),type_role(T,R), not image(O,R,_).
+% attr(object_missing_image_role(O,R),class, ("fw-semibold"; "text-secondary"; "text-center"; "text-nowrap"; "m-0")) :- object(O,T),type_role(T,R), not image(O,R,_).
+% attr(object_missing_image_role(O,R),"font-size","9px") :- object(O,T),type_role(T,R), not image(O,R,_).
+
 % ------------------------------------------------------------
 % ROLE-SPECIFIC IMAGE BLOCK
 % ------------------------------------------------------------
@@ -227,6 +234,8 @@ attr(object_image(O,R,I),image,I) :- object(O,T), image(O,R,I).
 attr(object_image(O,R,I),width,30) :- object(O,T), image(O,R,I).
 attr(object_image(O,R,I),height,30) :- object(O,T), image(O,R,I).
 attr(object_image(O,R,I),class, ("rounded-2"; "bg-white"; "flex-shrink-0")) :- object(O,T), image(O,R,I).
+
+
 
 % ------------------------------------------------------------
 % ROLE BADGE

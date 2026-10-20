@@ -104,25 +104,16 @@ has_positions(O) :-position(_,_,O).
 % ============================================================
 
 % Count all nodes in the instance.
-node_count(N) :-
-    N = #count { Node : node((Node)) }.
+node_count(N) :-N = #count { Node : node((Node)) }.
 
 % Count all distinct objects in the instance.
-object_count(N) :-
-    N = #count { O : object(O,_) }.
-
-% Count distinct types used by existing objects.
-type_count(N) :-
-    N = #count { T : object(_,T) }.
+object_count(N) :-N = #count { O : object(O,_) }.
 
 % Count distinct types declared through object_type/2.
-type_count(N) :-
-    N = #count { T : object_type(T) }.
+type_count(N) :-N = #count { T : object_type(T) }.
 
 % Count all images associated with object O.
-object_image_count(O,N) :-
-    object(O,_),
-    N = #count { R,I : image(O,R,I) }.
+object_image_count(O,N) :-object(O,_),N = #count { R,I : image(O,R,I) }.
 
 % Count all positions associated with object O.
 object_position_count(O,N) :-
@@ -246,3 +237,8 @@ node_contains_type(N,T) :-position(N,_,O),object(O,T).
 
 % Use the label property, or fall back to the object name.
 object_display_ID(O,ID) :-object(O,_),property(O,id,ID).
+
+% generic_object_identifier_exists(O):-object(O,_)
+% If an object with identifier O and type T already exists, and there is a request to create that same object,
+%  derive a rejection result containing an error message
+object_creation_rejected(create,O,T,"Can not create object:an object with this identifier and type already exists."):-object(O,T),request(create,O,T).
