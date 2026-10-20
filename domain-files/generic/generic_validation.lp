@@ -116,9 +116,7 @@ type_count(N) :-N = #count { T : object_type(T) }.
 object_image_count(O,N) :-object(O,_),N = #count { R,I : image(O,R,I) }.
 
 % Count all positions associated with object O.
-object_position_count(O,N) :-
-    object(O,_),
-    N = #count { Node,R : position(Node,R,O) }.
+object_position_count(O,N) :-object(O,_),N = #count { Node,R : position(Node,R,O) }.
 
 
 % ============================================================
@@ -241,4 +239,6 @@ object_display_ID(O,ID) :-object(O,_),property(O,id,ID).
 % generic_object_identifier_exists(O):-object(O,_)
 % If an object with identifier O and type T already exists, and there is a request to create that same object,
 %  derive a rejection result containing an error message
-object_creation_rejected(create,O,T,"Can not create object:an object with this identifier and type already exists."):-object(O,T),request(create,O,T).
+% object_creation_rejected(create,O,T,"Can not create object:an object with this identifier and type already exists."):-object(O,T),request(create,O,T).
+% identifier/type pairs already present in the instance.
+generic_object_exists(O,T) :-object(O,T).

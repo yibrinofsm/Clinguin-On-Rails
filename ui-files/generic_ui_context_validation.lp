@@ -92,3 +92,6 @@ object_placement_rejected(N,O,T,R) :- same_type_placement_conflict(N,R,O,T).
 %  Determine whether the selected object can be placed.
 valid_object_placement(Row,Col,O,T,R) :-node((Row,Col)),object_selected_for_placement(O,T,R),not position((Row,Col),R,O),not object_placement_rejected((Row,Col),O,T,R),not _clinguin_unsat.
 
+
+% Use the existing notification component after validation.
+% notification_event(w,load,error,"Object already exists",@concat("Object ",O," of type ",T," already exists.")) :-object_creation_rejected(O,T,_).

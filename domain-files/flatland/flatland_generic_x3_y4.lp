@@ -97,7 +97,7 @@ position((2,3),cell,track(2064)).
 % ----------------------------------------------------------
 
 position((0,2),start,train(0)).
-% position((2,2),end,train(0)).
+position((2,2),end,train(0)).
 
 
 

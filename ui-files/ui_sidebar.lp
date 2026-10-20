@@ -569,7 +569,6 @@ when(save(add_object),click,context,(notice_level,success)).
 when(save(add_object),click,context,(notice_title,"Object created")).
 when(save(add_object),click,context,(notice_message,@concat("Object ",_context_value(new_object_name),", of type ",_context_value(new_object_type),", was created successfully."))).
 when(save(add_object),click,call,add_atom(object_type(_context_value(new_object_type)))).
-
 when(save(add_object),click,call,add_atom(object(_context_value(new_object_name),_context_value(new_object_type)))).
 
 
@@ -923,58 +922,7 @@ elem(missing_optional_property_status(O,T,P,VT),label,missing_optional_property_
 attr(missing_optional_property_status(O,T,P,VT),order,2) :- elem(missing_optional_property_status(O,T,P,VT),label,_).
 attr(missing_optional_property_status(O,T,P,VT),label,"Not configured") :- elem(missing_optional_property_status(O,T,P,VT),label,_).
 attr(missing_optional_property_status(O,T,P,VT),class,("fst-italic";"text-secondary";"m-0")) :- elem(missing_optional_property_status(O,T,P,VT),label,_).
-attr(missing_optional_property_status(O,T,P,VT),"font-size","8px") :- elem(missing_optional_property_status(O,T,P,VT),label,_).
-% ============================================================
-% ADD NEW PROPERTY SECTION
-% ============================================================
-%
-% Allows a property outside the declared type_property/4 schema
-% to be added directly to the inspected object.
-% ============================================================
-elem(add_new_property_section(O,T),container,inspector_properties(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_new_property_section(O,T),order,7) :- elem(add_new_property_section(O,T),container,_).
-attr(add_new_property_section(O,T),flex_direction,column) :- elem(add_new_property_section(O,T),container,_).
-attr(add_new_property_section(O,T),class,("d-flex";"flex-column";"gap-2";"pt-2";"mt-1";"w-100")) :- elem(add_new_property_section(O,T),container,_).
-attr(add_new_property_section(O,T),"border-top","1px solid #E2E8F0") :- elem(add_new_property_section(O,T),container,_).
-elem(add_new_property_header(O,T),container,add_new_property_section(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_new_property_header(O,T),order,1) :- elem(add_new_property_header(O,T),container,_).
-attr(add_new_property_header(O,T),flex_direction,column) :- elem(add_new_property_header(O,T),container,_).
-attr(add_new_property_header(O,T),class,("d-flex";"flex-column";"gap-0")) :- elem(add_new_property_header(O,T),container,_).
-elem(add_new_property_title(O,T),label,add_new_property_header(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_new_property_title(O,T),order,1) :- elem(add_new_property_title(O,T),label,_).
-attr(add_new_property_title(O,T),label,"Add new property") :- elem(add_new_property_title(O,T),label,_).
-attr(add_new_property_title(O,T),class,("fw-bold";"text-dark";"m-0")) :- elem(add_new_property_title(O,T),label,_).
-attr(add_new_property_title(O,T),"font-size","10px") :- elem(add_new_property_title(O,T),label,_).
-elem(add_new_property_hint(O,T),label,add_new_property_header(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_new_property_hint(O,T),order,2) :- elem(add_new_property_hint(O,T),label,_).
-attr(add_new_property_hint(O,T),label,"Add a property that is not currently configured.") :- elem(add_new_property_hint(O,T),label,_).
-attr(add_new_property_hint(O,T),class,("text-secondary";"m-0")) :- elem(add_new_property_hint(O,T),label,_).
-attr(add_new_property_hint(O,T),"font-size","8px") :- elem(add_new_property_hint(O,T),label,_).
-elem(add_new_property_fields(O,T),container,add_new_property_section(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_new_property_fields(O,T),order,2) :- elem(add_new_property_fields(O,T),container,_).
-attr(add_new_property_fields(O,T),flex_direction,row) :- elem(add_new_property_fields(O,T),container,_).
-attr(add_new_property_fields(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-2";"w-100")) :- elem(add_new_property_fields(O,T),container,_).
-elem(add_new_property_key(O,T),textfield,add_new_property_fields(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_new_property_key(O,T),order,1) :- elem(add_new_property_key(O,T),textfield,_).
-attr(add_new_property_key(O,T),placeholder,"Property name") :- elem(add_new_property_key(O,T),textfield,_).
-attr(add_new_property_key(O,T),class,("form-control";"form-control-sm";"rounded-2";"flex-grow-1")) :- elem(add_new_property_key(O,T),textfield,_).
-attr(add_new_property_key(O,T),"font-size","10px") :- elem(add_new_property_key(O,T),textfield,_).
-when(add_new_property_key(O,T),input,context,(new_custom_property_key,_value)) :- object_selected_for_inspection(O,T).
-elem(add_new_property_value(O,T),textfield,add_new_property_fields(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_new_property_value(O,T),order,2) :- elem(add_new_property_value(O,T),textfield,_).
-attr(add_new_property_value(O,T),placeholder,"Property value") :- elem(add_new_property_value(O,T),textfield,_).
-attr(add_new_property_value(O,T),class,("form-control";"form-control-sm";"rounded-2";"flex-grow-1")) :- elem(add_new_property_value(O,T),textfield,_).
-attr(add_new_property_value(O,T),"font-size","10px") :- elem(add_new_property_value(O,T),textfield,_).
-when(add_new_property_value(O,T),input,context,(new_custom_property_value,_value)) :- object_selected_for_inspection(O,T).
-
-elem(add_new_property_button(O,T),button,add_new_property_fields(O,T)) :- object_selected_for_inspection(O,T).
-attr(add_new_property_button(O,T),order,3) :- elem(add_new_property_button(O,T),button,_).
-attr(add_new_property_button(O,T),label,"Add property") :- elem(add_new_property_button(O,T),button,_).
-attr(add_new_property_button(O,T),icon,"fa-plus") :- elem(add_new_property_button(O,T),button,_).
-attr(add_new_property_button(O,T),class,("btn-outline-primary";"btn-sm";"rounded-2";"px-2";"py-1";"flex-shrink-0")) :- elem(add_new_property_button(O,T),button,_).
-attr(add_new_property_button(O,T),"font-size","9px") :- elem(add_new_property_button(O,T),button,_).
-when(add_new_property_button(O,T),click,call,add_atom(property(O,_context_value(new_custom_property_key,const),_context_value(new_custom_property_value)))) :- object_selected_for_inspection(O,T).
-
+attr(missing_optional_property_status(O,T,P,VT),"font-size","8px") :- elem(missing_optional_property_status(O,T,P,VT),label,_).% ============================================================% ADD NEW PROPERTY SECTION% ============================================================%% Allows a property outside the declared type_property/4 schema% to be added directly to the inspected object.% ============================================================elem(add_new_property_section(O,T),container,inspector_properties(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_section(O,T),order,7) :- elem(add_new_property_section(O,T),container,_).attr(add_new_property_section(O,T),flex_direction,column) :- elem(add_new_property_section(O,T),container,_).attr(add_new_property_section(O,T),class,("d-flex";"flex-column";"gap-2";"pt-2";"mt-1";"w-100")) :- elem(add_new_property_section(O,T),container,_).attr(add_new_property_section(O,T),"border-top","1px solid #E2E8F0") :- elem(add_new_property_section(O,T),container,_).elem(add_new_property_header(O,T),container,add_new_property_section(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_header(O,T),order,1) :- elem(add_new_property_header(O,T),container,_).attr(add_new_property_header(O,T),flex_direction,column) :- elem(add_new_property_header(O,T),container,_).attr(add_new_property_header(O,T),class,("d-flex";"flex-column";"gap-0")) :- elem(add_new_property_header(O,T),container,_).elem(add_new_property_title(O,T),label,add_new_property_header(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_title(O,T),order,1) :- elem(add_new_property_title(O,T),label,_).attr(add_new_property_title(O,T),label,"Add new property") :- elem(add_new_property_title(O,T),label,_).attr(add_new_property_title(O,T),class,("fw-bold";"text-dark";"m-0")) :- elem(add_new_property_title(O,T),label,_).attr(add_new_property_title(O,T),"font-size","10px") :- elem(add_new_property_title(O,T),label,_).elem(add_new_property_hint(O,T),label,add_new_property_header(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_hint(O,T),order,2) :- elem(add_new_property_hint(O,T),label,_).attr(add_new_property_hint(O,T),label,"Add a property that is not currently configured.") :- elem(add_new_property_hint(O,T),label,_).attr(add_new_property_hint(O,T),class,("text-secondary";"m-0")) :- elem(add_new_property_hint(O,T),label,_).attr(add_new_property_hint(O,T),"font-size","8px") :- elem(add_new_property_hint(O,T),label,_).elem(add_new_property_fields(O,T),container,add_new_property_section(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_fields(O,T),order,2) :- elem(add_new_property_fields(O,T),container,_).attr(add_new_property_fields(O,T),flex_direction,row) :- elem(add_new_property_fields(O,T),container,_).attr(add_new_property_fields(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-2";"w-100")) :- elem(add_new_property_fields(O,T),container,_).elem(add_new_property_key(O,T),textfield,add_new_property_fields(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_key(O,T),order,1) :- elem(add_new_property_key(O,T),textfield,_).attr(add_new_property_key(O,T),placeholder,"Property name") :- elem(add_new_property_key(O,T),textfield,_).attr(add_new_property_key(O,T),class,("form-control";"form-control-sm";"rounded-2";"flex-grow-1")) :- elem(add_new_property_key(O,T),textfield,_).attr(add_new_property_key(O,T),"font-size","10px") :- elem(add_new_property_key(O,T),textfield,_).when(add_new_property_key(O,T),input,context,(new_custom_property_key,_value)) :- object_selected_for_inspection(O,T).elem(add_new_property_value(O,T),textfield,add_new_property_fields(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_value(O,T),order,2) :- elem(add_new_property_value(O,T),textfield,_).attr(add_new_property_value(O,T),placeholder,"Property value") :- elem(add_new_property_value(O,T),textfield,_).attr(add_new_property_value(O,T),class,("form-control";"form-control-sm";"rounded-2";"flex-grow-1")) :- elem(add_new_property_value(O,T),textfield,_).attr(add_new_property_value(O,T),"font-size","10px") :- elem(add_new_property_value(O,T),textfield,_).when(add_new_property_value(O,T),input,context,(new_custom_property_value,_value)) :- object_selected_for_inspection(O,T).elem(add_new_property_button(O,T),button,add_new_property_fields(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_button(O,T),order,3) :- elem(add_new_property_button(O,T),button,_).attr(add_new_property_button(O,T),label,"Add property") :- elem(add_new_property_button(O,T),button,_).attr(add_new_property_button(O,T),icon,"fa-plus") :- elem(add_new_property_button(O,T),button,_).attr(add_new_property_button(O,T),class,("btn-outline-primary";"btn-sm";"rounded-2";"px-2";"py-1";"flex-shrink-0")) :- elem(add_new_property_button(O,T),button,_).attr(add_new_property_button(O,T),"font-size","9px") :- elem(add_new_property_button(O,T),button,_).when(add_new_property_button(O,T),click,call,add_atom(property(O,_context_value(new_custom_property_key,const),_context_value(new_custom_property_value)))) :- object_selected_for_inspection(O,T).
 
 
 
