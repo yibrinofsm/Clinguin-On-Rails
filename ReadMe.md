@@ -226,9 +226,8 @@ node((0..29,0..19)).
 
 Run the following commands from the project root with your Conda or virtual environment activated.
 
-The `--domain-files` option loads the generic validation rules, the instance, and the domain-specific encoding. The `--ui-files` option specifies the UI entry point. These options follow Clinguin's [input-file model](https://clinguin.readthedocs.io/en/latest/clinguin/reference/input.html).
+The `--domain-files` option loads the generic validation rules, the instance, and the domain-specific encoding. The `--ui-files` option specifies the UI entry point. 
 
-The commands below assume that the instance files use the naming convention described above. If existing files have different names, use their actual paths.
 
 ### With a Flatland Domain Instance
 
