@@ -13,20 +13,10 @@ attr(menu_bar,order,0).
 attr(menu_bar,title,"Generic UI").
 attr(menu_bar,icon,"fa-table-cells").
 
-% Add new Object
-
-elem(add_new_object,button,menu_bar).
-attr(add_new_object,order,1).
-attr(add_new_object,label,"New object").
-attr(add_new_object,icon,"fa-plus").
-attr(add_new_object,class,("btn-primary";"px-3")).
-when(add_new_object,click,context,(dialog,form(add_object))).
-when(add_new_object,click,update,(dialog(form(add_object)),visibility,shown)).
-
 % Next Solution
 
 elem(next_solution_button,button,menu_bar).
-attr(next_solution_button,order,2).
+attr(next_solution_button,order,1).
 attr(next_solution_button,label,"Next solution").
 attr(next_solution_button,icon,"fa-forward-step").
 attr(next_solution_button,class,("btn-outline-primary";"px-3")).
