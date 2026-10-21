@@ -2,11 +2,11 @@
 
 This project uses a generic and extensible Answer Set Programming (ASP) representation to support the generation, diagnosis, and visualization of **Multi-Agent Path Finding (MAPF)**, **Flatland**, and other compatible grid-based domain instances using Clinguin.
 
-Instances are described through five common predicates: `object/2`, `property/3`, `node/1`, `position/3`, and `image/3`. Together, they describe which objects exist, their attributes, the available locations, their placements, and their visual appearance.
+Instances are described through five common predicates: `object/2`, `property/3`, `node/1`, `position/3`, `image/3`,etc. Together, they describe which objects exist, their attributes, the available locations, their placements, and their visual appearance etc
 
 The shared representation allows the same user interface to work with different domains. New object types and properties can be introduced through additional facts and schema declarations, while domain-specific rules define their meaning, valid placements, and constraints. The core UI can be reused whenever the new domain fits the supported representation and interactions.
 
-These five predicates form **this project's instance schema**. Clinguin itself defines user interfaces through `elem/3`, `attr/3`, and `when/4`, which describe interface elements, attributes, and event-driven actions, respectively. See the [Clinguin state documentation](https://clinguin.readthedocs.io/en/latest/clinguin/reference/state.html) for this distinction.
+These five predicates form **this project's instance schema**. Clinguin itself defines user interfaces through `elem/3`, `attr/3`, and `when/4`, which describe interface elements, attributes, and event-driven actions, respectively. 
 
 ## Generic Predicates
 
@@ -33,9 +33,9 @@ These facts declare four distinct objects: a train, an agent, a robot, and a tra
 
 **Why use one predicate for different object types?**
 
-Although these objects have different meanings, they all have an identity and a type. Representing these shared characteristics with `object/2` gives the UI a uniform way to discover, list, select, and inspect them. A new object type can use the same object-management logic, while domain rules distinguish its behavior through the second argument.
+Although these objects have different meanings, they all have an identity and a type. Representing these shared characteristics with `object/2` gives the UI a uniform way to discover, list, select, and inspect them. 
 
-For example, `train(0)` is the identifier of an object whose declared type is `train`. The identifiers `train(0)`, `agent(0)`, and `robot(0)` are distinct ASP terms even though they contain the same number. An identifier can also be a symbolic constant, such as `track1025`.
+For example, `train(0)` is the identifier of an object whose declared type is `train`. 
 
 ### 2. Properties — `property/3`
 
@@ -53,9 +53,9 @@ These facts assign a northward direction to `train(0)` and a speed of 5 metres p
 
 An object's identity and type do not describe all of its characteristics. A train may have a direction, while a robot may have a speed. `property/3` represents these attributes through a common object–key–value structure, allowing the interface to display and manage properties across different object types.
 
-New attributes can be introduced through additional `property/3` facts. Domain-specific schema and validation rules determine which properties are applicable and which values are valid.
+New attributes can be introduced through additional `property/3` facts. 
 
-Store values that participate in numeric comparisons or calculations as numbers. In the example above, `5` is the numeric speed and `"m/s"` records its unit separately. The unquoted expression `5m/s` is not valid ASP syntax.
+
 
 ### 3. Grid Environment — `node/1`
 
@@ -73,7 +73,7 @@ A two-dimensional grid provides a common spatial structure for the grid-based MA
 
 The grid records which locations exist. Domain rules determine how locations are connected, which cells are traversable, and where particular objects may be placed.
 
-Using a two-dimensional grid is a design choice for this project. Clinguin also supports interfaces for domains with other spatial or non-spatial structures.
+
 
 ### 4. Positions — `position/3`
 
@@ -109,7 +109,7 @@ image(train(0),end,"img/train0_end.png").
 object(train(0),train).
 ```
 
-The two image facts therefore describe **two visual representations of one object**. Object identity comes from the shared identifier `train(0)`; assigning another image does not create another object.
+The two image facts therefore describe **two visual representations of one object**. 
 
 **Why does an image have a role?**
 
@@ -120,7 +120,6 @@ The role tells the UI which image to use for each placement. The interface match
 | `train(0)` | `start` | `(10,10)` | `img/train0_start.png` |
 | `train(0)` | `end` | `(15,15)` | `img/train0_end.png` |
 
-Image paths must be quoted ASP strings and refer to resources available to the application.
 
 ## Domain Schema
 
@@ -128,14 +127,14 @@ Additional schema predicates describe the types and roles available to the gener
 
 | Predicate | Purpose |
 | --- | --- |
-| `domain_type(Type)` | Declares an available object type. |
+| `object_type(Type)` | Declares an available object type. |
 | `type_role(Type,Role)` | Declares a placement role associated with an object type. |
 
 For example:
 
 ```asp
-domain_type(train).
-domain_type(track).
+object_type(train).
+object_type(track).
 
 type_role(train,start).
 type_role(train,end).
@@ -161,7 +160,6 @@ python -m pip install clinguin
 clinguin -h
 ```
 
-Conda manages the environment, while pip installs Clinguin inside it. The final command displays Clinguin's command-line help and confirms that the executable is available. See the [Conda environment guide](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for environment management.
 
 ### Option 2: Python Virtual Environment
 
