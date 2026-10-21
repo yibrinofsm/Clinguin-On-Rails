@@ -178,14 +178,14 @@ elem(dialog_sheet(D),container,dialog(D)) :- elem(dialog(D),modal,w).
 attr(dialog_sheet(D),order,1) :- elem(dialog(D),modal,w).
 attr(dialog_sheet(D),class,("d-flex";"flex-column";"gap-2";"p-0";"m-0")) :- elem(dialog(D),modal,w).
 
-elem(dialog_close(D),button,dialog_sheet(D)) :- elem(dialog(D),modal,w).
-attr(dialog_close(D),order,1000) :- elem(dialog(D),modal,w).
-attr(dialog_close(D),label,"Close ×") :- elem(dialog(D),modal,w).
-attr(dialog_close(D),class,("btn-outline-primary";"align-self-end")) :- elem(dialog(D),modal,w).
-when(dialog_close(D),click,update,(dialog(D),visibility,hidden)) :- elem(dialog(D),modal,w).
-when(dialog_close(D),click,context,(dialog,none)) :- elem(dialog(D),modal,w).
-attr(dialog_text(D),order,1) :- elem(dialog_text(D),label,_).
-attr(form_body(F),order,1) :- elem(form_body(F),container,_).
+% elem(dialog_close(D),button,dialog_sheet(D)) :- elem(dialog(D),modal,w).
+% attr(dialog_close(D),order,1000) :- elem(dialog(D),modal,w).
+% attr(dialog_close(D),label,"Close ×") :- elem(dialog(D),modal,w).
+% attr(dialog_close(D),class,("btn-outline-primary";"align-self-end")) :- elem(dialog(D),modal,w).
+% when(dialog_close(D),click,update,(dialog(D),visibility,hidden)) :- elem(dialog(D),modal,w).
+% when(dialog_close(D),click,context,(dialog,none)) :- elem(dialog(D),modal,w).
+% attr(dialog_text(D),order,1) :- elem(dialog_text(D),label,_).
+% attr(form_body(F),order,1) :- elem(form_body(F),container,_).
 
 
 
@@ -207,22 +207,67 @@ when(confirm_clear,click,cell,clear_atoms).
 when(confirm_clear,click,update,(dialog(clear),visibility,hidden)).
 
 
+% ============================================================
+% RESTART MODAL
+% ============================================================
 
-
-%Restart modal.
 elem(dialog(restart),modal,w).
 attr(dialog(restart),visibility,hidden).
 attr(dialog(restart),title,"Restart the session?").
 
-elem(dialog_text(restart),label,dialog_sheet(restart)).
-attr(dialog_text(restart),label,"Restore the original backend state and clear session edits.").
-attr(dialog_text(restart),class,("p-3";"text-secondary")).
 
-elem(confirm_restart,button,dialog_sheet(restart)).
+elem(dialog_sheet(restart),container,dialog(restart)).
+attr(dialog_sheet(restart),child_layout,flex).
+attr(dialog_sheet(restart),flex_direction,column).
+attr(dialog_sheet(restart),class,(
+    "d-flex";
+    "flex-column";
+    "w-100";
+    "gap-3";
+    "p-3"
+)).
+
+elem(dialog_text(restart),label,dialog_sheet(restart)).
+attr(dialog_text(restart),order,1).
+attr(dialog_text(restart),label, "Restore the original state and clear all session edits.").
+attr(dialog_text(restart),class,(
+    "text-secondary";
+    "text-start";
+    "d-block";
+    "m-0"
+)).
+
+% Button row.
+elem(dialog_actions(restart),container,dialog_sheet(restart)).
+attr(dialog_actions(restart),order,2).
+attr(dialog_actions(restart),child_layout,flex).
+attr(dialog_actions(restart),flex_direction,row).
+attr(dialog_actions(restart),class,(
+    "d-flex";
+    "flex-row";
+    "justify-content-end";
+    "align-items-center";
+    "gap-2";
+    "w-100";
+    "border-top";
+    "pt-3"
+)).
+
+% Cancel: close the modal.
+elem(cancel_restart,button,dialog_actions(restart)).
+attr(cancel_restart,order,1).
+attr(cancel_restart,label,"Cancel").
+attr(cancel_restart,class,("btn-outline-secondary";"px-3")).
+when(cancel_restart,click,update,(dialog(restart),visibility,hidden)).
+
+% Confirm: close the modal and restart.
+elem(confirm_restart,button,dialog_actions(restart)).
 attr(confirm_restart,order,2).
-attr(confirm_restart,label,"Confirm").
-attr(confirm_restart,class,("btn-danger";"m-3";"align-self-end")).
+attr(confirm_restart,label,"Confirm restart").
+attr(confirm_restart,class,("btn-danger";"px-3")).
+when(confirm_restart,click,update,(dialog(restart),visibility,hidden)).
 when(confirm_restart,click,call,restart).
+
 % Help modal
 elem(dialog(help),modal,w).
 attr(dialog(help),visibility,hidden).

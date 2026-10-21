@@ -46,6 +46,7 @@ type_property(train,direction,int,required).
 type_property(train,speed,int,required).
 type_property(train,dep,int,required).
 type_property(train,arr,int,required).
+type_property(train,id,int,required).
 
 type_property(track,code,int,required).
 
