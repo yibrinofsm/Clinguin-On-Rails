@@ -41,24 +41,20 @@ object(track(2064),track).
 
 
 % Train Properties
+
+% Train0
 property(train(0),dep,0).
 property(train(0),direction,1).
 property(train(0),arr,12).
 property(train(0),speed,1).
 property(train(0),id,0).
 
-
+% Train1
 property(train(1),dep,0).
 property(train(1),direction,0).
 property(train(1),arr,12).
 property(train(1),speed,1).
 property(train(1),id,1).
-
-property(train(2),dep,0).
-property(train(2),direction,2).
-property(train(2),arr,12).
-property(train(2),speed,1).
-property(train(2),id,2).
 
 % Track Properties
 property(track(2064),code,2064).
@@ -102,250 +98,10 @@ position((2,2),end,train(0)).
 
 
 % % ----------------------------------------------------------
-% % Generate all grid nodes
+% % x and y dimension
 % % ----------------------------------------------------------
-node((R,C)):-Rmax=#max{RR:position((RR,_),_,_)},Cmax=#max{CC:position((_,CC),_,_)},R=0..Rmax,C=0..Cmax.
-% % % ----------------------------------------------------------
-
-% % node((R,C)):-Rmax=#max{RR:position((RR,_),_,_)},Cmax=#max{CC:position((_,CC),_,_)},R=0..Rmax,C=0..Cmax.
-
-node((0,0)).
-
-node((0,1)).
-
-node((0,2)).
-
-node((0,3)).
-
-node((0,4)).
-
-node((0,5)).
-
-node((0,6)).
-
-node((0,7)).
-
-node((0,8)).
-
-node((0,9)).
-
-node((0,10)).
-
-node((0,11)).
-
-node((0,12)).
-
-node((0,13)).
-
-node((0,14)).
-
-node((0,15)).
-
-node((0,16)).
-
-node((0,17)).
-
-node((0,18)).
-
-node((0,19)).
-
-node((0,20)).
-
-node((0,21)).
-
-node((0,22)).
-
-
-
-
-
-node((1,0)).
-
-node((1,1)).
-
-node((1,2)).
-
-node((1,3)).
-
-node((1,4)).
-
-node((1,5)).
-
-node((1,6)).
-
-node((1,7)).
-
-node((1,8)).
-
-node((1,9)).
-
-node((1,10)).
-
-node((1,11)).
-
-node((1,12)).
-
-node((1,13)).
-
-node((1,14)).
-
-node((1,15)).
-
-node((1,16)).
-
-node((1,17)).
-
-node((1,18)).
-
-node((1,19)).
-
-node((1,20)).
-
-node((1,21)).
-
-node((1,22)).
-
-
-
-
-
-node((2,0)).
-
-node((2,1)).
-
-node((2,2)).
-
-node((2,3)).
-
-node((2,4)).
-
-node((2,5)).
-
-node((2,6)).
-
-node((2,7)).
-
-node((2,8)).
-
-node((2,9)).
-
-node((2,10)).
-
-node((2,11)).
-
-node((2,12)).
-
-node((2,13)).
-
-node((2,14)).
-
-node((2,15)).
-
-node((2,16)).
-
-node((2,17)).
-
-node((2,18)).
-
-node((2,19)).
-
-node((2,20)).
-
-node((2,21)).
-
-node((2,22)).
-
-
-
-
-
-node((3,0)).
-
-node((3,1)).
-
-node((3,2)).
-
-node((3,3)).
-
-node((3,4)).
-
-node((3,5)).
-
-node((3,6)).
-
-node((3,7)).
-
-node((3,8)).
-
-node((3,9)).
-
-node((3,10)).
-
-node((3,11)).
-
-node((3,12)).
-
-node((3,13)).
-
-node((3,14)).
-
-node((3,15)).
-
-node((3,16)).
-
-node((3,17)).
-
-node((3,18)).
-
-node((3,19)).
-
-node((3,20)).
-
-node((3,21)).
-
-node((3,22)).
-
-
-% 1. MAPF
-% 2. FLATLAND
-
-% 3. ASP
-% 4. Clinguin
-% 5. ASPRILO
-% 6. Flaspland 
-
-
-% Generic UI (domain-independent)
-
-% node/1,object/2,property/3, position/3, image/3
-
-
-% train(0). start(0,(18,7),3,w). end(0,(16,24),59). speed(0,1).
-
-% train(1). start(1,(15,24),7,w). end(1,(19,7),42). speed(1,1).
-
-% cell((0,0), 0).
-
-% object(track0,track).
-% position((0,0),cell,track0).
-
-% object(train(0),train).
-% position((18,7),start,train(0)).
-% position((16,24),end,train(0)).
-% property(train(1),speed,2).
-
-% object(train(1),train).
-% position((15,24),start,train(1)).
-% position((19,7),end,train(1)).
-% property(train(1),speed,1).
-
-
-% object(train(start),train).
-% object(train(end),train).
-
-
-% object(agent(start),agent).
-% object(agent(end),agent).
-
-
-
+row(0..19).
+col(0..29).
+
+% ---------- NODES----------
+node((R,C)) :- row(R), col(C).% % % ----------------------------------------------------------

@@ -10,4 +10,3 @@
 #include "mapf_domain.lp". % Defines the possible objects and properties
 % some error or warnining:-not node(()).
 % object alread added :-object(O,T), but if you try to request the same object
-#include "mapf_generic_instance_x20_y20_a15.lp". % Contains generic instances of flatland domain.

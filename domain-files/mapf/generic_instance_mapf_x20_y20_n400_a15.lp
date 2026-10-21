@@ -139,9 +139,9 @@ position((15,12),cell,wall(1)).
 position((15,16),cell,wall(1)).
 position((15,20),cell,wall(1)).
 
-% ---------- DOMAIN ----------
-row(1..30).
-col(1..30).
+% ---------- x and y dimesion----------
+row(0..19).
+col(0..29).
 
 % ---------- NODES----------
 node((R,C)) :- row(R), col(C).
