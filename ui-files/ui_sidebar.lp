@@ -171,249 +171,310 @@ attr(type_items(T),class,("d-flex";"flex-column";"gap-2";"mw-100")) :- object(_,
 attr(type_items(T),"min-width","0") :- object(_,T).
 
 % ============================================================
-% OBJECT CARD 
+% OBJECT CARD
 % ============================================================
 
 elem(object_card(O,T),container,type_items(T)) :- object(O,T).
-attr(object_card(O,T),order,N+10) :- object(O,T),N=#count{Other:object(Other,T),Other<O}.
-attr(object_card(O,T),flex_direction,row) :- object(O,T).
-attr(object_card(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-1";"p-0";"border";"rounded-3";"mw-100")) :- object(O,T).
-attr(object_card(O,T),background_color,"white") :- object(O,T),not _clinguin_context(object_selected,O).
-attr(object_card(O,T),background_color,"#e9ecef") :- object(O,T),_clinguin_context(object_selected,O).
-attr(object_card(O,T),background_color,"#fff3cd") :- object_selected_for_inspection(O,T).
-attr(object_card(O,T),class,("border-warning";"border-2";"shadow-sm")) :- object_selected_for_inspection(O,T).
-attr(object_card(O,T),class,("border-primary";"border-2";"shadow-sm")) :- object(O,T),_clinguin_context(object_selected,O).
-attr(object_card(O,T),on_hover,true) :- object(O,T),not _clinguin_context(object_selected,O).
-attr(object_card(O,T),on_hover_background_color,"#e9ecef") :- object(O,T),not _clinguin_context(object_selected,O).
+attr(object_card(O,T),order,N+10) :-object(O,T),N=#count{Other:object(Other,T),Other<O}.
+attr(object_card(O,T),child_layout,flex) :- object(O,T).
+attr(object_card(O,T),flex_direction,column) :- object(O,T).
+attr(object_card(O,T),class,("d-flex";"flex-column";"align-items-stretch";"gap-0";"p-0";"border";"border-2";"rounded-3";"w-100";"mw-100";"overflow-hidden")) :- object(O,T).
+attr(object_card(O,T),"min-width","0") :- object(O,T).
+attr(object_card(O,T),"transition","background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease") :- object(O,T).
+
+% backgrounds
+
+attr(object_card(O,T),background_color,"#ffffff") :-object(O,T),not _clinguin_context(object_selected,O),not object_selected_for_inspection(O,T).
+attr(object_card(O,T),background_color,"#e9ecef") :-object(O,T),_clinguin_context(object_selected,O).
+attr(object_card(O,T),background_color,"#fff3cd") :-object(O,T),object_selected_for_inspection(O,T),not _clinguin_context(object_selected,O).
+attr(object_card(O,T),class,("border-primary";"shadow-sm")) :-object(O,T),_clinguin_context(object_selected,O).
+attr(object_card(O,T),class,("border-warning";"shadow-sm")) :-object(O,T),object_selected_for_inspection(O,T),not _clinguin_context(object_selected,O).
+attr(object_card(O,T),on_hover,true) :-object(O,T),not _clinguin_context(object_selected,O).
+attr(object_card(O,T),on_hover_background_color,"#e9ecef") :-object(O,T), not _clinguin_context(object_selected,O).
 
 
 % ============================================================
 % CARD MAIN CONTENT
 % ============================================================
-
 elem(object_card_main(O,T),container,object_card(O,T)) :- object(O,T).
 attr(object_card_main(O,T),order,1) :- object(O,T).
 attr(object_card_main(O,T),flex_direction,row) :- object(O,T).
-attr(object_card_main(O,T),class, ("d-flex"; "flex-row"; "align-items-start"; "gap-3"; "p-3"; "w-100")) :- object(O,T).
+attr(object_card_main(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-start";"gap-3";"p-3";"w-100";"bg-transparent")) :- object(O,T).
+attr(object_card_main(O,T),background_color,"transparent") :-object(O,T).
 attr(object_card_main(O,T),"min-width","0") :- object(O,T).
+
 
 % ============================================================
 % OBJECT VISUAL AREA
 % ============================================================
-
-elem(object_visuals(O,T),container,object_card_main(O,T)) :- object(O,T), image(O,_,_).
-attr(object_visuals(O,T),order,1) :- object(O,T), image(O,_,_).
-attr(object_visuals(O,T),flex_direction,row) :- object(O,T), image(O,_,_).
-attr(object_visuals(O,T),class, ("d-flex"; "flex-row"; "flex-wrap"; "gap-2"; "align-items-start"; "flex-shrink-0")) :- object(O,T), image(O,_,_).
-
-% elem(object_missing_image_role(O,R),container,object_visuals(O,T)) :- object(O,T),type_role(T,R), not image(O,R,_).
-% attr(object_missing_image_role(O,R),label,"{}") :-object(O,T),type_role(T,R), not image(O,R,_).
-% attr(object_missing_image_role(O,R),width,30) :-object(O,T),type_role(T,R), not image(O,R,_).
-% attr(object_missing_image_role(O,R),height,30) :-object(O,T),type_role(T,R), not image(O,R,_).
-% attr(object_missing_image_role(O,R),class, ("fw-semibold"; "text-secondary"; "text-center"; "text-nowrap"; "m-0")) :- object(O,T),type_role(T,R), not image(O,R,_).
-% attr(object_missing_image_role(O,R),"font-size","9px") :- object(O,T),type_role(T,R), not image(O,R,_).
+elem(object_visuals(O,T),container,object_card_main(O,T)) :-object(O,T),image(O,_,_).
+attr(object_visuals(O,T),order,1) :-object(O,T),image(O,_,_).
+attr(object_visuals(O,T),flex_direction,row) :-object(O,T),image(O,_,_).
+attr(object_visuals(O,T),class,("d-flex";"flex-row";"flex-wrap"; "gap-2";"align-items-start";"flex-shrink-0";"mw-100";"bg-transparent")) :-object(O,T),image(O,_,_).
+attr(object_visuals(O,T),background_color,"transparent") :-object(O,T),image(O,_,_).
 
 % ------------------------------------------------------------
 % ROLE-SPECIFIC IMAGE BLOCK
 % ------------------------------------------------------------
-
-elem(object_image_block(O,R,I),container,object_visuals(O,T)) :- object(O,T), image(O,R,I).
-attr(object_image_block(O,R,I),order,N) :- object(O,T), image(O,R,I), N = #count { R2,I2 : image(O,R2,I2), (R2,I2) < (R,I) }.
-attr(object_image_block(O,R,I),flex_direction,column) :- object(O,T), image(O,R,I).
-attr(object_image_block(O,R,I),class, ("d-flex"; "flex-column"; "align-items-center"; "gap-1"; "p-1"; "rounded-3")) :- object(O,T), image(O,R,I).
-attr(object_image_block(O,R,I),background_color,"#F8FAFC") :- object(O,T), image(O,R,I).
-attr(object_image_block(O,R,I),"border","1px solid #E2E8F0") :- object(O,T), image(O,R,I).
-
+elem(object_image_block(O,R,I),container,object_visuals(O,T)) :-object(O,T),image(O,R,I).
+attr(object_image_block(O,R,I),order,N) :-object(O,T),image(O,R,I),N=#count{R2,I2:image(O,R2,I2),(R2,I2)<(R,I)}.
+attr(object_image_block(O,R,I),flex_direction,column) :-object(O,T),image(O,R,I).
+attr(object_image_block(O,R,I),class,("d-flex";"flex-column";"align-items-center";"gap-1";"p-1";"rounded-3";"bg-transparent")) :-object(O,T),image(O,R,I).
+attr(object_image_block(O,R,I),background_color,"transparent") :-object(O,T),image(O,R,I).
+attr(object_image_block(O,R,I),"border","1px solid #E2E8F0") :-object(O,T),image(O,R,I).
 % ------------------------------------------------------------
 % ACTUAL IMAGE
 % ------------------------------------------------------------
 
-elem(object_image(O,R,I),canvas,object_image_block(O,R,I)) :- object(O,T), image(O,R,I).
-attr(object_image(O,R,I),order,1) :- object(O,T), image(O,R,I).
-attr(object_image(O,R,I),image,I) :- object(O,T), image(O,R,I).
-attr(object_image(O,R,I),width,30) :- object(O,T), image(O,R,I).
-attr(object_image(O,R,I),height,30) :- object(O,T), image(O,R,I).
-attr(object_image(O,R,I),class, ("rounded-2"; "bg-white"; "flex-shrink-0")) :- object(O,T), image(O,R,I).
-
-
-
+elem(object_image(O,R,I),canvas,object_image_block(O,R,I)) :-object(O,T),image(O,R,I).
+attr(object_image(O,R,I),order,1) :-object(O,T),image(O,R,I).
+attr(object_image(O,R,I),image,I) :-object(O,T),image(O,R,I).
+attr(object_image(O,R,I),width,30) :-object(O,T),image(O,R,I).
+attr(object_image(O,R,I),height,30) :-object(O,T),image(O,R,I).
+attr(object_image(O,R,I),class,( "rounded-2";"bg-white";"flex-shrink-0")) :-object(O,T),image(O,R,I).
 % ------------------------------------------------------------
 % ROLE BADGE
 % ------------------------------------------------------------
-
-elem(object_image_role(O,R,I),label,object_image_block(O,R,I)) :- object(O,T), image(O,R,I).
-attr(object_image_role(O,R,I),order,2) :- object(O,T), image(O,R,I).
-attr(object_image_role(O,R,I),label,@concat("",R)) :- object(O,T), image(O,R,I).
-attr(object_image_role(O,R,I),class, ("fw-semibold"; "text-secondary"; "text-center"; "text-nowrap"; "m-0")) :- object(O,T), image(O,R,I).
-attr(object_image_role(O,R,I),"font-size","9px") :- object(O,T), image(O,R,I).
-
+elem(object_image_role(O,R,I),label,object_image_block(O,R,I)) :-object(O,T), image(O,R,I).
+attr(object_image_role(O,R,I),order,2) :-object(O,T),image(O,R,I).
+attr(object_image_role(O,R,I),label,@concat("",R)) :-object(O,T),image(O,R,I).
+attr(object_image_role(O,R,I),class,("fw-semibold";"text-secondary";"text-center";"text-nowrap";"m-0")) :-object(O,T),image(O,R,I).
+attr(object_image_role(O,R,I),"font-size","9px") :-object(O,T),image(O,R,I).
 % ============================================================
 % FALLBACK VISUAL
 % ============================================================
-
-elem(catalogue_object_mark(O,T),label,object_card_main(O,T)) :- object(O,T), not image(O,_,_).
-attr(catalogue_object_mark(O,T),order,1) :- object(O,T), not image(O,_,_).
-attr(catalogue_object_mark(O,T),label,"{}") :- object(O,T), not image(O,_,_).
-attr(catalogue_object_mark(O,T),width,30) :- object(O,T), not image(O,_,_).
-attr(catalogue_object_mark(O,T),height,30) :- object(O,T), not image(O,_,_).
-attr(catalogue_object_mark(O,T),class, ("d-flex"; "align-items-center"; "justify-content-center"; "font-monospace"; "fw-bold"; "rounded-3"; "flex-shrink-0"; "m-0")) :- object(O,T), not image(O,_,_).
-attr(catalogue_object_mark(O,T),background_color,"#EFF6FF") :- object(O,T), not image(O,_,_).
-attr(catalogue_object_mark(O,T),foreground_color,"#2563EB") :- object(O,T), not image(O,_,_).
-attr(catalogue_object_mark(O,T),"font-size","17px") :- object(O,T), not image(O,_,_).
-
+elem(catalogue_object_mark(O,T),label,object_card_main(O,T)) :-object(O,T),not image(O,_,_).
+attr(catalogue_object_mark(O,T),order,1) :-object(O,T),not image(O,_,_).
+attr(catalogue_object_mark(O,T),label,"{}") :-object(O,T),not image(O,_,_).
+attr(catalogue_object_mark(O,T),width,30) :-object(O,T),not image(O,_,_).
+attr(catalogue_object_mark(O,T),height,30) :-object(O,T),not image(O,_,_).
+attr(catalogue_object_mark(O,T),class,("d-flex";"align-items-center";"justify-content-center";"font-monospace";"fw-bold";"rounded-3";"flex-shrink-0";"m-0")) :-object(O,T),not image(O,_,_).
+attr(catalogue_object_mark(O,T),background_color,"#EFF6FF") :-object(O,T),not image(O,_,_).
+attr(catalogue_object_mark(O,T),foreground_color,"#2563EB") :-object(O,T),not image(O,_,_).
+attr(catalogue_object_mark(O,T),"font-size","17px") :-object(O,T),not image(O,_,_).
 % ============================================================
 % OBJECT INFORMATION
 % ============================================================
-
-elem(object_info(O,T),container,object_card_main(O,T)) :- object(O,T).
+elem(object_info(O,T),container,object_card_main(O,T)) :-object(O,T).
 attr(object_info(O,T),order,2) :- object(O,T).
 attr(object_info(O,T),flex_direction,column) :- object(O,T).
-attr(object_info(O,T),class, ("d-flex"; "flex-column"; "gap-1"; "flex-grow-1"; "mw-100"; "pt-1")) :- object(O,T).
+attr(object_info(O,T),class,("d-flex";"flex-column";"align-items-start";"gap-1";"flex-grow-1";"mw-100"; "pt-1";"bg-transparent")) :- object(O,T).
+attr(object_info(O,T),background_color,"transparent") :-object(O,T).
 attr(object_info(O,T),"min-width","0") :- object(O,T).
-
-% Object ASP representation
-
+% ------------------------------------------------------------
+% OBJECT ASP REPRESENTATION
+% ------------------------------------------------------------
 elem(object_body(O,T),label,object_info(O,T)) :- object(O,T).
-attr(object_body(O,T),order,3) :- object(O,T).
-attr(object_body(O,T),label,@concat("object(",O,", ",T,")")) :- object(O,T).
-attr(object_body(O,T),class, ("font-monospace"; "text-secondary"; "text-wrap"; "m-0"; "mt-1")) :- object(O,T).
+attr(object_body(O,T),order,1) :- object(O,T).
+attr(object_body(O,T),label,@concat("object(",O,", ",T,")")) :-object(O,T).
+attr(object_body(O,T),class,("font-monospace";"text-secondary";"text-wrap";"m-0";"mt-1")) :- object(O,T).
 attr(object_body(O,T),"font-size","10px") :- object(O,T).
 attr(object_body(O,T),"line-height","1.4") :- object(O,T).
 attr(object_body(O,T),"overflow-wrap","anywhere") :- object(O,T).
 
 
-% Object Completeness
-
-elem(object_completeness(O,T), label, object_card(O,T)) :-object(O,T).
-attr(object_completeness(O,T), label, "Ready") :-complete(O,T).
-attr(object_completeness(O,T), label, "Incomplete") :-incomplete(O,T).
-attr(object_completeness(O,T), order, 4) :-object(O,T).
-attr(object_completeness(O,T), class,("badge";"bg-success";"text-white")) :-complete(O,T).
-attr(object_completeness(O,T), class,("badge";"bg-warning";"text-dark")) :-incomplete(O,T).
-attr(object_completeness(O,T), "font-size", "10px") :-object(O,T).
-attr(object_completeness(O,T), "margin-left", "5px") :-object(O,T).
+% ------------------------------------------------------------
+% OBJECT COMPLETENESS
+% ------------------------------------------------------------
+elem(object_completeness(O,T),label,object_info(O,T)) :-object(O,T).
+attr(object_completeness(O,T),order,2) :- object(O,T).
+attr(object_completeness(O,T),label,"Ready") :-complete(O,T).
+attr(object_completeness(O,T),label,"Incomplete") :-incomplete(O,T).
+attr(object_completeness(O,T),class,("rounded-pill";"px-2";"py-1";"m-0")) :- object(O,T).
+attr(object_completeness(O,T),class,("badge";"bg-success";"text-white")) :- complete(O,T).
+attr(object_completeness(O,T),class,("badge";"bg-warning";"text-dark")) :- incomplete(O,T).
+attr(object_completeness(O,T),"font-size","10px") :- object(O,T).
 
 % ============================================================
 % ACTION FOOTER
 % ============================================================
 
-elem(object_actions(O,T),container,object_card(O,T)) :- object(O,T).
+elem(object_actions(O,T),container,object_card(O,T)) :-object(O,T).
 attr(object_actions(O,T),order,2) :- object(O,T).
 attr(object_actions(O,T),flex_direction,row) :- object(O,T).
-attr(object_actions(O,T),class, ("d-flex"; "flex-row"; "flex-wrap"; "align-items-center"; "gap-2"; "w-100"; "px-3"; "py-2"; "border-top")) :- object(O,T).
-attr(object_actions(O,T),background_color,"#F8FAFC") :- object(O,T).
+attr(object_actions(O,T),class,( "d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-2";"w-100"; "px-3";"py-2"; "border-top"; "bg-transparent")) :- object(O,T).
+attr(object_actions(O,T),background_color,"transparent") :-object(O,T).
 attr(object_actions(O,T),"min-width","0") :- object(O,T).
-
 % ============================================================
-% SELECT
+% SELECT / PLACE
 % ============================================================
 
-elem(object_select(O,T),button,object_actions(O,T)) :- object(O,T).
+elem(object_select(O,T),button,object_actions(O,T)) :-object(O,T).
 attr(object_select(O,T),order,1) :- object(O,T).
 attr(object_select(O,T),icon,"fa-arrow-pointer") :- object(O,T).
-attr(object_select(O,T),disabled,true) :- object(O,T),not complete(O,T).
-attr(object_select(O,T),label,"Selected") :- object(O,T), _clinguin_context(object_selected,O).
-attr(object_select(O,T),label,"Select") :- object(O,T), not _clinguin_context(object_selected,O).
-attr(object_select(O,T),class, ("btn-outline-primary"; "btn-sm"; "rounded-2"; "px-1"; "py-1")) :- object(O,T), not _clinguin_context(object_selected,O).
-attr(object_select(O,T),class, ("btn-primary"; "btn-sm"; "rounded-2"; "px-1"; "py-1")) :- object(O,T), _clinguin_context(object_selected,O).
-attr(object_select(O,T), "font-size", "10px") :- object(O,T).
-
-when(object_select(O,T),click,context,(object_selected,O)) :- complete(O,T).
-when(object_select(O,T),click,context,(selected_role_for_placement,none)) :- complete(O,T),not object_single_role_image(O,_).
+attr(object_select(O,T),disabled,true) :-object(O,T),not complete(O,T).
+attr(object_select(O,T),label,"Placing") :-object(O,T),_clinguin_context(object_selected,O).
+attr(object_select(O,T),label,"Place") :-object(O,T),not _clinguin_context(object_selected,O).
+attr(object_select(O,T),class,("btn-outline-primary";"btn-sm";"rounded-2";"px-2";"py-1";"fw-semibold";"text-nowrap")) :-object(O,T),not _clinguin_context(object_selected,O).
+attr(object_select(O,T),class,("btn-primary"; "btn-sm";"rounded-2";"px-2";"py-1";"fw-semibold";"text-nowrap")) :-object(O,T),_clinguin_context(object_selected,O).
+attr(object_select(O,T),"font-size","10px") :- object(O,T).
+when(object_select(O,T),click,context,(object_selected,O)) :-complete(O,T).
+when(object_select(O,T),click,context,(selected_role_for_placement,none)) :-complete(O,T),not object_single_role_image(O,_).
 when(object_select(O,T),click,context,(selected_role_for_placement,R)) :- complete(O,T),object_single_role_image(O,R).
-when(object_select(O,T),click,call,()) :- complete(O,T).
+when(object_select(O,T),click,call,()) :-complete(O,T).
+
 
 % ============================================================
 % INSPECT
 % ============================================================
-elem(object_inspect(O,T),button,object_actions(O,T)) :- object(O,T).
+elem(object_inspect(O,T),button,object_actions(O,T)) :-object(O,T).
 attr(object_inspect(O,T),order,2) :- object(O,T).
 attr(object_inspect(O,T),icon,"fa-magnifying-glass") :- object(O,T).
-attr(object_inspect(O,T),label,"Inspect") :- object(O,T), not _clinguin_context(selected_for_inspection,O).
-attr(object_inspect(O,T),label,"Inspecting") :- object(O,T), _clinguin_context(selected_for_inspection,O).
-attr(object_inspect(O,T),class, ("btn-outline-secondary"; "btn-sm"; "rounded-2"; "px-1"; "py-1")) :- object(O,T), not _clinguin_context(selected_for_inspection,O).
-attr(object_inspect(O,T),class, ("btn-secondary"; "btn-sm"; "rounded-2"; "px-1"; "py-1")) :- object(O,T), _clinguin_context(selected_for_inspection,O).
-attr(object_inspect(O,T), "font-size", "10px") :- object(O,T).
-when(object_inspect(O,T),click,context,(selected_for_inspection,O)) :- object(O,T).
-when(object_inspect(O,T),click,context,(inspector_open,true)) :- object(O,T).
-when(object_inspect(O,T),click,update, (dialog(inspector),visibility,shown)) :- object(O,T).
-when(object_inspect(O,T),click,call,()) :- object(O,T).
+attr(object_inspect(O,T),label,"Inspect") :-object(O,T),not _clinguin_context(selected_for_inspection,O).
+attr(object_inspect(O,T),label,"Inspecting") :- object(O,T),_clinguin_context(selected_for_inspection,O).
+attr(object_inspect(O,T),class,("btn-outline-secondary";"btn-sm";"rounded-2";"px-2";"py-1"; "text-nowrap")) :-object(O,T),not _clinguin_context(selected_for_inspection,O).
+attr(object_inspect(O,T),class,("btn-secondary"; "btn-sm"; "rounded-2";"px-2";"py-1";"text-nowrap")) :-object(O,T),_clinguin_context(selected_for_inspection,O).
+attr(object_inspect(O,T),"font-size","10px") :- object(O,T).
+when(object_inspect(O,T),click,context,(selected_for_inspection,O)) :-object(O,T).
+when(object_inspect(O,T),click,context,(inspector_open,true)) :-object(O,T).
+when(object_inspect(O,T),click,update,(dialog(inspector),visibility,shown)) :-object(O,T).
+when(object_inspect(O,T),click,call,()) :-object(O,T).
+
 
 % ============================================================
 % DELETE
 % ============================================================
-elem(object_delete(O,T),button,object_actions(O,T)) :- object(O,T), _clinguin_atom(object(O,T)).
-attr(object_delete(O,T),order,3) :- elem(object_delete(O,T),button,_).
-attr(object_delete(O,T),icon,"fa-trash") :- elem(object_delete(O,T),button,_).
+elem(object_delete(O,T),button,object_actions(O,T)) :-object(O,T),_clinguin_atom(object(O,T)).
+attr(object_delete(O,T),order,3) :-elem(object_delete(O,T),button,_).
+attr(object_delete(O,T),icon,"fa-trash") :-elem(object_delete(O,T),button,_).
 attr(object_delete(O,T),label,"Delete") :- elem(object_delete(O,T),button,_).
-attr(object_delete(O,T),class, ("btn-outline-danger"; "btn-sm"; "rounded-2"; "px-1"; "py-1"; "ms-auto")) :- elem(object_delete(O,T),button,_).
-attr(object_delete(O,T), "font-size", "10px") :- object(O,T).
-when(object_delete(O,T),click,context, (delete_object,O)) :- elem(object_delete(O,T),button,_).
+attr(object_delete(O,T),class,("btn-outline-danger";"btn-sm";"rounded-2";"px-2";"py-1"; "ms-auto";"text-nowrap")) :-elem(object_delete(O,T),button,_).
+attr(object_delete(O,T),"font-size","10px") :-elem(object_delete(O,T),button,_).
+when(object_delete(O,T),click,context,(delete_object,O)) :- elem(object_delete(O,T),button,_).
+when(object_delete(O,T),click,context,(notice_level,warning)) :-object(O,T),_clinguin_atom(object(O,T)).
+when(object_delete(O,T),click,context,(notice_title,"Object deleted")) :-object(O,T),_clinguin_atom(object(O,T)).
+when(object_delete(O,T),click,context,(notice_message,@concat("Object ",O," (type: ",T,") was deleted."))) :-object(O,T), _clinguin_atom(object(O,T)).
+when(object_delete(O,T),click,call,remove_atom(object(O,T))) :-elem(object_delete(O,T),button,_).
 
-when(object_delete(O,T),click,context,(notice_level,warning)):-object(O,T), _clinguin_atom(object(O,T)).
-when(object_delete(O,T),click,context,(notice_title,"Object deleted")):-object(O,T), _clinguin_atom(object(O,T)).
-when(object_delete(O,T),click,context,(notice_message,@concat("Object ",O," (type: ",T,") was deleted."))):-object(O,T), _clinguin_atom(object(O,T)).
-when(object_delete(O,T),click,call, remove_atom(object(O,T))) :- elem(object_delete(O,T),button,_).
 
 % ============================================================
-% placement role section
+% PLACEMENT ROLE SECTION
 % ============================================================
-
-% Section: one toolbar row.
-elem(placement_role_section(O,T),container,object_card(O,T)) :-complete(O,T), _clinguin_context(object_selected,O).
-attr(placement_role_section(O,T),order,5) :-elem(placement_role_section(O,T),container,_).
+elem(placement_role_section(O,T),container,object_card(O,T)) :- complete(O,T),_clinguin_context(object_selected,O).
+attr(placement_role_section(O,T),order,3) :-elem(placement_role_section(O,T),container,_).
 attr(placement_role_section(O,T),child_layout,flex) :-elem(placement_role_section(O,T),container,_).
 attr(placement_role_section(O,T),flex_direction,row) :-elem(placement_role_section(O,T),container,_).
-attr(placement_role_section(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-1";"px-2";"py-1";"w-100";"border-top";"bg-white")) :-elem(placement_role_section(O,T),container,_).
-
-%  heading.
+attr(placement_role_section(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center"; "gap-2";"px-3";"py-2";"w-100";"border-top";"bg-transparent")) :-elem(placement_role_section(O,T),container,_).
+attr(placement_role_section(O,T),background_color,"transparent") :-elem(placement_role_section(O,T),container,_).
+% ------------------------------------------------------------
+% ROLE HEADING
+% ------------------------------------------------------------
 elem(placement_role_label(O,T),label,placement_role_section(O,T)) :-elem(placement_role_section(O,T),container,_).
 attr(placement_role_label(O,T),order,1) :-elem(placement_role_label(O,T),label,_).
 attr(placement_role_label(O,T),label,"Role") :-elem(placement_role_label(O,T),label,_).
-attr(placement_role_label(O,T),class,("fw-bold";"text-secondary";"text-nowrap";"m-0";"me-1")) :-elem(placement_role_label(O,T),label,_).
-attr(placement_role_label(O,T),"font-size","0.75rem") :-elem(placement_role_label(O,T),label,_).
-
-%  role buttons.
+attr(placement_role_label(O,T),class,("fw-bold"; "text-secondary"; "text-nowrap"; "m-0"; "me-1")) :- elem(placement_role_label(O,T),label,_).
+attr(placement_role_label(O,T),"font-size","0.75rem") :- elem(placement_role_label(O,T),label,_).
+% ------------------------------------------------------------
+% ROLE BUTTON CONTAINER
+% ------------------------------------------------------------
 elem(placement_role_buttons(O,T),container,placement_role_section(O,T)) :-elem(placement_role_section(O,T),container,_).
 attr(placement_role_buttons(O,T),order,2) :-elem(placement_role_buttons(O,T),container,_).
 attr(placement_role_buttons(O,T),child_layout,flex) :-elem(placement_role_buttons(O,T),container,_).
-attr(placement_role_buttons(O,T),flex_direction,row) :-elem(placement_role_buttons(O,T),container,_).
-attr(placement_role_buttons(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-1";"flex-grow-1")) :-elem(placement_role_buttons(O,T),container,_).
+attr(placement_role_buttons(O,T),flex_direction,row) :- elem(placement_role_buttons(O,T),container,_).
+attr(placement_role_buttons(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-1";"flex-grow-1";"bg-transparent")) :-elem(placement_role_buttons(O,T),container,_).
+attr(placement_role_buttons(O,T),background_color,"transparent") :-elem(placement_role_buttons(O,T),container,_).
+attr(placement_role_buttons(O,T),"min-width","0") :- elem(placement_role_buttons(O,T),container,_).
+% ------------------------------------------------------------
+% ROLE BUTTONS
+% ------------------------------------------------------------
 
-elem(placement_role_button(O,R),button,placement_role_buttons(O,T)) :- elem(placement_role_buttons(O,T),container,_),type_role(T,R), image(O,R,_).
-attr(placement_role_button(O,R),label,@concat("",R)) :- elem(placement_role_button(O,R),button,_).
+elem(placement_role_button(O,R),button,placement_role_buttons(O,T)) :-elem(placement_role_buttons(O,T),container,_), type_role(T,R),image(O,R,_).
+attr(placement_role_button(O,R),label,@concat("",R)) :-elem(placement_role_button(O,R),button,_).
+attr(placement_role_button(O,R),order,N) :-elem(placement_role_button(O,R),button,placement_role_buttons(O,T)),N=#count{R2:elem(placement_role_button(O,R2),button,placement_role_buttons(O,T)),R2<R}.
 attr(placement_role_button(O,R),height,26) :-elem(placement_role_button(O,R),button,_).
 attr(placement_role_button(O,R),"font-size","0.8125rem") :-elem(placement_role_button(O,R),button,_).
-attr(placement_role_button(O,R),class,("btn-sm";"rounded-pill";"px-2";"py-0";"m-0";"text-nowrap")) :-elem(placement_role_button(O,R),button,_).
-attr(placement_role_button(O,R),class,"btn-primary") :-elem(placement_role_button(O,R),button,_), _clinguin_context(selected_role_for_placement,R).
-attr(placement_role_button(O,R),icon,"fa-check") :-elem(placement_role_button(O,R),button,_), _clinguin_context(selected_role_for_placement,R).
-attr(placement_role_button(O,R),class,"btn-outline-secondary") :- elem(placement_role_button(O,R),button,_), not _clinguin_context(selected_role_for_placement,R).
-when(placement_role_button(O,R),click,context,(selected_role_for_placement,R)) :- elem(placement_role_button(O,R),button,_).
-when(placement_role_button(O,R),click,call,()) :- elem(placement_role_button(O,R),button,_).
+attr(placement_role_button(O,R),class,("btn-sm";"rounded-pill"; "px-2";"py-0";"m-0";"fw-semibold";"text-nowrap")) :-elem(placement_role_button(O,R),button,_).
+attr(placement_role_button(O,R),class,"btn-primary") :-elem(placement_role_button(O,R),button,_),_clinguin_context(selected_role_for_placement,R).
+attr(placement_role_button(O,R),icon,"fa-check") :-elem(placement_role_button(O,R),button,_),_clinguin_context(selected_role_for_placement,R).
+attr(placement_role_button(O,R),class,"btn-outline-secondary") :-elem(placement_role_button(O,R),button,_),not _clinguin_context(selected_role_for_placement,R).
+when(placement_role_button(O,R),click,context,(selected_role_for_placement,R)) :-elem(placement_role_button(O,R),button,_).
+when(placement_role_button(O,R),click,call,()) :-elem(placement_role_button(O,R),button,_).
+% ------------------------------------------------------------
+% UNSELECT
+% ------------------------------------------------------------
 
-elem(unselect_placement(O,T),button,placement_role_section(O,T)) :- elem(placement_role_section(O,T),container,_).
-attr(unselect_placement(O,T),order,3) :- elem(unselect_placement(O,T),button,_).
-attr(unselect_placement(O,T),label,"Unselect") :- elem(unselect_placement(O,T),button,_).
-attr(unselect_placement(O,T),height,26) :- elem(unselect_placement(O,T),button,_).
-attr(unselect_placement(O,T),"font-size","0.75rem") :- elem(unselect_placement(O,T),button,_).
-attr(unselect_placement(O,T),class,("btn-sm";"btn-outline-secondary";"border-0";"rounded";"px-2";"py-0";"ms-auto";"text-nowrap")) :- elem(unselect_placement(O,T),button,_).
-when(unselect_placement(O,T),click,context,(object_selected,none)) :- elem(unselect_placement(O,T),button,_).
-when(unselect_placement(O,T),click,context,(selected_role_for_placement,none)) :- elem(unselect_placement(O,T),button,_).
-when(unselect_placement(O,T),click,call,()) :- elem(unselect_placement(O,T),button,_).
+elem(unselect_placement(O,T),button,placement_role_section(O,T)) :-
+    elem(placement_role_section(O,T),container,_).
+
+attr(unselect_placement(O,T),order,3) :-
+    elem(unselect_placement(O,T),button,_).
+
+attr(unselect_placement(O,T),label,"Unselect") :-
+    elem(unselect_placement(O,T),button,_).
+
+attr(unselect_placement(O,T),icon,"fa-xmark") :-
+    elem(unselect_placement(O,T),button,_).
+
+attr(unselect_placement(O,T),height,26) :-
+    elem(unselect_placement(O,T),button,_).
+
+attr(unselect_placement(O,T),"font-size","0.75rem") :-
+    elem(unselect_placement(O,T),button,_).
+
+attr(unselect_placement(O,T),class,(
+    "btn-sm";
+    "btn-outline-danger";
+    "rounded-2";
+    "fw-semibold";
+    "px-2";
+    "py-0";
+    "ms-auto";
+    "text-nowrap"
+)) :-
+    elem(unselect_placement(O,T),button,_).
+
+when(unselect_placement(O,T),click,context,(object_selected,none)) :-
+    elem(unselect_placement(O,T),button,_).
+
+when(unselect_placement(O,T),click,context,(selected_role_for_placement,none)) :-
+    elem(unselect_placement(O,T),button,_).
+
+when(unselect_placement(O,T),click,call,()) :-
+    elem(unselect_placement(O,T),button,_).
 % ============================================================
 % PLACEMENT HINT
 % ============================================================
-elem(placement_role_hint(O,T),label,placement_role_section(O,T)) :- elem(placement_role_section(O,T),container,_).
-attr(placement_role_hint(O,T),order,4) :- elem(placement_role_hint(O,T),label,_).
-attr(placement_role_hint(O,T),class,("w-100";"m-0";"lh-sm")) :- elem(placement_role_hint(O,T),label,_).
-attr(placement_role_hint(O,T),"flex-basis","100%") :- elem(placement_role_hint(O,T),label,_).
-attr(placement_role_hint(O,T),"font-size","0.75rem") :- elem(placement_role_hint(O,T),label,_).
-attr(placement_role_hint(O,T),label,"Choose a role, then click a cell.") :- elem(placement_role_hint(O,T),label,_), 0 < #count { R : elem(placement_role_button(O,R),button,placement_role_buttons(O,T)) }, 0 = #count { R : elem(placement_role_button(O,R),button,placement_role_buttons(O,T)), _clinguin_context(selected_role_for_placement,R) }.
-attr(placement_role_hint(O,T),label,@concat("Click a cell to place as ",R,".")) :- elem(placement_role_hint(O,T),label,_), elem(placement_role_button(O,R),button,placement_role_buttons(O,T)), _clinguin_context(selected_role_for_placement,R).
-attr(placement_role_hint(O,T),label,"No roles with images available.") :- elem(placement_role_hint(O,T),label,_), 0 = #count { R : elem(placement_role_button(O,R),button,placement_role_buttons(O,T)) }.
-attr(placement_role_hint(O,T),class,"text-primary") :- elem(placement_role_hint(O,T),label,_), elem(placement_role_button(O,R),button,placement_role_buttons(O,T)), _clinguin_context(selected_role_for_placement,R).
-attr(placement_role_hint(O,T),class,"text-secondary") :- elem(placement_role_hint(O,T),label,_), 0 = #count { R : elem(placement_role_button(O,R),button,placement_role_buttons(O,T)), _clinguin_context(selected_role_for_placement,R) }.
 
+elem(placement_role_hint(O,T),label,placement_role_section(O,T)) :-elem(placement_role_section(O,T),container,_).
+attr(placement_role_hint(O,T),order,4) :-elem(placement_role_hint(O,T),label,_).
+attr(placement_role_hint(O,T),class,("w-100";"m-0";"lh-sm")) :-elem(placement_role_hint(O,T),label,_).
+attr(placement_role_hint(O,T),"flex-basis","100%") :-elem(placement_role_hint(O,T),label,_).
+attr(placement_role_hint(O,T),"font-size","0.75rem") :-elem(placement_role_hint(O,T),label,_).
+% Roles exist, but none has been selected.
+attr(placement_role_hint(O,T),label, "Choose a role, then click a cell.") :- elem(placement_role_hint(O,T),label,_),0 < #count{R:elem(placement_role_button(O,R),button,placement_role_buttons(O,T)) },
+    0 = #count{
+        R:
+        elem(placement_role_button(O,R),button,placement_role_buttons(O,T)),
+        _clinguin_context(selected_role_for_placement,R)
+    }.
+
+% A valid role is selected.
+
+attr(placement_role_hint(O,T),label,@concat("Click a cell to place as ",R,".")) :-elem(placement_role_hint(O,T),label,_),elem(placement_role_button(O,R),button,placement_role_buttons(O,T)),_clinguin_context(selected_role_for_placement,R).
+
+% No available role buttons.
+
+attr(placement_role_hint(O,T),label,
+    "No roles with images available."
+) :-
+    elem(placement_role_hint(O,T),label,_),
+    0 = #count{
+        R:
+        elem(placement_role_button(O,R),button,placement_role_buttons(O,T))
+    }.
+
+attr(placement_role_hint(O,T),class,"text-primary") :-
+    elem(placement_role_hint(O,T),label,_),
+    elem(placement_role_button(O,R),button,placement_role_buttons(O,T)),
+    _clinguin_context(selected_role_for_placement,R).
+
+attr(placement_role_hint(O,T),class,"text-secondary") :-
+    elem(placement_role_hint(O,T),label,_),
+    0 = #count{
+        R:
+        elem(placement_role_button(O,R),button,placement_role_buttons(O,T)),
+        _clinguin_context(selected_role_for_placement,R)
+    }.
 % Shared form styles 
 attr(form_actions(F),flex_direction,row) :- elem(form_actions(F),container,_).
 attr(form_actions(F),class,"flex-wrap") :- elem(form_actions(F),container,_).

@@ -5,20 +5,42 @@
 % ============================================================
 
 % ---------- AGENTS ----------
-object(agent(1),agent).  object(agent(2),agent).  object(agent(3),agent).
-object(agent(4),agent).  object(agent(5),agent).  object(agent(6),agent).
-object(agent(7),agent).  object(agent(8),agent).  object(agent(9),agent).
-object(agent(10),agent). object(agent(11),agent). object(agent(12),agent).
-object(agent(13),agent). object(agent(14),agent). object(agent(15),agent).
+object(agent(1),agent).  
+object(agent(2),agent).  
+object(agent(3),agent).
+object(agent(4),agent).  
+object(agent(5),agent).  
+object(agent(6),agent).
+object(agent(7),agent).  
+object(agent(8),agent).  
+object(agent(9),agent).
+object(agent(10),agent). 
+object(agent(11),agent). 
+object(agent(12),agent).
+object(agent(13),agent). 
+object(agent(14),agent). 
+object(agent(15),agent).
 
-property(agent(1),id,1).   property(agent(2),id,2).   property(agent(3),id,3).
-property(agent(4),id,4).   property(agent(5),id,5).   property(agent(6),id,6).
-property(agent(7),id,7).   property(agent(8),id,8).   property(agent(9),id,9).
-property(agent(10),id,10). property(agent(11),id,11). property(agent(12),id,12).
-property(agent(13),id,13). property(agent(14),id,14). property(agent(15),id,15).
-
-% ---------- WALL OBJECT ----------
+ % ---------- WALL OBJECT ----------
 object(wall(1),wall).
+
+% Agents ID
+property(agent(1),id,1).   
+property(agent(2),id,2).  
+property(agent(3),id,3).
+property(agent(4),id,4).   
+property(agent(5),id,5).   
+property(agent(6),id,6).
+property(agent(7),id,7).   
+property(agent(8),id,8).   
+property(agent(9),id,9).
+property(agent(10),id,10). 
+property(agent(11),id,11). 
+property(agent(12),id,12).
+property(agent(13),id,13). 
+property(agent(14),id,14). 
+property(agent(15),id,15).
+
 
 % ---------- STARTS ----------
 position((1,2),start,agent(1)).
@@ -51,12 +73,11 @@ position((11,20),end,agent(10)).
 position((10,14),end,agent(11)).
 position((9,4),end,agent(12)).
 position((9,4),start,agent(1)).
-
 position((8,17),end,agent(13)).
 position((7,11),end,agent(14)).
 position((6,1),end,agent(15)).
 
-% ---------- WALL POSITIONS (all occupied by wall(1), role = cell) ----------
+% ---------- WALL POSITIONS----------
 position((1,5),cell,wall(1)).
 position((1,9),cell,wall(1)).
 position((1,14),cell,wall(1)).
@@ -119,8 +140,8 @@ position((15,16),cell,wall(1)).
 position((15,20),cell,wall(1)).
 
 % ---------- DOMAIN ----------
-row(1..20).
-col(1..20).
+row(1..30).
+col(1..30).
 
-% ---------- FREE NODES----------
+% ---------- NODES----------
 node((R,C)) :- row(R), col(C).
