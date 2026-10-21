@@ -746,7 +746,60 @@ attr(inspector_visual_path(O,T,R,I),class,("font-monospace";"text-secondary";"te
 attr(inspector_visual_path(O,T,R,I),"font-size","8px") :- object_selected_for_inspection(O,T),image(O,R,I).% ============================================================% ADD IMAGE% ============================================================elem(inspector_add_role(O,T),container,inspector_body) :- object_selected_for_inspection(O,T).attr(inspector_add_role(O,T),order,11) :- object_selected_for_inspection(O,T).attr(inspector_add_role(O,T),flex_direction,column) :- object_selected_for_inspection(O,T).attr(inspector_add_role(O,T),class,("d-flex";"flex-column";"gap-2";"p-2";"bg-white";"border";"rounded-3";"w-100")) :- object_selected_for_inspection(O,T).% Headerelem(add_visual_header(O,T),container,inspector_add_role(O,T)) :- object_selected_for_inspection(O,T).attr(add_visual_header(O,T),order,1) :- object_selected_for_inspection(O,T).attr(add_visual_header(O,T),flex_direction,row) :- object_selected_for_inspection(O,T).attr(add_visual_header(O,T),class,("d-flex";"flex-row";"align-items-center";"justify-content-between";"gap-2")) :- object_selected_for_inspection(O,T).elem(add_visual_remaining(O,T),label,add_visual_header(O,T)) :- object_selected_for_inspection(O,T),object_missing_image(O,T).attr(add_visual_remaining(O,T),order,2) :- object_selected_for_inspection(O,T),object_missing_image(O,T).attr(add_visual_remaining(O,T),label,@concat(N," roles available")) :- object_selected_for_inspection(O,T),object_missing_image(O,T),N=#count{R:object_missing_image_for_role(O,T,R)}.attr(add_visual_remaining(O,T),class,("text-secondary";"m-0")) :- object_selected_for_inspection(O,T),object_missing_image(O,T).attr(add_visual_remaining(O,T),"font-size","9px") :- object_selected_for_inspection(O,T),object_missing_image(O,T).
 
 
+% ============================================================
+% ALLOWED PROPERTY VALUES
+% Keep these facts in your domain configuration if already defined there.
+% Both declarations use track, matching the supplied facts.
+% ============================================================
+type_property_options(track,code,(32800;1025;37408;17411;32872;3089;49186;1097;34864;5633;33825;38433;50211;33897;35889;38505;52275;20994;16458;2136;6672;4608;16386;72;2064;8192;4;128;256)).
+type_property_options(track,directions,(0;1;2;3;4)).
 
+% ============================================================
+% GENERIC PROPERTY OPTION HELPERS
+% ============================================================
+inspector_property_has_options(T,P) :- type_property_options(T,P,_).
+inspector_required_option_selection(O,T,P,Opt) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,_),type_property_options(T,P,Opt),_clinguin_context(required_property_value(O,T,P),Opt).
+inspector_editor_value(O,T,P,V,NV) :- elem(property_editor(O,T,P,V),container,_),_clinguin_context(editing_property_new_value,NV).
+inspector_editor_value(O,T,P,V,V) :- elem(property_editor(O,T,P,V),container,_),not _clinguin_context(editing_property_new_value,_).
+
+% Restore the active editor and valid dropdown selections after a server call.
+when(w,load,context,(editing_property_key,P)) :- elem(property_editor(O,T,P,V),container,_).
+when(w,load,context,(editing_property_old_value,V)) :- elem(property_editor(O,T,P,V),container,_).
+when(w,load,context,(editing_property_new_value,NV)) :- inspector_editor_value(O,T,P,V,NV).
+when(w,load,context,(required_property_value(O,T,P),Opt)) :- inspector_required_option_selection(O,T,P,Opt).
+
+% ============================================================
+% PROPERTY OPTIONS: DOMAIN CONFIGURATION
+% Keep these declarations with your domain configuration if preferred.
+% The direction rules use whichever spelling your schema declares.
+% ============================================================
+type_property_options(track,code,(32800;1025;37408;17411;32872;3089;49186;1097;34864;5633;33825;38433;50211;33897;35889;38505;52275;20994;16458;2136;6672;4608;16386;72;2064;8192;4;128;256)).
+type_property_options(T,direction,0..4) :- type_property(T,direction,_,_).
+type_property_options(T,directions,0..4) :- type_property(T,directions,_,_).
+
+% ============================================================
+% GENERIC HELPERS
+% This inspector edits one selected object at a time.
+% Use a supported unary context key; keep the owner separately.
+% ============================================================
+inspector_property_has_options(T,P) :- type_property_options(T,P,_).
+inspector_integer_type(int;integer).
+inspector_string_type(str;string;text).
+inspector_property_cast(T,P,int) :- type_property(T,P,VT,_),inspector_integer_type(VT).
+inspector_property_cast(T,P,str) :- type_property(T,P,VT,_),inspector_string_type(VT).
+inspector_required_submission(O,T,P,_context_value(required_property_value(P),Cast)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,_),inspector_property_cast(T,P,Cast).
+inspector_required_submission(O,T,P,_context_value(required_property_value(P))) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,_),not inspector_property_cast(T,P,_).
+inspector_required_draft(O,T,P,V) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,_),_clinguin_context(required_property_owner,(O,T)),_clinguin_context(required_property_value(P),V).
+inspector_required_option_selection(O,T,P,Opt) :- inspector_required_draft(O,T,P,Opt),type_property_options(T,P,Opt).
+inspector_editor_value(O,T,P,V,NV) :- elem(property_editor(O,T,P,V),container,_),_clinguin_context(editing_property_new_value,NV).
+inspector_editor_value(O,T,P,V,V) :- elem(property_editor(O,T,P,V),container,_),not _clinguin_context(editing_property_new_value,_).
+inspector_editor_submission(O,T,P,V,_context_value(editing_property_new_value,Cast)) :- elem(property_editor(O,T,P,V),container,_),inspector_property_cast(T,P,Cast).
+inspector_editor_submission(O,T,P,V,_context_value(editing_property_new_value)) :- elem(property_editor(O,T,P,V),container,_),not inspector_property_cast(T,P,_).
+
+% Restore pending values after a server call, only for the same object.
+when(W,load,context,(required_property_owner,(O,T))) :- elem(W,window,_),inspector_required_draft(O,T,_,_).
+when(W,load,context,(required_property_value(P),V)) :- elem(W,window,_),inspector_required_draft(O,T,P,V).
+when(W,load,context,(editing_property_new_value,NV)) :- elem(W,window,_),inspector_editor_value(O,T,P,V,NV).
 
 % ============================================================
 % PROPERTIES CONTAINER
@@ -756,6 +809,7 @@ attr(inspector_properties(O,T),order,15) :- elem(inspector_properties(O,T),conta
 attr(inspector_properties(O,T),flex_direction,column) :- elem(inspector_properties(O,T),container,_).
 attr(inspector_properties(O,T),class,("d-flex";"flex-column";"gap-2";"p-2";"bg-white";"border";"rounded-3";"w-100")) :- elem(inspector_properties(O,T),container,_).
 attr(inspector_properties(O,T),"min-width","0") :- elem(inspector_properties(O,T),container,_).
+
 % ============================================================
 % PROPERTIES HEADER
 % ============================================================
@@ -763,16 +817,19 @@ elem(inspector_properties_header(O,T),container,inspector_properties(O,T)) :- ob
 attr(inspector_properties_header(O,T),order,1) :- elem(inspector_properties_header(O,T),container,_).
 attr(inspector_properties_header(O,T),flex_direction,row) :- elem(inspector_properties_header(O,T),container,_).
 attr(inspector_properties_header(O,T),class,("d-flex";"flex-row";"align-items-center";"justify-content-between";"gap-2";"w-100")) :- elem(inspector_properties_header(O,T),container,_).
+
 elem(inspector_properties_title(O,T),label,inspector_properties_header(O,T)) :- object_selected_for_inspection(O,T).
 attr(inspector_properties_title(O,T),order,1) :- elem(inspector_properties_title(O,T),label,_).
 attr(inspector_properties_title(O,T),label,"Properties") :- elem(inspector_properties_title(O,T),label,_).
 attr(inspector_properties_title(O,T),class,("fw-bold";"text-dark";"m-0")) :- elem(inspector_properties_title(O,T),label,_).
 attr(inspector_properties_title(O,T),"font-size","11px") :- elem(inspector_properties_title(O,T),label,_).
+
 elem(inspector_properties_count(O,T),label,inspector_properties_header(O,T)) :- object_selected_for_inspection(O,T).
 attr(inspector_properties_count(O,T),order,2) :- elem(inspector_properties_count(O,T),label,_).
 attr(inspector_properties_count(O,T),label,@concat(N," configured")) :- object_selected_for_inspection(O,T),N=#count{P,V:property(O,P,V)}.
 attr(inspector_properties_count(O,T),class,("text-secondary";"m-0")) :- elem(inspector_properties_count(O,T),label,_).
 attr(inspector_properties_count(O,T),"font-size","9px") :- elem(inspector_properties_count(O,T),label,_).
+
 % ============================================================
 % MISSING REQUIRED PROPERTY WARNING
 % ============================================================
@@ -782,16 +839,19 @@ attr(inspector_property_warning(O,T),flex_direction,row) :- elem(inspector_prope
 attr(inspector_property_warning(O,T),class,("d-flex";"flex-row";"align-items-center";"gap-2";"px-2";"py-1";"rounded-2";"w-100")) :- elem(inspector_property_warning(O,T),container,_).
 attr(inspector_property_warning(O,T),background_color,"#FFF7ED") :- elem(inspector_property_warning(O,T),container,_).
 attr(inspector_property_warning(O,T),"border","1px solid #FED7AA") :- elem(inspector_property_warning(O,T),container,_).
+
 elem(inspector_property_warning_icon(O,T),icon,inspector_property_warning(O,T)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,_,_).
 attr(inspector_property_warning_icon(O,T),order,1) :- elem(inspector_property_warning_icon(O,T),icon,_).
 attr(inspector_property_warning_icon(O,T),icon,"fa-triangle-exclamation") :- elem(inspector_property_warning_icon(O,T),icon,_).
 attr(inspector_property_warning_icon(O,T),class,"text-warning") :- elem(inspector_property_warning_icon(O,T),icon,_).
+
 elem(inspector_property_warning_text(O,T),label,inspector_property_warning(O,T)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,_,_).
 attr(inspector_property_warning_text(O,T),order,2) :- elem(inspector_property_warning_text(O,T),label,_).
-attr(inspector_property_warning_text(O,T),label,@concat(N," required properties need configuration.")) :- object_selected_for_inspection(O,T),N=#count{P:object_missing_required_property(O,T,P,_)}.
+attr(inspector_property_warning_text(O,T),label,@concat(N," required properties need configuration.")) :- elem(inspector_property_warning_text(O,T),label,_),N=#count{P:object_missing_required_property(O,T,P,_)}.
 attr(inspector_property_warning_text(O,T),class,("fw-semibold";"m-0")) :- elem(inspector_property_warning_text(O,T),label,_).
 attr(inspector_property_warning_text(O,T),foreground_color,"#9A3412") :- elem(inspector_property_warning_text(O,T),label,_).
 attr(inspector_property_warning_text(O,T),"font-size","9px") :- elem(inspector_property_warning_text(O,T),label,_).
+
 % ============================================================
 % CONFIGURED PROPERTY LIST
 % ============================================================
@@ -799,6 +859,7 @@ elem(configured_property_list(O,T),container,inspector_properties(O,T)) :- objec
 attr(configured_property_list(O,T),order,3) :- elem(configured_property_list(O,T),container,_).
 attr(configured_property_list(O,T),flex_direction,column) :- elem(configured_property_list(O,T),container,_).
 attr(configured_property_list(O,T),class,("d-flex";"flex-column";"gap-1";"w-100")) :- elem(configured_property_list(O,T),container,_).
+
 % ============================================================
 % CONFIGURED PROPERTY ROW
 % ============================================================
@@ -806,6 +867,7 @@ elem(configured_property_row(O,T,P,V),container,configured_property_list(O,T)) :
 attr(configured_property_row(O,T,P,V),order,N) :- object_selected_for_inspection(O,T),property(O,P,V),N=#count{P2,V2:property(O,P2,V2),(P2,V2)<(P,V)}.
 attr(configured_property_row(O,T,P,V),flex_direction,row) :- elem(configured_property_row(O,T,P,V),container,_).
 attr(configured_property_row(O,T,P,V),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-2";"px-2";"py-1";"bg-light";"border";"rounded-2";"w-100")) :- elem(configured_property_row(O,T,P,V),container,_).
+
 % ============================================================
 % PROPERTY VALUE
 % ============================================================
@@ -814,6 +876,7 @@ attr(configured_property_text(O,T,P,V),order,1) :- elem(configured_property_text
 attr(configured_property_text(O,T,P,V),label,@concat(P," = ",V)) :- object_selected_for_inspection(O,T),property(O,P,V).
 attr(configured_property_text(O,T,P,V),class,("font-monospace";"fw-semibold";"text-dark";"text-break";"flex-grow-1";"m-0")) :- elem(configured_property_text(O,T,P,V),label,_).
 attr(configured_property_text(O,T,P,V),"font-size","10px") :- elem(configured_property_text(O,T,P,V),label,_).
+
 % ============================================================
 % PROPERTY TYPE BADGE
 % ============================================================
@@ -822,6 +885,7 @@ attr(configured_property_type(O,T,P,V),order,2) :- elem(configured_property_type
 attr(configured_property_type(O,T,P,V),label,@concat("",VT)) :- object_selected_for_inspection(O,T),property(O,P,V),type_property(T,P,VT,_).
 attr(configured_property_type(O,T,P,V),class,("rounded-pill";"px-2";"py-1";"bg-white";"text-secondary";"border";"m-0")) :- elem(configured_property_type(O,T,P,V),label,_).
 attr(configured_property_type(O,T,P,V),"font-size","8px") :- elem(configured_property_type(O,T,P,V),label,_).
+
 % ============================================================
 % REQUIRED / OPTIONAL BADGE
 % ============================================================
@@ -831,6 +895,7 @@ attr(configured_property_requirement(O,T,P,V),label,"Required") :- object_select
 attr(configured_property_requirement(O,T,P,V),label,"Optional") :- object_selected_for_inspection(O,T),property(O,P,V),type_property(T,P,_,optional).
 attr(configured_property_requirement(O,T,P,V),class,("rounded-pill";"px-2";"py-1";"bg-white";"text-secondary";"border";"m-0")) :- elem(configured_property_requirement(O,T,P,V),label,_).
 attr(configured_property_requirement(O,T,P,V),"font-size","8px") :- elem(configured_property_requirement(O,T,P,V),label,_).
+
 % ============================================================
 % CUSTOM PROPERTY BADGE
 % ============================================================
@@ -839,6 +904,7 @@ attr(custom_property_badge(O,T,P,V),order,3) :- elem(custom_property_badge(O,T,P
 attr(custom_property_badge(O,T,P,V),label,"Custom") :- elem(custom_property_badge(O,T,P,V),label,_).
 attr(custom_property_badge(O,T,P,V),class,("rounded-pill";"px-2";"py-1";"bg-white";"text-secondary";"border";"m-0")) :- elem(custom_property_badge(O,T,P,V),label,_).
 attr(custom_property_badge(O,T,P,V),"font-size","8px") :- elem(custom_property_badge(O,T,P,V),label,_).
+
 % ============================================================
 % EDIT PROPERTY BUTTON
 % ============================================================
@@ -852,6 +918,7 @@ when(property_edit(O,T,P,V),click,context,(editing_property_key,P)) :- object_se
 when(property_edit(O,T,P,V),click,context,(editing_property_old_value,V)) :- object_selected_for_inspection(O,T),property(O,P,V),_clinguin_atom(property(O,P,V)).
 when(property_edit(O,T,P,V),click,context,(editing_property_new_value,V)) :- object_selected_for_inspection(O,T),property(O,P,V),_clinguin_atom(property(O,P,V)).
 when(property_edit(O,T,P,V),click,call,()) :- object_selected_for_inspection(O,T),property(O,P,V),_clinguin_atom(property(O,P,V)).
+
 % ============================================================
 % DELETE PROPERTY BUTTON
 % ============================================================
@@ -862,6 +929,7 @@ attr(property_delete(O,T,P,V),icon,"fa-trash") :- elem(property_delete(O,T,P,V),
 attr(property_delete(O,T,P,V),class,("btn-outline-danger";"btn-sm";"rounded-2";"px-2";"py-1")) :- elem(property_delete(O,T,P,V),button,_).
 attr(property_delete(O,T,P,V),"font-size","9px") :- elem(property_delete(O,T,P,V),button,_).
 when(property_delete(O,T,P,V),click,call,remove_atom(property(O,P,V))) :- object_selected_for_inspection(O,T),property(O,P,V),_clinguin_atom(property(O,P,V)).
+
 % ============================================================
 % INLINE PROPERTY EDITOR
 % ============================================================
@@ -871,40 +939,59 @@ attr(property_editor(O,T,P,V),flex_direction,column) :- elem(property_editor(O,T
 attr(property_editor(O,T,P,V),class,("d-flex";"flex-column";"gap-2";"p-2";"rounded-2";"w-100")) :- elem(property_editor(O,T,P,V),container,_).
 attr(property_editor(O,T,P,V),background_color,"#EFF6FF") :- elem(property_editor(O,T,P,V),container,_).
 attr(property_editor(O,T,P,V),"border","1px solid #BFDBFE") :- elem(property_editor(O,T,P,V),container,_).
+
 elem(property_editor_title(O,T,P,V),label,property_editor(O,T,P,V)) :- elem(property_editor(O,T,P,V),container,_).
 attr(property_editor_title(O,T,P,V),order,1) :- elem(property_editor_title(O,T,P,V),label,_).
 attr(property_editor_title(O,T,P,V),label,@concat("Edit ",P)) :- elem(property_editor_title(O,T,P,V),label,_).
 attr(property_editor_title(O,T,P,V),class,("fw-bold";"text-primary";"m-0")) :- elem(property_editor_title(O,T,P,V),label,_).
 attr(property_editor_title(O,T,P,V),"font-size","10px") :- elem(property_editor_title(O,T,P,V),label,_).
-elem(property_editor_input(O,T,P,V),textfield,property_editor(O,T,P,V)) :- elem(property_editor(O,T,P,V),container,_).
+
+% Textfield editor for properties without declared options.
+elem(property_editor_input(O,T,P,V),textfield,property_editor(O,T,P,V)) :- elem(property_editor(O,T,P,V),container,_),not inspector_property_has_options(T,P).
 attr(property_editor_input(O,T,P,V),order,2) :- elem(property_editor_input(O,T,P,V),textfield,_).
 attr(property_editor_input(O,T,P,V),placeholder,@concat("Current value: ",V)) :- elem(property_editor_input(O,T,P,V),textfield,_).
 attr(property_editor_input(O,T,P,V),class,("form-control";"form-control-sm";"rounded-2";"w-100")) :- elem(property_editor_input(O,T,P,V),textfield,_).
 attr(property_editor_input(O,T,P,V),"font-size","10px") :- elem(property_editor_input(O,T,P,V),textfield,_).
 when(property_editor_input(O,T,P,V),input,context,(editing_property_new_value,_value)) :- elem(property_editor_input(O,T,P,V),textfield,_).
+
+% Dropdown editor for any property with declared options.
+elem(property_editor_input(O,T,P,V),dropdown_menu,property_editor(O,T,P,V)) :- elem(property_editor(O,T,P,V),container,_),inspector_property_has_options(T,P).
+attr(property_editor_input(O,T,P,V),order,2) :- elem(property_editor_input(O,T,P,V),dropdown_menu,_).
+attr(property_editor_input(O,T,P,V),selected,@concat("",NV)) :- elem(property_editor_input(O,T,P,V),dropdown_menu,_),inspector_editor_value(O,T,P,V,NV).
+attr(property_editor_input(O,T,P,V),class,("btn-outline-primary";"btn-sm";"rounded-2";"w-100";"text-start")) :- elem(property_editor_input(O,T,P,V),dropdown_menu,_).
+attr(property_editor_input(O,T,P,V),"font-size","10px") :- elem(property_editor_input(O,T,P,V),dropdown_menu,_).
+elem(property_editor_option(O,T,P,V,Opt),dropdown_menu_item,property_editor_input(O,T,P,V)) :- elem(property_editor_input(O,T,P,V),dropdown_menu,_),type_property_options(T,P,Opt).
+attr(property_editor_option(O,T,P,V,Opt),order,N) :- elem(property_editor_option(O,T,P,V,Opt),dropdown_menu_item,_),N=#count{Other:type_property_options(T,P,Other),Other<Opt}.
+attr(property_editor_option(O,T,P,V,Opt),label,@concat("",Opt)) :- elem(property_editor_option(O,T,P,V,Opt),dropdown_menu_item,_).
+attr(property_editor_option(O,T,P,V,Opt),class,("font-monospace";"small")) :- elem(property_editor_option(O,T,P,V,Opt),dropdown_menu_item,_).
+when(property_editor_option(O,T,P,V,Opt),click,context,(editing_property_new_value,Opt)) :- elem(property_editor_option(O,T,P,V,Opt),dropdown_menu_item,_).
+when(property_editor_option(O,T,P,V,Opt),click,update,(property_editor_input(O,T,P,V),selected,@concat("",Opt))) :- elem(property_editor_option(O,T,P,V,Opt),dropdown_menu_item,_).
+
+% Editor actions.
 elem(property_editor_actions(O,T,P,V),container,property_editor(O,T,P,V)) :- elem(property_editor(O,T,P,V),container,_).
 attr(property_editor_actions(O,T,P,V),order,3) :- elem(property_editor_actions(O,T,P,V),container,_).
 attr(property_editor_actions(O,T,P,V),flex_direction,row) :- elem(property_editor_actions(O,T,P,V),container,_).
 attr(property_editor_actions(O,T,P,V),class,("d-flex";"flex-row";"justify-content-end";"gap-2")) :- elem(property_editor_actions(O,T,P,V),container,_).
+
 elem(property_edit_cancel(O,T,P,V),button,property_editor_actions(O,T,P,V)) :- elem(property_editor(O,T,P,V),container,_).
 attr(property_edit_cancel(O,T,P,V),order,1) :- elem(property_edit_cancel(O,T,P,V),button,_).
 attr(property_edit_cancel(O,T,P,V),label,"Cancel") :- elem(property_edit_cancel(O,T,P,V),button,_).
 attr(property_edit_cancel(O,T,P,V),class,("btn-light";"border";"btn-sm";"rounded-2")) :- elem(property_edit_cancel(O,T,P,V),button,_).
 when(property_edit_cancel(O,T,P,V),click,context,(editing_property_key,none)) :- elem(property_editor(O,T,P,V),container,_).
 when(property_edit_cancel(O,T,P,V),click,call,()) :- elem(property_editor(O,T,P,V),container,_).
+
 elem(property_edit_save(O,T,P,V),button,property_editor_actions(O,T,P,V)) :- elem(property_editor(O,T,P,V),container,_).
 attr(property_edit_save(O,T,P,V),order,2) :- elem(property_edit_save(O,T,P,V),button,_).
 attr(property_edit_save(O,T,P,V),label,"Save") :- elem(property_edit_save(O,T,P,V),button,_).
 attr(property_edit_save(O,T,P,V),icon,"fa-check") :- elem(property_edit_save(O,T,P,V),button,_).
 attr(property_edit_save(O,T,P,V),class,("btn-primary";"btn-sm";"rounded-2")) :- elem(property_edit_save(O,T,P,V),button,_).
 when(property_edit_save(O,T,P,V),click,context,(editing_property_key,none)) :- elem(property_editor(O,T,P,V),container,_).
-when(property_edit_save(O,T,P,V),click,call,(remove_atom(property(O,P,V)),add_atom(property(O,P,_context_value(editing_property_new_value))))) :- object_selected_for_inspection(O,T),property(O,P,V),_clinguin_atom(property(O,P,V)),_clinguin_context(editing_property_key,P),_clinguin_context(editing_property_old_value,V).
+when(property_edit_save(O,T,P,V),click,call,(remove_atom(property(O,P,V)),add_atom(property(O,P,Input)))) :- elem(property_edit_save(O,T,P,V),button,_),inspector_editor_submission(O,T,P,V,Input).
+
 % ============================================================
 % MISSING REQUIRED PROPERTIES
-% ============================================================
-%
-% Every missing required type_property is shown simultaneously.
-% There is no property-selection dropdown.
+% Every missing required property is shown simultaneously.
+% Only properties with declared options use dropdowns.
 % ============================================================
 elem(missing_required_properties(O,T),container,inspector_properties(O,T)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,_,_).
 attr(missing_required_properties(O,T),order,5) :- elem(missing_required_properties(O,T),container,_).
@@ -918,6 +1005,7 @@ attr(missing_required_properties_title(O,T),label,"Missing required properties")
 attr(missing_required_properties_title(O,T),class,("fw-bold";"m-0")) :- elem(missing_required_properties_title(O,T),label,_).
 attr(missing_required_properties_title(O,T),foreground_color,"#9A3412") :- elem(missing_required_properties_title(O,T),label,_).
 attr(missing_required_properties_title(O,T),"font-size","10px") :- elem(missing_required_properties_title(O,T),label,_).
+
 % ============================================================
 % MISSING REQUIRED PROPERTY ROW
 % ============================================================
@@ -933,23 +1021,51 @@ attr(object_missing_required_property_name(O,T,P),class,("fw-bold";"text-dark";"
 attr(object_missing_required_property_name(O,T,P),"font-size","10px") :- elem(object_missing_required_property_name(O,T,P),label,_).
 
 elem(object_missing_required_property_type(O,T,P,VT),label,object_missing_required_property_row(O,T,P)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,VT).
-attr(object_missing_required_property_type(O,T,P),order,2) :- elem(object_missing_required_property_type(O,T,P),label,_).
-attr(object_missing_required_property_type(O,T,P),label,@concat("",VT)) :- elem(object_missing_required_property_type(O,T,P,VT),label,_).
-attr(object_missing_required_property_type(O,T,P),class,("rounded-pill";"px-2";"bg-light";"border";"text-secondary";"m-0")) :- elem(object_missing_required_property_type(O,T,P),label,_).
-attr(object_missing_required_property_type(O,T,P),"font-size","8px") :- elem(object_missing_required_property_type(O,T,P),label,_).
+attr(object_missing_required_property_type(O,T,P,VT),order,2) :- elem(object_missing_required_property_type(O,T,P,VT),label,_).
+attr(object_missing_required_property_type(O,T,P,VT),label,@concat("",VT)) :- elem(object_missing_required_property_type(O,T,P,VT),label,_).
+attr(object_missing_required_property_type(O,T,P,VT),class,("rounded-pill";"px-2";"bg-light";"border";"text-secondary";"m-0")) :- elem(object_missing_required_property_type(O,T,P,VT),label,_).
+attr(object_missing_required_property_type(O,T,P,VT),"font-size","8px") :- elem(object_missing_required_property_type(O,T,P,VT),label,_).
 
-elem(object_missing_required_property_input(O,T,P,VT),textfield,object_missing_required_property_row(O,T,P)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,VT).
+% Textfield input for properties without declared options.
+elem(object_missing_required_property_input(O,T,P,VT),textfield,object_missing_required_property_row(O,T,P)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,VT),not inspector_property_has_options(T,P).
 attr(object_missing_required_property_input(O,T,P,VT),order,3) :- elem(object_missing_required_property_input(O,T,P,VT),textfield,_).
-attr(object_missing_required_property_input(O,T,P,VT),placeholder,@concat("Enter ",P)) :- elem(object_missing_required_property_input(O,T,P,VT),textfield,_).
+attr(object_missing_required_property_input(O,T,P,VT),placeholder,@concat("Enter ",P)) :- elem(object_missing_required_property_input(O,T,P,VT),textfield,_),not inspector_required_draft(O,T,P,_).
+attr(object_missing_required_property_input(O,T,P,VT),placeholder,@concat("Entered: ",V)) :- elem(object_missing_required_property_input(O,T,P,VT),textfield,_),inspector_required_draft(O,T,P,V).
 attr(object_missing_required_property_input(O,T,P,VT),class,("form-control";"form-control-sm";"rounded-2";"flex-grow-1")) :- elem(object_missing_required_property_input(O,T,P,VT),textfield,_).
 attr(object_missing_required_property_input(O,T,P,VT),"font-size","10px") :- elem(object_missing_required_property_input(O,T,P,VT),textfield,_).
-when(object_missing_required_property_input(O,T,P,VT),input,context,(required_property_value(P),_value)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,VT).
+when(object_missing_required_property_input(O,T,P,VT),input,context,(required_property_owner,(O,T))) :- elem(object_missing_required_property_input(O,T,P,VT),textfield,_).
+when(object_missing_required_property_input(O,T,P,VT),input,context,(required_property_value(P),_value)) :- elem(object_missing_required_property_input(O,T,P,VT),textfield,_).
+
+% Dropdown input for any missing required property with declared options.
+elem(object_missing_required_property_input(O,T,P,VT),dropdown_menu,object_missing_required_property_row(O,T,P)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,VT),inspector_property_has_options(T,P).
+attr(object_missing_required_property_input(O,T,P,VT),order,3) :- elem(object_missing_required_property_input(O,T,P,VT),dropdown_menu,_).
+attr(object_missing_required_property_input(O,T,P,VT),selected,@concat("Select ",P)) :- elem(object_missing_required_property_input(O,T,P,VT),dropdown_menu,_),not inspector_required_option_selection(O,T,P,_).
+attr(object_missing_required_property_input(O,T,P,VT),selected,@concat("",Opt)) :- elem(object_missing_required_property_input(O,T,P,VT),dropdown_menu,_),inspector_required_option_selection(O,T,P,Opt).
+attr(object_missing_required_property_input(O,T,P,VT),class,("btn-outline-secondary";"btn-sm";"rounded-2";"flex-grow-1";"text-start")) :- elem(object_missing_required_property_input(O,T,P,VT),dropdown_menu,_).
+attr(object_missing_required_property_input(O,T,P,VT),"font-size","10px") :- elem(object_missing_required_property_input(O,T,P,VT),dropdown_menu,_).
+elem(object_missing_required_property_option(O,T,P,VT,Opt),dropdown_menu_item,object_missing_required_property_input(O,T,P,VT)) :- elem(object_missing_required_property_input(O,T,P,VT),dropdown_menu,_),type_property_options(T,P,Opt).
+attr(object_missing_required_property_option(O,T,P,VT,Opt),order,N) :- elem(object_missing_required_property_option(O,T,P,VT,Opt),dropdown_menu_item,_),N=#count{Other:type_property_options(T,P,Other),Other<Opt}.
+attr(object_missing_required_property_option(O,T,P,VT,Opt),label,@concat("",Opt)) :- elem(object_missing_required_property_option(O,T,P,VT,Opt),dropdown_menu_item,_).
+attr(object_missing_required_property_option(O,T,P,VT,Opt),class,("font-monospace";"small")) :- elem(object_missing_required_property_option(O,T,P,VT,Opt),dropdown_menu_item,_).
+when(object_missing_required_property_option(O,T,P,VT,Opt),click,context,(required_property_owner,(O,T))) :- elem(object_missing_required_property_option(O,T,P,VT,Opt),dropdown_menu_item,_).
+when(object_missing_required_property_option(O,T,P,VT,Opt),click,context,(required_property_value(P),Opt)) :- elem(object_missing_required_property_option(O,T,P,VT,Opt),dropdown_menu_item,_).
+when(object_missing_required_property_option(O,T,P,VT,Opt),click,update,(object_missing_required_property_input(O,T,P,VT),selected,@concat("",Opt))) :- elem(object_missing_required_property_option(O,T,P,VT,Opt),dropdown_menu_item,_).
+
+% ============================================================
+% ADD ONE REQUIRED PROPERTY
+% This adds the selected row even when other required fields are empty.
+% ============================================================
+elem(add_required_property(O,T,P),button,object_missing_required_property_row(O,T,P)) :- elem(object_missing_required_property_row(O,T,P),container,_).
+attr(add_required_property(O,T,P),order,4) :- elem(add_required_property(O,T,P),button,_).
+attr(add_required_property(O,T,P),label,"Add") :- elem(add_required_property(O,T,P),button,_).
+attr(add_required_property(O,T,P),icon,"fa-plus") :- elem(add_required_property(O,T,P),button,_).
+attr(add_required_property(O,T,P),class,("btn-primary";"btn-sm";"rounded-2";"px-2";"py-1")) :- elem(add_required_property(O,T,P),button,_).
+attr(add_required_property(O,T,P),"font-size","9px") :- elem(add_required_property(O,T,P),button,_).
+when(add_required_property(O,T,P),click,call,add_atom(property(O,P,Input))) :- elem(add_required_property(O,T,P),button,_),inspector_required_submission(O,T,P,Input).
+
 % ============================================================
 % ADD ALL MISSING REQUIRED PROPERTIES
-% ============================================================
-%
-% A single click triggers one add_atom action for every currently
-% missing required property.
+% Select or enter every required value before clicking.
 % ============================================================
 elem(add_all_required_properties(O,T),button,missing_required_properties(O,T)) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,_,_).
 attr(add_all_required_properties(O,T),order,100) :- elem(add_all_required_properties(O,T),button,_).
@@ -957,7 +1073,14 @@ attr(add_all_required_properties(O,T),label,"Add all properties") :- elem(add_al
 attr(add_all_required_properties(O,T),icon,"fa-plus") :- elem(add_all_required_properties(O,T),button,_).
 attr(add_all_required_properties(O,T),class,("btn-primary";"btn-sm";"rounded-2";"align-self-end";"px-3";"py-1")) :- elem(add_all_required_properties(O,T),button,_).
 attr(add_all_required_properties(O,T),"font-size","9px") :- elem(add_all_required_properties(O,T),button,_).
-when(add_all_required_properties(O,T),click,call,add_atom(property(O,P,_context_value(required_property_value(P))))) :- object_selected_for_inspection(O,T),object_missing_required_property(O,T,P,_).
+when(add_all_required_properties(O,T),click,call,add_atom(property(O,P,Input))) :- elem(add_all_required_properties(O,T),button,_),inspector_required_submission(O,T,P,Input).
+
+elem(required_properties_hint(O,T),label,missing_required_properties(O,T)) :- elem(missing_required_properties(O,T),container,_).
+attr(required_properties_hint(O,T),order,99) :- elem(required_properties_hint(O,T),label,_).
+attr(required_properties_hint(O,T),label,"Use Add for one property, or fill every required field and choose Add all properties.") :- elem(required_properties_hint(O,T),label,_).
+attr(required_properties_hint(O,T),class,("text-secondary";"m-0")) :- elem(required_properties_hint(O,T),label,_).
+attr(required_properties_hint(O,T),"font-size","9px") :- elem(required_properties_hint(O,T),label,_).
+
 % ============================================================
 % MISSING OPTIONAL PROPERTIES
 % ============================================================
@@ -983,10 +1106,7 @@ elem(missing_optional_property_status(O,T,P,VT),label,missing_optional_property_
 attr(missing_optional_property_status(O,T,P,VT),order,2) :- elem(missing_optional_property_status(O,T,P,VT),label,_).
 attr(missing_optional_property_status(O,T,P,VT),label,"Not configured") :- elem(missing_optional_property_status(O,T,P,VT),label,_).
 attr(missing_optional_property_status(O,T,P,VT),class,("fst-italic";"text-secondary";"m-0")) :- elem(missing_optional_property_status(O,T,P,VT),label,_).
-attr(missing_optional_property_status(O,T,P,VT),"font-size","8px") :- elem(missing_optional_property_status(O,T,P,VT),label,_).% ============================================================% ADD NEW PROPERTY SECTION% ============================================================%% Allows a property outside the declared type_property/4 schema% to be added directly to the inspected object.% ============================================================elem(add_new_property_section(O,T),container,inspector_properties(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_section(O,T),order,7) :- elem(add_new_property_section(O,T),container,_).attr(add_new_property_section(O,T),flex_direction,column) :- elem(add_new_property_section(O,T),container,_).attr(add_new_property_section(O,T),class,("d-flex";"flex-column";"gap-2";"pt-2";"mt-1";"w-100")) :- elem(add_new_property_section(O,T),container,_).attr(add_new_property_section(O,T),"border-top","1px solid #E2E8F0") :- elem(add_new_property_section(O,T),container,_).elem(add_new_property_header(O,T),container,add_new_property_section(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_header(O,T),order,1) :- elem(add_new_property_header(O,T),container,_).attr(add_new_property_header(O,T),flex_direction,column) :- elem(add_new_property_header(O,T),container,_).attr(add_new_property_header(O,T),class,("d-flex";"flex-column";"gap-0")) :- elem(add_new_property_header(O,T),container,_).elem(add_new_property_title(O,T),label,add_new_property_header(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_title(O,T),order,1) :- elem(add_new_property_title(O,T),label,_).attr(add_new_property_title(O,T),label,"Add new property") :- elem(add_new_property_title(O,T),label,_).attr(add_new_property_title(O,T),class,("fw-bold";"text-dark";"m-0")) :- elem(add_new_property_title(O,T),label,_).attr(add_new_property_title(O,T),"font-size","10px") :- elem(add_new_property_title(O,T),label,_).elem(add_new_property_hint(O,T),label,add_new_property_header(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_hint(O,T),order,2) :- elem(add_new_property_hint(O,T),label,_).attr(add_new_property_hint(O,T),label,"Add a property that is not currently configured.") :- elem(add_new_property_hint(O,T),label,_).attr(add_new_property_hint(O,T),class,("text-secondary";"m-0")) :- elem(add_new_property_hint(O,T),label,_).attr(add_new_property_hint(O,T),"font-size","8px") :- elem(add_new_property_hint(O,T),label,_).elem(add_new_property_fields(O,T),container,add_new_property_section(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_fields(O,T),order,2) :- elem(add_new_property_fields(O,T),container,_).attr(add_new_property_fields(O,T),flex_direction,row) :- elem(add_new_property_fields(O,T),container,_).attr(add_new_property_fields(O,T),class,("d-flex";"flex-row";"flex-wrap";"align-items-center";"gap-2";"w-100")) :- elem(add_new_property_fields(O,T),container,_).elem(add_new_property_key(O,T),textfield,add_new_property_fields(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_key(O,T),order,1) :- elem(add_new_property_key(O,T),textfield,_).attr(add_new_property_key(O,T),placeholder,"Property name") :- elem(add_new_property_key(O,T),textfield,_).attr(add_new_property_key(O,T),class,("form-control";"form-control-sm";"rounded-2";"flex-grow-1")) :- elem(add_new_property_key(O,T),textfield,_).attr(add_new_property_key(O,T),"font-size","10px") :- elem(add_new_property_key(O,T),textfield,_).when(add_new_property_key(O,T),input,context,(new_custom_property_key,_value)) :- object_selected_for_inspection(O,T).elem(add_new_property_value(O,T),textfield,add_new_property_fields(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_value(O,T),order,2) :- elem(add_new_property_value(O,T),textfield,_).attr(add_new_property_value(O,T),placeholder,"Property value") :- elem(add_new_property_value(O,T),textfield,_).attr(add_new_property_value(O,T),class,("form-control";"form-control-sm";"rounded-2";"flex-grow-1")) :- elem(add_new_property_value(O,T),textfield,_).attr(add_new_property_value(O,T),"font-size","10px") :- elem(add_new_property_value(O,T),textfield,_).when(add_new_property_value(O,T),input,context,(new_custom_property_value,_value)) :- object_selected_for_inspection(O,T).elem(add_new_property_button(O,T),button,add_new_property_fields(O,T)) :- object_selected_for_inspection(O,T).attr(add_new_property_button(O,T),order,3) :- elem(add_new_property_button(O,T),button,_).attr(add_new_property_button(O,T),label,"Add property") :- elem(add_new_property_button(O,T),button,_).attr(add_new_property_button(O,T),icon,"fa-plus") :- elem(add_new_property_button(O,T),button,_).attr(add_new_property_button(O,T),class,("btn-outline-primary";"btn-sm";"rounded-2";"px-2";"py-1";"flex-shrink-0")) :- elem(add_new_property_button(O,T),button,_).attr(add_new_property_button(O,T),"font-size","9px") :- elem(add_new_property_button(O,T),button,_).when(add_new_property_button(O,T),click,call,add_atom(property(O,_context_value(new_custom_property_key,const),_context_value(new_custom_property_value)))) :- object_selected_for_inspection(O,T).
-
-
-
+attr(missing_optional_property_status(O,T,P,VT),"font-size","8px") :- elem(missing_optional_property_status(O,T,P,VT),label,_).
 
 % PLACEMENTS
 % ============================================================
