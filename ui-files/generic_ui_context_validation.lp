@@ -4,6 +4,14 @@
 % user-added atoms, and Clinguin UI context”
 % The rules depends on the current user selection, so it is UI-context-dependent. 
 
+
+
+% Expand the saved grid dimensions into generic nodes.
+node((Row,Col)) :- _clinguin_atom(nodes(Width,Height)),Row=0..Height-1,Col=0..Width-1.
+
+% Open grid setup only when no nodes exist.
+grid_setup_required :- not node(_).
+
 % ============================================================
 % CURRENT UI SELECTION
 % ============================================================

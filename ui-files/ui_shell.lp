@@ -263,11 +263,8 @@ elem(dialog(help),modal,w).
 attr(dialog(help),visibility,hidden).
 attr(dialog(help),title,"Generic UI").
 elem(dialog_text(help),label,dialog_sheet(help)).
-attr(dialog_text(help),label,"Instances use a generic representation to describe objects, properties, grid nodes, positions, and images. The catalogue lists available objects. Use Add object to create an object. Inspect an object to manage its properties. To place an object, select it, choose a role such as start, end, or cell, and click a grid node. The same object can have different positions and images for different roles. Domain rules determine the applicable validation checks and placement restrictions.").
+attr(dialog_text(help), label, "This UI uses a generic and extensible Answer Set Programming (ASP) representation to support the generation, diagnosis, and visualization of Multi-Agent Path Finding (MAPF), Flatland, and other compatible grid-based domain instances using Clinguin. Instances are described through five common predicates: object/2, property/3, node/1, position/3, image/3, etc. Together, they describe which objects exist, their attributes, the available locations, their placements, and their visual appearance. The catalogue lists available objects. Use \"Add object\" to create an object. Inspect an object to manage its properties. To place an object, select it, choose a role such as start, end, or cell, and click a grid node. The same object can have different positions and images for different roles. Domain rules determine the applicable validation checks and placement restrictions.").
 attr(dialog_text(help),class,("p-3";"text-secondary")).
-
-
-
 
 
 %  shared styling.
