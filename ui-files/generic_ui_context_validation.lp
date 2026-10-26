@@ -103,3 +103,14 @@ valid_object_placement(Row,Col,O,T,R) :-node((Row,Col)),object_selected_for_plac
 
 % Use the existing notification component after validation.
 % notification_event(w,load,error,"Object already exists",@concat("Object ",O," of type ",T," already exists.")) :-object_creation_rejected(O,T,_).
+% Read object selection independently of the chosen placement role.
+% The sidebar stores the selected object under the key object_selected.
+grid_selected_object(O) :-
+    _clinguin_context(object_selected,O),
+    object(O,_).
+
+% Match every placement role and highlight each occupied node once.
+grid_selected_node(Row,Col) :-
+    grid_selected_object(O),
+    node((Row,Col)),
+    position((Row,Col),_,O).

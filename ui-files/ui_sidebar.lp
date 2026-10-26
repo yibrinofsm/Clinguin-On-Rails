@@ -1174,3 +1174,5 @@ attr(inspector_position_role(O,T,N,R),"font-size","8px") :- elem(inspector_posit
 % Preserve placement selection.
 when(w,load,context,(object_selected,O)) :- _clinguin_context(object_selected,O),complete(O,_).
 when(w,load,context,(selected_role_for_placement,R)) :- _clinguin_context(object_selected,O),_clinguin_context(selected_role_for_placement,R),complete(O,T),type_role(T,R),image(O,R,_).
+elem(b1, button, w). elem(b2, button, w). elem(l, line, w). attr(l, start, b1). attr(l, end, b2). elem(b1, color, @color(blue)).
+

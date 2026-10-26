@@ -271,7 +271,6 @@ attr(grid_labels(Row,Col),grid_column,0) :- elem(grid_labels(Row,Col),container,
 attr(grid_labels(Row,Col),child_layout,flex) :- elem(grid_labels(Row,Col),container,_).
 attr(grid_labels(Row,Col),flex_direction,column) :- elem(grid_labels(Row,Col),container,_).
 attr(grid_labels(Row,Col),class,("d-flex";"flex-column";"justify-content-end";"w-100";"h-100";"p-0";"m-0";"pe-none";"overflow-hidden")) :- elem(grid_labels(Row,Col),container,_).
-attr(grid_labels(Row,Col),"z-index","2") :- elem(grid_labels(Row,Col),container,_).
 attr(grid_labels(Row,Col),"min-width","0") :- elem(grid_labels(Row,Col),container,_).
 attr(grid_labels(Row,Col),"min-height","0") :- elem(grid_labels(Row,Col),container,_).
 
@@ -285,4 +284,50 @@ attr(grid_object_label(Row,Col,O),order,N) :- elem(grid_object_label(Row,Col,O),
 attr(grid_object_label(Row,Col,O),class,("d-block";"w-100";"text-center";"fw-bold";"text-dark";"text-truncate";"flex-shrink-0";"pe-none";"p-0";"m-0")) :- elem(grid_object_label(Row,Col,O),label,_).
 attr(grid_object_label(Row,Col,O),"font-size","8px") :- elem(grid_object_label(Row,Col,O),label,_).
 attr(grid_object_label(Row,Col,O),"line-height","9px") :- elem(grid_object_label(Row,Col,O),label,_).
-attr(grid_object_label(Row,Col,O),background_color,"rgba(255,255,255,0.85)") :- elem(grid_object_label(Row,Col,O),label,_).
+attr(grid_object_label(Row,Col,O),background_color,"rgba(255,255,255,0.85)") :- elem(grid_object_label(Row,Col,O),label,_),not grid_selected_object(O).
+
+% ============================================================
+% HIGHLIGHT ALL PLACEMENTS OF THE SELECTED OBJECT
+% ============================================================
+
+
+
+% An extra layer draws a ring above the images and labels.
+elem(grid_selection(Row,Col),container,node_box(Row,Col)) :-
+    grid_selected_node(Row,Col).
+
+attr(grid_selection(Row,Col),grid_row,0) :-
+    grid_selected_node(Row,Col).
+attr(grid_selection(Row,Col),grid_column,0) :-
+    grid_selected_node(Row,Col).
+attr(grid_selection(Row,Col),class,
+    ("w-100";"h-100";"p-0";"m-0";"pe-none")) :-
+    grid_selected_node(Row,Col).
+
+% Preserve cell dimensions and allow clicks to reach the node box.
+attr(grid_selection(Row,Col),"min-width","0") :-
+    grid_selected_node(Row,Col).
+attr(grid_selection(Row,Col),"min-height","0") :-
+    grid_selected_node(Row,Col).
+attr(grid_selection(Row,Col),"pointer-events","none") :-
+    grid_selected_node(Row,Col).
+
+% Amber contrasts with the blue grid; an inset ring adds no width.
+attr(grid_selection(Row,Col),"box-shadow",
+    "inset 0 0 0 3px #f59e0b") :-
+    grid_selected_node(Row,Col).
+
+% Placements use their drawing layers; labels use Highest+1.
+% The highlight therefore uses Highest+2, even for large layer values.
+attr(grid_selection(Row,Col),"z-index",Highest+2) :-
+    grid_selected_node(Row,Col),
+    Highest=#max{
+        0;
+        Level,Role,Obj:
+            attr(grid_placement(Row,Col,Role,Obj),"z-index",Level)
+    }.
+
+% Distinguish the selected object's label when objects share a cell.
+attr(grid_object_label(Row,Col,O),background_color,"#f59e0b") :-
+    elem(grid_object_label(Row,Col,O),label,_),
+    grid_selected_object(O).
