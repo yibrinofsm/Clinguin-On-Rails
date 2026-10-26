@@ -34,7 +34,7 @@ type_role(train,end).
 type_property_options(track,code,32800;1025;37408;17411;32872;3089;49186;1097;34864;5633;33825;38433;50211;33897;35889;38505;52275;20994;16458;2136;6672;4608;16386;72;2064;8192;4;128;256).
 
 % Allowed train directions
-type_property_options(track,directions,0;1;2;3;4).
+type_property_options(track,directions,0;1;2;3).
 
 % Train property declaration
 % type_property(
@@ -52,8 +52,7 @@ type_property(train,id,int,required).
 
 type_property(track,code,int,required).
 
-% Trains require an existing track at the destination node.
-type_placement_requirement(train,track).
+
 
 % Valid train directions
 % train_direction(0).
