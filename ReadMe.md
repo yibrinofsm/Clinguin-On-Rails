@@ -250,7 +250,7 @@ The following example loads a MAPF instance with 20 columns, 20 rows, and 15 age
 clinguin client-server \
   --domain-files \
     domain-files/generic/generic_validation.lp \
-    domain-files/mapf/generic_instance_mapf_x20_y20_n400_a15.lp \
+    domain-files/mapf/generic_instance_mapf_x19_y21_a15.lp \
     domain-files/mapf/mapf.lp \
   --ui-files ui-files/ui_presentation.lp
 ```

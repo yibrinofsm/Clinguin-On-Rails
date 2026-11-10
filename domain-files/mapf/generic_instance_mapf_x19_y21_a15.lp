@@ -21,6 +21,24 @@ object(agent(12),agent).
 object(agent(13),agent).
 object(agent(14),agent).
 object(agent(15),agent).
+
+% Agents ID
+property(agent(1),id,1).   
+property(agent(2),id,2).  
+property(agent(3),id,3).
+property(agent(4),id,4).   
+property(agent(5),id,5).   
+property(agent(6),id,6).
+property(agent(7),id,7).   
+property(agent(8),id,8).   
+property(agent(9),id,9).
+property(agent(10),id,10). 
+property(agent(11),id,11). 
+property(agent(12),id,12).
+property(agent(13),id,13). 
+property(agent(14),id,14). 
+property(agent(15),id,15). 
+
 node((1,1)).
 node((3,1)).
 node((5,1)).
