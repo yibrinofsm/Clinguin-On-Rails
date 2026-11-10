@@ -83,7 +83,16 @@ has_images(O) :-image(O,_,_).
 % True if object O has at least one position.
 has_positions(O) :-position(_,_,O).
 
+% Open grid setup only when no nodes exist.
+grid_setup_required :- not node(_).
 
+
+% VALID DIRECTED EDGES
+directed_edge(A,B) :- edge(A,B), node(A), node(B), A != B.
+
+% 2. IDENTIFY EDGE ENDPOINTS
+edge_endpoint(N) :- directed_edge(N,_).
+edge_endpoint(N) :- directed_edge(_,N).
 % ============================================================
 % 3. INSTANCE STATISTICS AND COUNTS
 % ============================================================

@@ -9,8 +9,7 @@
 % Expand the saved grid dimensions into generic nodes.
 node((Row,Col)) :- _clinguin_atom(nodes(Width,Height)),Row=0..Height-1,Col=0..Width-1.
 
-% Open grid setup only when no nodes exist.
-grid_setup_required :- not node(_).
+
 
 % ============================================================
 % CURRENT UI SELECTION
@@ -105,12 +104,14 @@ valid_object_placement(Row,Col,O,T,R) :-node((Row,Col)),object_selected_for_plac
 % notification_event(w,load,error,"Object already exists",@concat("Object ",O," of type ",T," already exists.")) :-object_creation_rejected(O,T,_).
 % Read object selection independently of the chosen placement role.
 % The sidebar stores the selected object under the key object_selected.
-grid_selected_object(O) :-
-    _clinguin_context(object_selected,O),
-    object(O,_).
+grid_selected_object(O) :-_clinguin_context(object_selected,O),object(O,_).
 
 % Match every placement role and highlight each occupied node once.
-grid_selected_node(Row,Col) :-
-    grid_selected_object(O),
-    node((Row,Col)),
-    position((Row,Col),_,O).
+grid_selected_node(Row,Col) :-grid_selected_object(O),node((Row,Col)),position((Row,Col),_,O).
+
+% VALID DIRECTED EDGES
+directed_edge(A,B) :- node(A),node(B),edge(A,B), A != B.
+
+% 2. IDENTIFY EDGE ENDPOINTS
+edge_endpoint(N) :- directed_edge(N,_).
+edge_endpoint(N) :- directed_edge(_,N).
